@@ -31,6 +31,9 @@ public class DoctorEntity implements Serializable {
     
     @OneToMany(mappedBy = "doctorEntity")
     private List<AppointmentEntity> appointmentEntities;
+    
+    @OneToMany(mappedBy = "doctorEntity")
+    private List<DoctorsLeaveEntity> doctorsLeaveEntities;
 
     public DoctorEntity() {
     }
