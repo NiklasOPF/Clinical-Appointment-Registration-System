@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ej.bsession.stateless;
+package ejb.session.stateless;
 
 import entity.DoctorEntity;
 
-
-public interface DoctorSessionBeanLocal {
-
+public interface DoctorSessionBeanRemote {
     public Long createDoctorEntity(DoctorEntity doctorEntity);
+
     
 }

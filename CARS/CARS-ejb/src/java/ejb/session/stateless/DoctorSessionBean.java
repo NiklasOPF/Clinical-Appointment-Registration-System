@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ej.bsession.stateless;
+package ejb.session.stateless;
 
 import entity.DoctorEntity;
 import javax.ejb.Local;
@@ -21,6 +21,11 @@ import javax.persistence.PersistenceContext;
 @Remote(DoctorSessionBeanRemote.class)
 public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSessionBeanLocal {
 
+    public DoctorSessionBean() {
+    }
+
+    
+    
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
     
@@ -31,8 +36,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         
         return doctorEntity.getDoctorId();
     }
-
-
     
+   
     
 }
