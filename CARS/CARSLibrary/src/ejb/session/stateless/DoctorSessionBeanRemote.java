@@ -10,5 +10,13 @@ import entity.DoctorEntity;
 public interface DoctorSessionBeanRemote {
     public Long createDoctorEntity(DoctorEntity doctorEntity);
 
+    public DoctorEntity retrieveDoctorEntityByRegistration(String registration);
+
+    public DoctorEntity retrieveDoctorEntityByDoctorId(Long doctorId);
+
+    public void updateDoctorEntity(DoctorEntity doctorEntity);
+
+    public void deleteDoctorEntity(Long doctorId);
+
     
 }
