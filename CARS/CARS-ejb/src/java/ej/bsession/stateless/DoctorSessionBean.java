@@ -24,6 +24,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
     
+    @Override
     public Long createDoctorEntity(DoctorEntity doctorEntity){
         em.persist(doctorEntity);
         em.flush();

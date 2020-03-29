@@ -5,7 +5,11 @@
  */
 package ej.bsession.stateless;
 
+import entity.DoctorEntity;
+
 
 public interface DoctorSessionBeanLocal {
+
+    public Long createDoctorEntity(DoctorEntity doctorEntity);
     
 }

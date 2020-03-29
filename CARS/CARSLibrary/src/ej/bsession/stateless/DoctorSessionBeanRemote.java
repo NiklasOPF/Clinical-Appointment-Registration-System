@@ -5,6 +5,10 @@
  */
 package ej.bsession.stateless;
 
+import entity.DoctorEntity;
+
 public interface DoctorSessionBeanRemote {
+    public Long createDoctorEntity(DoctorEntity doctorEntity);
+
     
 }
