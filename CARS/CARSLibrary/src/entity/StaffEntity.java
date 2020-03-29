@@ -18,14 +18,84 @@ import javax.persistence.Id;
 @Entity
 public class StaffEntity implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long staffId;
     private String firstName;
     private String lastName;
     private String userName;
     private String password;
+
+    public StaffEntity() {
+    }
+
+    public StaffEntity(String firstName, String lastName, String userName, String password) {
+        this();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.password = password;
+    }
+    
+    
+    
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return the userName
+     */
+    public String getUserName() {
+        return userName;
+    }
+
+    /**
+     * @param userName the userName to set
+     */
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Long getStaffId() {
         return staffId;
@@ -38,7 +108,7 @@ public class StaffEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (staffId != null ? staffId.hashCode() : 0);
+        hash += (getStaffId() != null ? getStaffId().hashCode() : 0);
         return hash;
     }
 
@@ -49,7 +119,7 @@ public class StaffEntity implements Serializable {
             return false;
         }
         StaffEntity other = (StaffEntity) object;
-        if ((this.staffId == null && other.staffId != null) || (this.staffId != null && !this.staffId.equals(other.staffId))) {
+        if ((this.getStaffId() == null && other.getStaffId() != null) || (this.getStaffId() != null && !this.staffId.equals(other.staffId))) {
             return false;
         }
         return true;
@@ -57,7 +127,7 @@ public class StaffEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.StaffEntity[ id=" + staffId + " ]";
+        return "entity.StaffEntity[ id=" + getStaffId() + " ]";
     }
     
 }

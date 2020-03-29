@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -24,10 +25,26 @@ public class AppointmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long appointmentId;
-    private Long doctorId; //TODO look u if special mapping is needed
-    private Long patientIdentityNumber; // TODO look up special mapping
-    private Date date; //TODO maek sure these have the correct format
+    // We use a DoctorEntity instead private Long doctorId; //TODO look u if special mapping is needed
+    // We use a DoctorEntity instead private Long patientIdentityNumber; // TODO look up special mapping
+    private Date date; //TODO make sure these have the correct format
     private Time time;
+    
+    @ManyToOne
+    private DoctorEntity doctorEntity;
+    
+    @ManyToOne
+    private PatientEntity patientEntity;
+
+    public AppointmentEntity() {
+    }
+
+    public AppointmentEntity(Date date, Time time, DoctorEntity doctorEntity, PatientEntity patientEntity) {
+        this.date = date;
+        this.time = time;
+        this.doctorEntity = doctorEntity;
+        this.patientEntity = patientEntity;
+    }
 
 
     public Long getAppointmentId() {
@@ -61,6 +78,48 @@ public class AppointmentEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.AppointmentEntity[ id=" + appointmentId + " ]";
+    }
+
+    /**
+     * @return the date
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    /**
+     * @return the time
+     */
+    public Time getTime() {
+        return time;
+    }
+
+    /**
+     * @param time the time to set
+     */
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    /**
+     * @return the doctorEntity
+     */
+    public DoctorEntity getDoctorEntity() {
+        return doctorEntity;
+    }
+
+    /**
+     * @return the patientEntity
+     */
+    public PatientEntity getPatientEntity() {
+        return patientEntity;
     }
     
 }

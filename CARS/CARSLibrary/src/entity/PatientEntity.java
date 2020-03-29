@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 
 
@@ -27,7 +29,7 @@ public class PatientEntity implements Serializable {
     
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long patientId;
     @Column(unique=true)
     private String identityNumber;
@@ -40,6 +42,24 @@ public class PatientEntity implements Serializable {
     private String phone;
     private String address;
     private String password;
+    
+    @OneToMany(mappedBy = "patientEntity")
+    private List<AppointmentEntity> appointmentEntities;
+
+    public PatientEntity() {
+    }
+
+    public PatientEntity(String identityNumber, String firstName, String lastName, Gender gender, int age, String phone, String address, String password) {
+        this();
+        this.identityNumber = identityNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+    }
     
     
     
@@ -57,7 +77,7 @@ public class PatientEntity implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (patientId != null ? patientId.hashCode() : 0);
+        hash += (getPatientId() != null ? getPatientId().hashCode() : 0);
         return hash;
     }
 
@@ -68,7 +88,7 @@ public class PatientEntity implements Serializable {
             return false;
         }
         PatientEntity other = (PatientEntity) object;
-        if ((this.patientId == null && other.patientId != null) || (this.patientId != null && !this.patientId.equals(other.patientId))) {
+        if ((this.getPatientId() == null && other.getPatientId() != null) || (this.getPatientId() != null && !this.patientId.equals(other.patientId))) {
             return false;
         }
         return true;
@@ -76,7 +96,133 @@ public class PatientEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.PatientEntity[ id=" + patientId + " ]";
+        return "entity.PatientEntity[ id=" + getPatientId() + " ]";
+    }
+
+    /**
+     * @return the identityNumber
+     */
+    public String getIdentityNumber() {
+        return identityNumber;
+    }
+
+    /**
+     * @param identityNumber the identityNumber to set
+     */
+    public void setIdentityNumber(String identityNumber) {
+        this.identityNumber = identityNumber;
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return the gender
+     */
+    public Gender getGender() {
+        return gender;
+    }
+
+    /**
+     * @param gender the gender to set
+     */
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * @return the age
+     */
+    public int getAge() {
+        return age;
+    }
+
+    /**
+     * @param age the age to set
+     */
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    /**
+     * @return the phone
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * @param phone the phone to set
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * @return the address
+     */
+    public String getAddress() {
+        return address;
+    }
+
+    /**
+     * @param address the address to set
+     */
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
+     * @return the appointmentEntities
+     */
+    public List<AppointmentEntity> getAppointmentEntities() {
+        return appointmentEntities;
+    }
+
+    /**
+     * @param appointmentEntities the appointmentEntities to set
+     */
+    public void setAppointmentEntities(List<AppointmentEntity> appointmentEntities) {
+        this.appointmentEntities = appointmentEntities;
     }
     
 }

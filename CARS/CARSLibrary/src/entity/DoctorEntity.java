@@ -6,10 +6,12 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -26,6 +28,23 @@ public class DoctorEntity implements Serializable {
     private String lastName;
     private String registration;
     private String qualifications;
+    
+    @OneToMany(mappedBy = "doctorEntity")
+    private List<AppointmentEntity> appointmentEntities;
+
+    public DoctorEntity() {
+    }
+
+    public DoctorEntity(String firstName, String lastName, String registration, String qualifications) {
+        this();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.registration = registration;
+        this.qualifications = qualifications;
+    }
+    
+    
+    
 
     public Long getDoctorId() {
         return doctorId;
@@ -58,6 +77,76 @@ public class DoctorEntity implements Serializable {
     @Override
     public String toString() {
         return "entity.DoctorEntity[ id=" + doctorId + " ]";
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    /**
+     * @return the registration
+     */
+    public String getRegistration() {
+        return registration;
+    }
+
+    /**
+     * @param registration the registration to set
+     */
+    public void setRegistration(String registration) {
+        this.registration = registration;
+    }
+
+    /**
+     * @return the qualifications
+     */
+    public String getQualifications() {
+        return qualifications;
+    }
+
+    /**
+     * @param qualifications the qualifications to set
+     */
+    public void setQualifications(String qualifications) {
+        this.qualifications = qualifications;
+    }
+
+    /**
+     * @return the appointmentEntities
+     */
+    public List<AppointmentEntity> getAppointmentEntities() {
+        return appointmentEntities;
+    }
+
+    /**
+     * @param appointmentEntities the appointmentEntities to set
+     */
+    public void setAppointmentEntities(List<AppointmentEntity> appointmentEntities) {
+        this.appointmentEntities = appointmentEntities;
     }
     
 }
