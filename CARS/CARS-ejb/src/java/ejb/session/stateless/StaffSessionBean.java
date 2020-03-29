@@ -11,6 +11,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -44,6 +45,14 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
         return staffEntity;
     }
     
+    
+    @Override
+    public StaffEntity retrieveStaffEntityByUserName(String userName){
+        Query query = em.createQuery("SELECT DISTINCT p FROM StaffEntity p WHERE p.userName = :name");
+        query.setParameter("name", userName);
+        return (StaffEntity) query.getResultList().get(0);
+    }
+    
     @Override
     public void updateStaffEntity (StaffEntity staffEntity) {
         em.merge(staffEntity);
@@ -55,6 +64,8 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
         StaffEntity staffEntity = retrieveStaffEntityByStaffId(staffId);
         em.remove(staffEntity);
     }
+
+
     
     
 }

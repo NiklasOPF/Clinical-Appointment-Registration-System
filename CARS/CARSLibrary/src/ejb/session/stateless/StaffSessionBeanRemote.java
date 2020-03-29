@@ -7,9 +7,8 @@ package ejb.session.stateless;
 
 import entity.StaffEntity;
 
-
 public interface StaffSessionBeanRemote {
-    
+
     public Long createStaffEntity(StaffEntity staffEntity);
 
     public StaffEntity retrieveStaffEntityByStaffId(Long staffId);
@@ -17,4 +16,7 @@ public interface StaffSessionBeanRemote {
     public void updateStaffEntity(StaffEntity staffEntity);
 
     public void deleteStaffEntity(Long staffId);
+
+    public StaffEntity retrieveStaffEntityByUserName(String userName);
+
 }

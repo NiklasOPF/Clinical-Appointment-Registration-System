@@ -17,5 +17,7 @@ public interface StaffSessionBeanLocal {
     public void updateStaffEntity(StaffEntity staffEntity);
 
     public void deleteStaffEntity(Long staffId);
+
+    public StaffEntity retrieveStaffEntityByUserName(String userName);
     
 }
