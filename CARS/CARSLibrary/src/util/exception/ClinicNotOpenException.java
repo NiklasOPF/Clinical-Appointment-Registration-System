@@ -11,19 +11,11 @@ package util.exception;
  */
 public class ClinicNotOpenException extends Exception {
 
-    /**
-     * Creates a new instance of <code>ClinicNotOpenException</code> without
-     * detail message.
-     */
+
     public ClinicNotOpenException() {
     }
 
-    /**
-     * Constructs an instance of <code>ClinicNotOpenException</code> with the
-     * specified detail message.
-     *
-     * @param msg the detail message.
-     */
+
     public ClinicNotOpenException(String msg) {
         super(msg);
     }

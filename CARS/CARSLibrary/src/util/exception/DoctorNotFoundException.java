@@ -11,19 +11,9 @@ package util.exception;
  */
 public class DoctorNotFoundException extends Exception {
 
-    /**
-     * Creates a new instance of <code>DoctorException</code> without detail
-     * message.
-     */
     public DoctorNotFoundException() {
     }
 
-    /**
-     * Constructs an instance of <code>DoctorException</code> with the specified
-     * detail message.
-     *
-     * @param msg the detail message.
-     */
     public DoctorNotFoundException(String msg) {
         super(msg);
     }

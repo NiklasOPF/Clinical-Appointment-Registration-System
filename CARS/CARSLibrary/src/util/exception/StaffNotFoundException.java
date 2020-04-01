@@ -11,19 +11,11 @@ package util.exception;
  */
 public class StaffNotFoundException extends Exception {
 
-    /**
-     * Creates a new instance of <code>StaffNotFoundException</code> without
-     * detail message.
-     */
+
     public StaffNotFoundException() {
     }
 
-    /**
-     * Constructs an instance of <code>StaffNotFoundException</code> with the
-     * specified detail message.
-     *
-     * @param msg the detail message.
-     */
+
     public StaffNotFoundException(String msg) {
         super(msg);
     }
