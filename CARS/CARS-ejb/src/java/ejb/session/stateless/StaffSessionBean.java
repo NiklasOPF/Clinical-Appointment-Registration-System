@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.exception.InvalidLoginException;
 
 /**
  *
@@ -25,7 +26,17 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
     public StaffSessionBean() {
     }
     
-    
+    @Override
+    public StaffEntity login(String username, String password) throws InvalidLoginException{
+        StaffEntity user = retrieveStaffEntityByUserName(username);
+        if (user.getPassword().equals(password)){
+            return user;
+        }
+        else {
+            throw new InvalidLoginException();
+        }
+        
+    }
 
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;

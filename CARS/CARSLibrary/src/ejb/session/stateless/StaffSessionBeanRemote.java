@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.StaffEntity;
+import util.exception.InvalidLoginException;
 
 public interface StaffSessionBeanRemote {
 
@@ -18,5 +19,7 @@ public interface StaffSessionBeanRemote {
     public void deleteStaffEntity(Long staffId);
 
     public StaffEntity retrieveStaffEntityByUserName(String userName);
+    
+    public StaffEntity login(String username, String password) throws InvalidLoginException;
 
 }
