@@ -6,6 +6,9 @@
 package ejb.session.stateless;
 
 import entity.DoctorEntity;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -29,6 +32,18 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
+    
+    public Long[] getAvailableDoctors(Date date){
+        Query query = em.createQuery("SELECT DISTINCT p.doctorId FROM DoctorEntity p");
+        ArrayList<Long> doctorsIds = (ArrayList<Long>) query.getResultList();
+        
+        Query query2 = em.createQuery("SELECT DISTINCT p.doctorsLeaveId FROM DoctorsLeaveEntity p WHERE p.date = :date");
+        query2.setParameter("date", date);
+        ArrayList<Long> leaves = (ArrayList<Long>) query2.getResultList();
+        
+        doctorsIds.removeAll(leaves);
+        return (Long[]) doctorsIds.toArray();
+    }
     
     @Override
     public Long createDoctorEntity(DoctorEntity doctorEntity){

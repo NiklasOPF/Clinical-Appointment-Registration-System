@@ -22,4 +22,5 @@ public interface StaffSessionBeanRemote {
     
     public StaffEntity login(String username, String password) throws InvalidLoginException;
 
+
 }

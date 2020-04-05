@@ -5,9 +5,11 @@
  */
 package clinicadminterminal;
 
+import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
 import entity.PatientEntity;
 import entity.StaffEntity;
+import java.util.Date;
 import java.util.Scanner;
 import util.Enum.Gender;
 
@@ -17,13 +19,14 @@ import util.Enum.Gender;
  */
 public class RegistrationModule {
 
-    PatientSessionBeanRemote patientSessionBeanRemote;
+    private PatientSessionBeanRemote patientSessionBeanRemote;
+    private DoctorSessionBeanRemote doctorSessionBeanRemote;
 
     public RegistrationModule() {
 
     }
 
-    public RegistrationModule(StaffEntity staff, PatientSessionBeanRemote patientSessionBeanRemote) {
+    public RegistrationModule(StaffEntity staff, PatientSessionBeanRemote patientSessionBeanRemote, DoctorSessionBeanRemote doctorSessionBeanRemote) {
         this.patientSessionBeanRemote = patientSessionBeanRemote;
         //TODO
         Scanner sc = new Scanner(System.in);
@@ -40,22 +43,22 @@ public class RegistrationModule {
         switch (response) {
             case 1:
                 System.out.println("*** CARS :: Registration operation :: Register new patient**** \n ");
-                System.out.println("Enter Identity Number> ");
+                System.out.print("Enter Identity Number> ");
                 String identityNumber = sc.nextLine();
-                System.out.println("Enter Password> ");
+                System.out.print("Enter Password> ");
                 String password = sc.nextLine();
-                System.out.println("Enter First Name> ");
+                System.out.print("Enter First Name> ");
                 String firstName = sc.nextLine();
-                System.out.println("Enter Last Name> ");
+                System.out.print("Enter Last Name> ");
                 String lastName = sc.nextLine();
-                System.out.println("Enter Gender> ");
+                System.out.print("Enter Gender> ");
                 String gender = sc.nextLine();
-                System.out.println("Enter Age> ");
+                System.out.print("Enter Age> ");
                 int age = sc.nextInt();
                 sc.nextLine();
-                System.out.println("Enter Phone> ");
+                System.out.print("Enter Phone> ");
                 String phone = sc.nextLine();
-                System.out.println("Enter Address> ");
+                System.out.print("Enter Address> ");
                 String address = sc.nextLine();
 
                 try {
@@ -81,6 +84,7 @@ public class RegistrationModule {
 
             case 2:
                 System.out.println("*** CARS :: Registration operation :: Register Walk-In Consultation**** \n ");
+                doctorSessionBeanRemote.getAvailableDoctors(new Date()); //TOSO Make test class for this method call since it is not wortking
 
                 break;
             case 3:

@@ -85,7 +85,7 @@ public class MainApp {
 
             switch(response) {
                 case 1:
-                    RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote);
+                    RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote);
                     break;
                 case 2:
                     AppointmentModule appointmentModule = new AppointmentModule(staff);
