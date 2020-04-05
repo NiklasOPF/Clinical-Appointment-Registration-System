@@ -5,13 +5,18 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Remote;
+import entity.PatientEntity;
 
-/**
- *
- * @author Niklas
- */
-@Remote
+
 public interface PatientSessionBeanRemote {
     
+    public Long createPatientEntity(PatientEntity patientEntity);
+
+    public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber);
+
+    public PatientEntity retrievePatientEntityByPatientId(Long patientId);
+
+    public void updatePatientEntity(PatientEntity patientEntity);
+
+    public void deletePatientEntity(Long patientId);
 }

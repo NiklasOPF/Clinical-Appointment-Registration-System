@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
+import util.Enum.Gender;
 
 
 
@@ -25,7 +26,6 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 public class PatientEntity implements Serializable {
-    enum Gender {M,F}
     
     private static final long serialVersionUID = 1L;
     @Id

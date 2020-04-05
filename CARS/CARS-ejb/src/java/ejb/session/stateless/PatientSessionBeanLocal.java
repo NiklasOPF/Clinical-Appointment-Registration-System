@@ -5,13 +5,19 @@
  */
 package ejb.session.stateless;
 
-import javax.ejb.Local;
+import entity.PatientEntity;
 
-/**
- *
- * @author Niklas
- */
-@Local
+
 public interface PatientSessionBeanLocal {
+
+    public Long createPatientEntity(PatientEntity patientEntity);
+
+    public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber);
+
+    public PatientEntity retrievePatientEntityByPatientId(Long patientId);
+
+    public void updatePatientEntity(PatientEntity patientEntity);
+
+    public void deletePatientEntity(Long patientId);
     
 }

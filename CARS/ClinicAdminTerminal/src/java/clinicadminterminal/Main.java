@@ -6,6 +6,7 @@
 package clinicadminterminal;
 
 import ejb.session.stateless.DoctorSessionBeanRemote;
+import ejb.session.stateless.PatientSessionBeanRemote;
 import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
 import javax.ejb.EJB;
@@ -17,11 +18,15 @@ import javax.ejb.EJB;
  */
 public class Main {
 
+    @EJB(name = "PatientSessionBeanRemote")
+    private static PatientSessionBeanRemote patientSessionBeanRemote;
+
     @EJB(name = "StaffSessionBeanRemote")
     private static StaffSessionBeanRemote staffSessionBeanRemote;
 
     @EJB(name = "DoctorSessionBeanRemote")
     private static DoctorSessionBeanRemote doctorSessionBeanRemote;
+    
     
     
 
@@ -30,7 +35,7 @@ public class Main {
      */
     public static void main(String[] args) {
         //doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity("Niklas", "Forsstroem", "dunno", "none"));
-        new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote);
+        new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote);
     }
     
 }

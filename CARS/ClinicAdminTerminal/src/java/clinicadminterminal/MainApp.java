@@ -6,6 +6,7 @@
 package clinicadminterminal;
 
 import ejb.session.stateless.DoctorSessionBeanRemote;
+import ejb.session.stateless.PatientSessionBeanRemote;
 import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
 import entity.StaffEntity;
@@ -20,17 +21,19 @@ public class MainApp {
 
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
     private StaffSessionBeanRemote staffSessionBeanRemote;
+    private PatientSessionBeanRemote patientSessionBeanRemote;
     Scanner sc;
 
     public MainApp() {
         sc = new Scanner(System.in);
     }
 
-    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes) {
+    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote) {
         this();
 
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
         this.staffSessionBeanRemote = staffSessionBeanRemotes;
+        this.patientSessionBeanRemote = patientSessionBeanRemote;
         while (true) {
             System.out.println("*** Welcome to Clinic Appointment Registration System (CARS) **** \n ");
             System.out.println("1: Login ");
@@ -82,7 +85,7 @@ public class MainApp {
 
             switch(response) {
                 case 1:
-                    RegistrationModule registrationModule = new RegistrationModule(staff);
+                    RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote);
                     break;
                 case 2:
                     AppointmentModule appointmentModule = new AppointmentModule(staff);

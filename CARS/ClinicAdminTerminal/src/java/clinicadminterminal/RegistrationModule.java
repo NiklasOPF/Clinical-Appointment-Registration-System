@@ -5,8 +5,11 @@
  */
 package clinicadminterminal;
 
+import ejb.session.stateless.PatientSessionBeanRemote;
+import entity.PatientEntity;
 import entity.StaffEntity;
 import java.util.Scanner;
+import util.Enum.Gender;
 
 /**
  *
@@ -14,11 +17,14 @@ import java.util.Scanner;
  */
 public class RegistrationModule {
 
+    PatientSessionBeanRemote patientSessionBeanRemote;
+
     public RegistrationModule() {
 
     }
 
-    public RegistrationModule(StaffEntity staff) {
+    public RegistrationModule(StaffEntity staff, PatientSessionBeanRemote patientSessionBeanRemote) {
+        this.patientSessionBeanRemote = patientSessionBeanRemote;
         //TODO
         Scanner sc = new Scanner(System.in);
         System.out.println("*** CARS :: Registration operation **** \n ");
@@ -37,28 +43,49 @@ public class RegistrationModule {
                 System.out.println("Enter Identity Number> ");
                 String identityNumber = sc.nextLine();
                 System.out.println("Enter Password> ");
-                String password  = sc.nextLine();
+                String password = sc.nextLine();
                 System.out.println("Enter First Name> ");
-                String firstName  = sc.nextLine();
+                String firstName = sc.nextLine();
                 System.out.println("Enter Last Name> ");
-                String lastName  = sc.nextLine();
+                String lastName = sc.nextLine();
                 System.out.println("Enter Gender> ");
                 String gender = sc.nextLine();
                 System.out.println("Enter Age> ");
                 int age = sc.nextInt();
                 sc.nextLine();
                 System.out.println("Enter Phone> ");
-                String phone  = sc.nextLine();
+                String phone = sc.nextLine();
                 System.out.println("Enter Address> ");
                 String address = sc.nextLine();
+
+                try {
+                    PatientEntity patientEntity = new PatientEntity();
+                    switch (gender) {
+                        case "M":
+                        case "m":
+                            patientEntity = new PatientEntity(identityNumber, firstName, lastName, Gender.M, age, phone, address, password);
+                            break;
+                        case "F":
+                        case "f":
+                            patientEntity = new PatientEntity(identityNumber, firstName, lastName, Gender.F, age, phone, address, password);
+                            break;
+                        default:
+                            throw new Exception();
+                    }
+                    Long id = patientSessionBeanRemote.createPatientEntity(patientEntity);
+                } catch (Exception e) {
+                    System.err.println("wrong input"); // TODO make specific input error
+                }
+
                 break;
+
             case 2:
                 System.out.println("*** CARS :: Registration operation :: Register Walk-In Consultation**** \n ");
-                
+
                 break;
             case 3:
                 System.out.println("*** CARS :: Registration operation :: Regiuster Consultaiton By Appointment**** \n ");
-                
+
                 break;
             case 4:
                 return;
