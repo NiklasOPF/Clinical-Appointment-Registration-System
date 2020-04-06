@@ -18,7 +18,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    DoctorSessionBeanTest.class})
+    DoctorSessionBeanTest.class,
+    PatientSessionBeanTest.class})
 public class TestSuite {
     @BeforeClass
     public static void setUpClass() throws Exception{

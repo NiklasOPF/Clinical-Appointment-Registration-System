@@ -27,8 +27,6 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
 
     public DoctorSessionBean() {
     }
-
-    
     
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
@@ -42,9 +40,10 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         return doctorsIds;
     }
     
-    public Long[] getAvailableDoctors(Date date){
+    public Long[] getAvailableDoctors(Date date){ // TODO. Finish implementation of this after the leave table is working
         Query query = em.createQuery("SELECT DISTINCT p.doctorId FROM DoctorEntity p");
-        ArrayList<Long> doctorsIds = (ArrayList<Long>) query.getResultList();
+        List doctorsIds =  query.getResultList();
+        
         
         Query query2 = em.createQuery("SELECT DISTINCT p.doctorsLeaveId FROM DoctorsLeaveEntity p WHERE p.date = :date");
         query2.setParameter("date", date);
