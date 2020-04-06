@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.DoctorEntity;
 import java.util.Date;
+import java.util.List;
 
 public interface DoctorSessionBeanRemote {
     public Long createDoctorEntity(DoctorEntity doctorEntity);
@@ -21,5 +22,6 @@ public interface DoctorSessionBeanRemote {
 
     public Long[] getAvailableDoctors(Date date);
 
+    public List retrieveAllDoctors();
     
 }

@@ -13,5 +13,9 @@ public class Enum {
     public enum Gender{
         M,F;
     }
-    
+  
+    // Thoring time slots aas enum does not seem to work
+//    public enum TimeSlot{
+//        8,5;
+//    }
 }

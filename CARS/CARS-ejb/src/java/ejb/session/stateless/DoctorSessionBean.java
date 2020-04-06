@@ -33,6 +33,15 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
     
+    
+    @Override
+    public List retrieveAllDoctors(){
+        Query query = em.createQuery("SELECT DISTINCT p.doctorId FROM DoctorEntity p");
+        List doctorsIds =  query.getResultList();
+        
+        return doctorsIds;
+    }
+    
     public Long[] getAvailableDoctors(Date date){
         Query query = em.createQuery("SELECT DISTINCT p.doctorId FROM DoctorEntity p");
         ArrayList<Long> doctorsIds = (ArrayList<Long>) query.getResultList();
