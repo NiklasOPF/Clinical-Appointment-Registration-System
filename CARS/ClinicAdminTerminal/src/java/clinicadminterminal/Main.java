@@ -40,9 +40,9 @@ public class Main {
         //doctorSessionBeanRemote.createDoctorEntity(doc);
         //doctorSessionBeanRemote.createDoctorsLeaveEntity(new DoctorsLeaveEntity(doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1)), java.sql.Date.valueOf("2020-04-12")));
         
-        doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
+        //doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
         //doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-01-01"), java.sql.Date.valueOf("2020-05-01"));
-        //new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote);
+    new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote);
     }
     
 }
