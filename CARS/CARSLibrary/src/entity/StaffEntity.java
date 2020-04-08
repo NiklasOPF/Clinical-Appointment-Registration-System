@@ -41,6 +41,11 @@ public class StaffEntity implements Serializable {
         this.password = password;
     }
     
+    @Override
+    public String toString(){
+        return " First Name: " + firstName + "\n Last Name: " + lastName + "\n User Name: " + userName + "\n Password: " + password;
+    }
+    
     
     
     /**
@@ -127,9 +132,5 @@ public class StaffEntity implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.StaffEntity[ id=" + getStaffId() + " ]";
-    }
     
 }

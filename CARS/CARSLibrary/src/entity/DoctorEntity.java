@@ -49,7 +49,10 @@ public class DoctorEntity implements Serializable {
     }
     
     
-    
+    @Override
+    public String toString(){
+        return " First Name: " + firstName + "\n Last Name: " + lastName + "\n Registration: " + registration + "\n Qualifications: " + qualifications;
+    }
 
     public Long getDoctorId() {
         return doctorId;
@@ -79,10 +82,6 @@ public class DoctorEntity implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "entity.DoctorEntity[ id=" + doctorId + " ]";
-    }
 
     /**
      * @return the firstName

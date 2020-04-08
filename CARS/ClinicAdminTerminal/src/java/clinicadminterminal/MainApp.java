@@ -74,7 +74,7 @@ public class MainApp {
     private void mainModule(Scanner sc, StaffEntity staff){
         while (true) {
             System.out.println("*** CARS :: Main **** \n ");
-            System.out.println("You are logged in as " + staff.getFirstName() + staff.getLastName());
+            System.out.println("You are logged in as " + staff.getFirstName() + " " + staff.getLastName());
             System.out.println("1: Registration Operation");
             System.out.println("2: Appointment Operation");
             System.out.println("3: Administration Operation");

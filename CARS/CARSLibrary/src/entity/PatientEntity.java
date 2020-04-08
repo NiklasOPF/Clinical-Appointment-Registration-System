@@ -18,20 +18,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 import util.Enum.Gender;
 
-
-
 /**
  *
  * @author Niklas
  */
 @Entity
 public class PatientEntity implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long patientId;
-    @Column(unique=true)
+    @Column(unique = true)
     private String identityNumber;
     private String firstName;
     private String lastName;
@@ -42,7 +40,7 @@ public class PatientEntity implements Serializable {
     private String phone;
     private String address;
     private String password;
-    
+
     @OneToMany(mappedBy = "patientEntity")
     private List<AppointmentEntity> appointmentEntities;
 
@@ -60,11 +58,6 @@ public class PatientEntity implements Serializable {
         this.address = address;
         this.password = password;
     }
-    
-    
-    
-
-
 
     public Long getPatientId() {
         return patientId;
@@ -94,9 +87,16 @@ public class PatientEntity implements Serializable {
         return true;
     }
 
+
     @Override
     public String toString() {
-        return "entity.PatientEntity[ id=" + getPatientId() + " ]";
+        if (gender.equals(Gender.F)) {
+            return " Identity number: " + identityNumber + "First Name: " + firstName + "\n Last Name: " + lastName + "\n Gender: Female" + "\n Age: " + age + "\n Phone: " + phone + "\n Address: " + address + "\n Password: " + password;
+
+        } else {
+            return " Identity number: " + identityNumber + "First Name: " + firstName + "\n Last Name: " + lastName + "\n Gender: Male" + "\n Age: " + age + "\n Phone: " + phone + "\n Address: " + address + "\n Password: " + password;
+
+        }
     }
 
     /**
@@ -224,5 +224,5 @@ public class PatientEntity implements Serializable {
     public void setAppointmentEntities(List<AppointmentEntity> appointmentEntities) {
         this.appointmentEntities = appointmentEntities;
     }
-    
+
 }

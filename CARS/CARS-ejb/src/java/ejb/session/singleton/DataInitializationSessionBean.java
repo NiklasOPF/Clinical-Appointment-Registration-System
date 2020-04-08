@@ -29,7 +29,7 @@ public class DataInitializationSessionBean {
         try {
 
            // Can directly try to input since we don't allow duplicate usernames
-            em.persist(new StaffEntity("first", "last", "admin", "password"));
+            em.persist(new StaffEntity("first", "last", "admin", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
             em.flush();
         } catch (Exception e) { // TODO make exception mor especific
 

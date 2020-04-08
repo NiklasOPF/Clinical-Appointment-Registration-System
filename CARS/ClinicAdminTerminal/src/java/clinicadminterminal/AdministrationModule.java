@@ -5,8 +5,18 @@
  */
 package clinicadminterminal;
 
+import ejb.session.stateless.DoctorSessionBeanRemote;
+import ejb.session.stateless.PatientSessionBeanRemote;
+import ejb.session.stateless.StaffSessionBeanRemote;
+import entity.DoctorEntity;
+import entity.PatientEntity;
 import entity.StaffEntity;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  *
@@ -53,44 +63,97 @@ public class AdministrationModule {
         }
 
     }
-    
+
     private void staffManagement() { //TODO implement logic
-        while(true){
-            System.out.println("*** CARS :: Administraion operation :: Staff Management **** \n ");
+        StaffSessionBeanRemote staffSessionBeanRemote = lookupStaffSessionBeanRemote();
 
-            System.out.println("1: Add Staff");
-            System.out.println("2: View Staff Details");
-            System.out.println("3: Update Staff");
-            System.out.println("4: Delete Staff");
-            System.out.println("5: View All Staff");
-            System.out.println("6: Back \n");
-            System.out.print("> ");
-            response = sc.nextInt();
-            sc.nextLine();
+        System.out.println("*** CARS :: Administraion operation :: Staff Management **** \n ");
 
-            switch (response) {
-                case 1:
-                    break;
+        System.out.println("1: Add Staff");
+        System.out.println("2: View Staff Details");
+        System.out.println("3: Update Staff");
+        System.out.println("4: Delete Staff");
+        System.out.println("5: View All Staff");
+        System.out.println("6: Back \n");
+        System.out.print("> ");
+        response = sc.nextInt();
+        sc.nextLine();
 
-                case 2:
+        StaffEntity staff;
+        String firstName;
+        String lastName;
+        String userName;
+        String password;
+
+        switch (response) {
+            case 1:
+                System.out.println("*** CARS :: Registration operation :: Register new Staff**** \n ");
+                System.out.print("Enter First Name> ");
+                firstName = sc.nextLine();
+                System.out.print("Enter Last Name> ");
+                lastName = sc.nextLine();
+                System.out.print("Enter User Name> ");
+                userName = sc.nextLine();
+                System.out.print("Enter Password> ");
+                password = sc.nextLine();
+                staffSessionBeanRemote.createStaffEntity(new StaffEntity(firstName, lastName, userName, password));
+                break;
+
+            case 2:
+                System.out.println("*** CARS :: Registration operation :: View Staff Details**** \n ");
+                System.out.print("Enter user name> ");
+                staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+
+                System.out.println(staff.toString() + "\n");
+
+                System.out.println(" Press enter to go back \n");
+                System.out.print("> ");
+                sc.nextLine();
+
+                break;
+            case 3: // TODO Here IO am directly usign the getters and setters of the entity class. Is it better practice to use the session bean instead?
+                // TODO what to do when the user is current user
+                System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
+                System.out.print("Enter user name> ");
+                staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+
+                System.out.print("Enter New First Name> ");
+                staff.setFirstName(sc.nextLine());
+                System.out.print("Enter New Last Name> ");
+                staff.setLastName(sc.nextLine());
+                System.out.print("Enter New User Name> ");
+                staff.setUserName(sc.nextLine());
+                System.out.print("Enter New Password> ");
+                staff.setPassword(sc.nextLine());
+
+                staffSessionBeanRemote.updateStaffEntity(staff);
+                break;
+            case 4:
+                System.out.println("*** CARS :: Registration operation :: Delete Staff**** \n ");
+                // TODO what to do when the user is current user
+                System.out.print("Enter user name> ");
+                staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+                if (staff.getStaffId().equals(staffEntity.getStaffId())) {
+                    System.out.println("You can't remove the same profile as you are logged into!!");
                     break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    return;
-                default:
-                    System.out.println("Invalid input");
-            }
-        
+                }
+                staffSessionBeanRemote.deleteStaffEntity(staff.getStaffId());
+                break;
+            case 5:
+                System.out.println("*** CARS :: Registration operation :: View All Staff**** \n ");
+                //TODO
+                break;
+            case 6:
+                return;
+            default:
+                System.out.println("Invalid input");
         }
 
     }
-    private void doctorManagement(){ //TODO implement logic
-         while(true){
+
+    private void doctorManagement() {
+        while (true) {
+            DoctorSessionBeanRemote doctorSessionBeanRemote = lookupDoctorSessionBeanRemote();
             System.out.println("*** CARS :: Administraion operation :: Doctor Management **** \n ");
 
             System.out.println("1: Add Doctor");
@@ -104,32 +167,81 @@ public class AdministrationModule {
             response = sc.nextInt();
             sc.nextLine();
 
+            String firstName;
+            String lastName;
+            String registration;
+            String qualifications;
+            DoctorEntity doc;
             switch (response) {
                 case 1:
+                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Add Doctor **** \n ");
+
+                    System.out.print("Enter First Name> ");
+                    firstName = sc.nextLine();
+                    System.out.print("Enter Last Name> ");
+                    lastName = sc.nextLine();
+                    System.out.print("Enter Registration> ");
+                    registration = sc.nextLine();
+                    System.out.print("Enter Qualifications> ");
+                    qualifications = sc.nextLine();
+                    doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity(firstName, lastName, registration, qualifications));
                     break;
 
                 case 2:
+                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View Doctor Details **** \n ");
+
+                    System.out.print("Enter registration> ");
+                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+
+                    System.out.println(doc.toString() + "\n");
+
+                    System.out.println("Press enter to go back \n");
+                    System.out.print("> ");
+                    sc.nextLine();
                     break;
                 case 3:
+                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Update Doctor **** \n ");
+
+                    System.out.println("Enter Registration> ");
+                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+
+                    System.out.print("Enter New First Name> ");
+                    doc.setFirstName(sc.nextLine());
+                    System.out.print("Enter New Last Name> ");
+                    doc.setLastName(sc.nextLine());
+                    System.out.print("Enter New Qualifications> ");
+                    doc.setQualifications(sc.nextLine());
+                    System.out.print("Enter New Registration> ");
+                    doc.setRegistration(sc.nextLine());
+                    doctorSessionBeanRemote.updateDoctorEntity(doc);
                     break;
-                case 4:
+                case 4: //TODO what to do if a doctor has appointment??
+                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Delete Doctor **** \n ");
+                    System.out.println("Enter Registration> ");
+                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+                    doctorSessionBeanRemote.deleteDoctorEntity(doc.getDoctorId());
                     break;
                 case 5:
+                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View All Doctors **** \n ");
+                    //TODO
                     break;
                 case 6:
+                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
+                    //TODO
                     break;
                 case 7:
                     return;
                 default:
                     System.out.println("Invalid input");
             }
-        
+
         }
-        
+
     }
 
     private void patientManagement() { //TODO implement logic
-        while(true){
+        while (true) {
+            PatientSessionBeanRemote patientSessionBeanRemote = lookupPatientSessionBeanRemote();
             System.out.println("*** CARS :: Administraion operation :: Patient Management **** \n ");
 
             System.out.println("1: Add Patient");
@@ -142,26 +254,135 @@ public class AdministrationModule {
             response = sc.nextInt();
             sc.nextLine();
 
+            String identityNumber;
+            String firstName;
+            String lastName;
+            String gender;
+            int age;
+            String phone;
+            String address;
+            String password;
+            PatientEntity patientEntity;
+
             switch (response) {
                 case 1:
-                    break;
+                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
+                    System.out.print("Enter Identity Number> ");
+                    identityNumber = sc.nextLine();
+                    System.out.print("Enter First Name> ");
+                    firstName = sc.nextLine();
+                    System.out.print("Enter Last Name> ");
+                    lastName = sc.nextLine();
+                    System.out.print("Enter Gender> ");
+                    gender = sc.nextLine();
+                    System.out.print("Enter Age> ");
+                    age = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter Phone> ");
+                    phone = sc.nextLine();
+                    System.out.print("Enter Address> ");
+                    address = sc.nextLine();
+                    System.out.print("Enter Password> ");
+                    password = sc.nextLine();
+                    if (gender.equals("M") || gender.equals("m")) {
+                        patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
+                    }else if (gender.equals("F") || gender.equals("f")) {
+                        patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
+                    }else{
+                        System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                    }
 
+                    break;
                 case 2:
+                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: View Patient Details **** \n ");
+                    System.out.println("Enter Identity Number> ");
+                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+                    System.out.println(patientEntity.toString());
+
                     break;
                 case 3:
+                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: Update Patient **** \n ");
+                    System.out.println("Enter Identity Number> ");
+                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+                    
+                    
+                    System.out.print("Enter New Identity Number> ");
+                    patientEntity.setIdentityNumber(sc.nextLine());
+                    System.out.print("Enter New First Name> ");
+                    patientEntity.setFirstName(sc.nextLine());
+                    System.out.print("Enter Last Name> ");
+                    patientEntity.setLastName(sc.nextLine());
+                    System.out.print("Enter Gender> ");
+                    gender = sc.nextLine();
+                    if (gender.equals("M") || gender.equals("m")) {
+                        patientEntity.setGender(util.Enum.Gender.M);
+                    }else if (gender.equals("F") || gender.equals("f")) {
+                        patientEntity.setGender(util.Enum.Gender.F);
+                    }else{
+                        System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                        break;
+                    }
+                    System.out.print("Enter New Age> ");
+                    patientEntity.setAge(sc.nextInt());
+                    sc.nextLine();
+                    System.out.print("Enter New Phone> ");
+                    patientEntity.setPhone(sc.nextLine());
+                    System.out.print("Enter Address> ");
+                    patientEntity.setAddress(sc.nextLine());
+                    System.out.print("Enter Password> ");
+                    patientEntity.setPassword(sc.nextLine());
+                    
+                    patientSessionBeanRemote.updatePatientEntity(patientEntity);
                     break;
                 case 4:
+                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: Delete Patient **** \n ");
+                    System.out.println("Enter Identity Number> ");
+                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+                    patientSessionBeanRemote.deletePatientEntity(patientEntity.getPatientId());
+
                     break;
-                case 5:
+                case 5: // TODO
+                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: View All Patients **** \n ");
+
                     break;
                 case 6:
                     return;
                 default:
                     System.out.println("Invalid input");
             }
-        
+
         }
 
+    }
+
+    private StaffSessionBeanRemote lookupStaffSessionBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (StaffSessionBeanRemote) c.lookup("java:comp/env/StaffSessionBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private DoctorSessionBeanRemote lookupDoctorSessionBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (DoctorSessionBeanRemote) c.lookup("java:comp/env/DoctorSessionBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private PatientSessionBeanRemote lookupPatientSessionBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (PatientSessionBeanRemote) c.lookup("java:comp/env/PatientSessionBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 
 }
