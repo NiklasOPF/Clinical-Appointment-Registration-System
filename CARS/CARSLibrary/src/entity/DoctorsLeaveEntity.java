@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.LocalDate;  
+
 
 /**
  *
@@ -27,6 +29,17 @@ public class DoctorsLeaveEntity implements Serializable {
     @ManyToOne
     private DoctorEntity doctorEntity;
     private Date date;
+
+    public DoctorsLeaveEntity() {
+    }
+
+    public DoctorsLeaveEntity(DoctorEntity doctorEntity, Date date) {
+        this();
+        this.date = date;
+        this.doctorEntity = doctorEntity;
+        
+    }
+    
     
 
     public Long getDoctorsLeaveId() {

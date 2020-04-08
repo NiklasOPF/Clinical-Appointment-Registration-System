@@ -9,7 +9,7 @@ import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
 import entity.PatientEntity;
 import entity.StaffEntity;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Scanner;
 import util.Enum.Gender;
 
@@ -84,7 +84,7 @@ public class RegistrationModule {
 
             case 2:
                 System.out.println("*** CARS :: Registration operation :: Register Walk-In Consultation**** \n ");
-                doctorSessionBeanRemote.getAvailableDoctors(new Date()); //TOSO Make test class for this method call since it is not wortking
+                //doctorSessionBeanRemote.getAvailableDoctors(new Date()); //TODO Make test class for this method call since it is not wortking
 
                 break;
             case 3:

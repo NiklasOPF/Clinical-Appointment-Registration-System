@@ -1,6 +1,9 @@
 package ejb.session.stateless;
 
 import entity.DoctorEntity;
+import entity.DoctorsLeaveEntity;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +17,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import org.junit.runners.MethodSorters;
+import util.exception.DoubleLeaveRequestException;
+import util.exception.LeaveToCloseInTimeException;
 
 /**
  *
@@ -68,9 +73,58 @@ public class DoctorSessionBeanTest {
     }
     
     @Test()
-    public void test99RemoveDoctorEntity() {
+    public void test04CreateDoctorsLeaveEntity() {
+        System.out.println("***** DoctorSesionBeanTest.test04CreateDoctorsLeaveEntity");
+        // make leave that's five days from now
+        Long time = Calendar.getInstance().getTime().getTime() + (new Date(0, 0, 5).getTime() - new Date(0, 0, 0).getTime());
+        Long id = doctorSessionBeanRemote.createDoctorsLeaveEntity(new DoctorsLeaveEntity(doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1)), new Date(time)));
+        assertNotNull(id);
+    }
+    
+    @Test()
+    public void test05RetrieveDoctorsLeaveEntity() {
+        System.out.println("***** DoctorSesionBeanTest.test05RetrieveDoctorsLeaveEntity");
+        DoctorsLeaveEntity entity = doctorSessionBeanRemote.retrieveDoctorsLeaveEntityById(new Long(1));
+        assertNotNull(entity);
+    }
+    
+
+    
+    @Test()
+    public void test06requestDoctorsLeave() {
+        System.out.println("***** DoctorSesionBeanTest.test04requestDoctorsLeave");
+        // make leave that's three days from now to avoid exception
+        Long time = Calendar.getInstance().getTime().getTime() + (new Date(0, 0, 3).getTime() - new Date(0, 0, 0).getTime());
+        try {
+            doctorSessionBeanRemote.requestDoctorsLeave(new Date(time), new Long(1));
+        } catch (LeaveToCloseInTimeException ex) {
+            Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DoubleLeaveRequestException ex) {
+            Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1));
+        //assertNotNull(doc);
+    }
+    
+    @Test()
+    public void test08getDoctorsOnLeaveBetweenDates() {
+        System.out.println("***** DoctorSesionBeanTest.test07getDoctorsOnLeaveBetweenDates");
+        
+        List docs = doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-04-03"), java.sql.Date.valueOf("2020-04-20"));
+        assertEquals(docs.size(), 1);
+    }
+    
+    
+    
+    
+    
+    @Test()
+    public void test99RemoveDoctorEntity() {  
+        //Note that you can't remove a doctor if he has an associated leave registered. 
+        // TODO amend this issue
         System.out.println("***** DoctorSesionBeanTest.test99RemoveDoctorEntity");
-        doctorSessionBeanRemote.deleteDoctorEntity(new Long(1));
+        DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1));
+        //doctorSessionBeanRemote.deleteDoctorEntity(new Long(1));
         doctorSessionBeanRemote.deleteDoctorEntity(new Long(2));
         List docId = doctorSessionBeanRemote.retrieveAllDoctors();
         assertEquals(docId.size(), 0);

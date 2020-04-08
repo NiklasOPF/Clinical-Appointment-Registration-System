@@ -6,8 +6,11 @@
 package ejb.session.stateless;
 
 import entity.DoctorEntity;
-import java.util.Date;
+import entity.DoctorsLeaveEntity;
+import java.sql.Date;
 import java.util.List;
+import util.exception.DoubleLeaveRequestException;
+import util.exception.LeaveToCloseInTimeException;
 
 public interface DoctorSessionBeanRemote {
     public Long createDoctorEntity(DoctorEntity doctorEntity);
@@ -20,8 +23,17 @@ public interface DoctorSessionBeanRemote {
 
     public void deleteDoctorEntity(Long doctorId);
 
-    public Long[] getAvailableDoctors(Date date);
 
     public List retrieveAllDoctors();
+
+    public void requestDoctorsLeave(java.sql.Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException;
+
+    public Long createDoctorsLeaveEntity(DoctorsLeaveEntity doctorsLeaveEntity);
+
+    public DoctorsLeaveEntity retrieveDoctorsLeaveEntityById(Long doctorsLeaveId);
+
+    public List getDoctorsOnLeaveBetweenDates(java.sql.Date startDate, java.sql.Date endDate);
+
+    public void getAvailableDoctors(Date date);
     
 }

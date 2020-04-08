@@ -13,5 +13,10 @@ public class DoubleLeaveRequestException extends Exception{
 
     public DoubleLeaveRequestException() {
     }
+
+    public DoubleLeaveRequestException(String str) {
+        System.err.println("str");
+    }
+
     
 }

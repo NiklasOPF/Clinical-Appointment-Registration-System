@@ -17,7 +17,7 @@ import util.exception.LeaveToCloseInTimeException;
  * @author Niklas
  */
 public class tempMain {
-    public static void main(String[] args){
+    public static void main(String[] args) throws LeaveToCloseInTimeException, DoubleLeaveRequestException{
         DoctorSessionBean doc = new DoctorSessionBean();
 //        try {
 //            doc.requestDoctorsLeave(new Date(176685001 + Calendar.getInstance().getTime().getTime()), new Long(1));
@@ -26,7 +26,7 @@ public class tempMain {
 //        } catch (DoubleLeaveRequestException ex) {
 //            Logger.getLogger(tempMain.class.getName()).log(Level.SEVERE, null, ex);
 //        }
-        doc.getDoctorsOnLeave(new Date(0, 0, 0));
+        doc.requestDoctorsLeave(java.sql.Date.valueOf("2020-04-10"), new Long(1));
     }
     
 }

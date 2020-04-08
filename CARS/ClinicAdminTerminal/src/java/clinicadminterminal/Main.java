@@ -9,6 +9,7 @@ import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
 import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
+import entity.DoctorsLeaveEntity;
 import javax.ejb.EJB;
 
 
@@ -35,7 +36,13 @@ public class Main {
      */
     public static void main(String[] args) {
         //doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity("Niklas", "Forsstroem", "dunno", "none"));
-        new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote);
+        //DoctorEntity doc = new DoctorEntity("Niklas", "Forsstrom", "reg", "qual");
+        //doctorSessionBeanRemote.createDoctorEntity(doc);
+        //doctorSessionBeanRemote.createDoctorsLeaveEntity(new DoctorsLeaveEntity(doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1)), java.sql.Date.valueOf("2020-04-12")));
+        
+        doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
+        //doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-01-01"), java.sql.Date.valueOf("2020-05-01"));
+        //new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote);
     }
     
 }
