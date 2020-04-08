@@ -5,14 +5,16 @@
  */
 package util.exception;
 
+/**
+ *
+ * @author StudentStudent
+ */
+public class DoctorNotFoundException extends Exception {
 
-public class InvalidLoginException extends Exception {
-
-
-    public InvalidLoginException() {
+    public DoctorNotFoundException() {
     }
 
-    public InvalidLoginException(String msg) {
+    public DoctorNotFoundException(String msg) {
         super(msg);
     }
 }

@@ -5,14 +5,18 @@
  */
 package util.exception;
 
+/**
+ *
+ * @author StudentStudent
+ */
+public class ClinicNotOpenException extends Exception {
 
-public class InvalidLoginException extends Exception {
 
-
-    public InvalidLoginException() {
+    public ClinicNotOpenException() {
     }
 
-    public InvalidLoginException(String msg) {
+
+    public ClinicNotOpenException(String msg) {
         super(msg);
     }
 }

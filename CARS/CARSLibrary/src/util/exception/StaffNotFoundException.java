@@ -5,14 +5,18 @@
  */
 package util.exception;
 
+/**
+ *
+ * @author StudentStudent
+ */
+public class StaffNotFoundException extends Exception {
 
-public class InvalidLoginException extends Exception {
 
-
-    public InvalidLoginException() {
+    public StaffNotFoundException() {
     }
 
-    public InvalidLoginException(String msg) {
+
+    public StaffNotFoundException(String msg) {
         super(msg);
     }
 }
