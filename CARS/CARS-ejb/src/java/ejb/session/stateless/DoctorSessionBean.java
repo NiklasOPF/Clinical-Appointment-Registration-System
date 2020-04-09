@@ -22,6 +22,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
@@ -82,7 +83,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
 
     public List getDoctorsOnLeave(Date date) {
         Query query = em.createQuery("SELECT DISTINCT p.doctorEntity FROM DoctorsLeaveEntity p WHERE p.date = :date");
-        query.setParameter("date", date);
+        query.setParameter("date", date, TemporalType.DATE);
         return query.getResultList();
     }
 

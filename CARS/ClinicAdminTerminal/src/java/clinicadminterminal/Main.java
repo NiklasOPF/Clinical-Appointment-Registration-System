@@ -5,12 +5,19 @@
  */
 package clinicadminterminal;
 
+import ejb.session.stateless.AppointmentSessionBeanRemote;
 import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
 import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
 import entity.DoctorsLeaveEntity;
+import java.sql.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
+import util.exception.DoubleLeaveRequestException;
+import util.exception.LeaveToCloseInTimeException;
 
 
 /**
@@ -18,6 +25,9 @@ import javax.ejb.EJB;
  * @author Niklas
  */
 public class Main {
+
+    @EJB(name = "AppointmentSessionBeanRemote")
+    private static AppointmentSessionBeanRemote appointmentSessionBeanRemote;
 
     @EJB(name = "PatientSessionBeanRemote")
     private static PatientSessionBeanRemote patientSessionBeanRemote; //TODO theres no need to do depåendency injection here since we don't need it right now, we might not even need it in the MainApp module. Therefore it's better to wait and do a JNDI lookup when we actually need the bean. JNDI also allows the client to be in a separate JVM from the ejb
@@ -30,19 +40,23 @@ public class Main {
     
     
     
+    
+    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity("Niklas", "Forsstroem", "dunno", "none"));
-        //DoctorEntity doc = new DoctorEntity("Niklas", "Forsstrom", "reg", "qual");
-        //doctorSessionBeanRemote.createDoctorEntity(doc);
-        //doctorSessionBeanRemote.createDoctorsLeaveEntity(new DoctorsLeaveEntity(doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1)), java.sql.Date.valueOf("2020-04-12")));
-        
-        //doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
-        //doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-01-01"), java.sql.Date.valueOf("2020-05-01"));
-    new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote);
+      
+            //doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity("Niklas", "Forsstroem", "dunno", "none"));
+            //DoctorEntity doc = new DoctorEntity("Niklas", "Forsstrom", "reg", "qual");
+            //doctorSessionBeanRemote.createDoctorEntity(doc);
+            //doctorSessionBeanRemote.createDoctorsLeaveEntity(new DoctorsLeaveEntity(doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1)), java.sql.Date.valueOf("2020-04-12")));
+            
+            //doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
+            //doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-01-01"), java.sql.Date.valueOf("2020-05-01"));
+            new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote);
+
     }
     
 }

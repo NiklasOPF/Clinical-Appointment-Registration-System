@@ -5,6 +5,7 @@
  */
 package clinicadminterminal;
 
+import ejb.session.stateless.AppointmentSessionBeanRemote;
 import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
 import ejb.session.stateless.StaffSessionBeanRemote;
@@ -22,18 +23,20 @@ public class MainApp {
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
     private StaffSessionBeanRemote staffSessionBeanRemote;
     private PatientSessionBeanRemote patientSessionBeanRemote;
+    private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
     Scanner sc;
 
     public MainApp() {
         sc = new Scanner(System.in);
     }
 
-    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote) {
+    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote) {
         this();
 
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
         this.staffSessionBeanRemote = staffSessionBeanRemotes;
         this.patientSessionBeanRemote = patientSessionBeanRemote;
+        this.appointmentSessionBeanRemote = appointmentSessionBeanRemote;
         while (true) {
             System.out.println("*** Welcome to Clinic Appointment Registration System (CARS) **** \n ");
             System.out.println("1: Login ");
@@ -88,7 +91,7 @@ public class MainApp {
                     RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote);
                     break;
                 case 2:
-                    AppointmentModule appointmentModule = new AppointmentModule(staff);
+                    AppointmentModule appointmentModule = new AppointmentModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote);
                     break;
                 case 3:
                     AdministrationModule administrationModule = new AdministrationModule(staff);
