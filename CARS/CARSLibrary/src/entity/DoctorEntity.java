@@ -52,7 +52,7 @@ public class DoctorEntity implements Serializable {
     
     @Override
     public String toString(){
-        return " First Name: " + firstName + "| Last Name: " + lastName + "| Registration: " + registration + "| Qualifications: " + qualifications;
+        return  firstName + " | " + lastName + " | " + registration + " | " + qualifications;
     }
 
     public Long getDoctorId() {

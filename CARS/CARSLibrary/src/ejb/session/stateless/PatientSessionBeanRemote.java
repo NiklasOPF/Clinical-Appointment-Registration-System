@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PatientEntity;
+import java.util.List;
 
 
 public interface PatientSessionBeanRemote {
@@ -19,4 +20,6 @@ public interface PatientSessionBeanRemote {
     public void updatePatientEntity(PatientEntity patientEntity);
 
     public void deletePatientEntity(Long patientId);
+
+    public List retrieveAllPatients();
 }

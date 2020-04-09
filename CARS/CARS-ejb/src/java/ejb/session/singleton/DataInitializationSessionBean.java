@@ -16,8 +16,8 @@ import javax.persistence.Query;
 @Singleton
 public class DataInitializationSessionBean {
 
-    @EJB(name = "StaffSessionBeanLocal")
-    private StaffSessionBeanLocal staffSessionBeanLocal;
+    //@EJB(name = "StaffSessionBeanLocal")
+    //private StaffSessionBeanLocal staffSessionBeanLocal;
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
 
@@ -32,7 +32,8 @@ public class DataInitializationSessionBean {
             //if (staffSessionBeanLocal.retrieveStaffEntityByUserName("sdlsdf")==null){
              //   throw new Exception();
             
-
+            //em.persist(new StaffEntity("first", "last", "admin", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
+            //em.flush();
            // Can directly try to input since we don't allow duplicate usernames
             
         } catch (Exception e) { // TODO make exception mor especific

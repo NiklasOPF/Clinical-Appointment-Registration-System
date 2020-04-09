@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PatientEntity;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -61,6 +62,12 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
     public void deletePatientEntity(Long patientId){
         PatientEntity patientEntity = retrievePatientEntityByPatientId(patientId);
         em.remove(patientEntity);
+    }
+    
+    public List retrieveAllPatients(){
+        Query query = em.createQuery("SELECT p FROM PatientEntity p");
+        return query.getResultList();
+    
     }
 
 }  

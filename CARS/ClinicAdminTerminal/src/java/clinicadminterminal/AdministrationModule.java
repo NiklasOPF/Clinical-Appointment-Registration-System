@@ -11,12 +11,16 @@ import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
 import entity.PatientEntity;
 import entity.StaffEntity;
+import java.sql.Date;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import util.exception.DoubleLeaveRequestException;
+import util.exception.LeaveToCloseInTimeException;
 
 /**
  *
@@ -141,7 +145,15 @@ public class AdministrationModule {
                 break;
             case 5:
                 System.out.println("*** CARS :: Registration operation :: View All Staff**** \n ");
-                //TODO
+                
+                List staffList = staffSessionBeanRemote.retrieveAllStaff();
+
+                System.out.println("First Name | Last Name | Username | Password");
+                    for (Object obj : staffList) {
+                        StaffEntity my_staff = (StaffEntity) obj;
+                        System.out.println(my_staff.toString());
+                    }
+                    System.out.println("\n");
                 break;
             case 6:
                 return;
@@ -223,12 +235,34 @@ public class AdministrationModule {
                     break;
                 case 5:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View All Doctors **** \n ");
-                    //TODO
+                    
+                    List docs =  doctorSessionBeanRemote.retrieveAllDoctors();
+                    System.out.println("First Name | Last Name | Registration | Qualifications");
+                    for (Object doctor : docs) {
+                        DoctorEntity my_doctor = (DoctorEntity) doctor;
+                        System.out.println(my_doctor.toString());
+                    }
+                    System.out.println("\n");
+                       
                     break;
                 case 6:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
-                    //TODO
+                    System.out.println("Enter Registration> ");
+                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+                    System.out.println("Enter Requested Leave date in the format: yyyy-MM-dd> ");
+                    Date date = java.sql.Date.valueOf(sc.nextLine());
+                    try {
+                        doctorSessionBeanRemote.requestDoctorsLeave(date, doc.getDoctorId());
+                    } catch (LeaveToCloseInTimeException ex) {
+                        System.out.println("%To close in time");
+                        Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (DoubleLeaveRequestException ex) {
+                        System.out.println("Already have a request for that week");
+                        Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                
                     break;
+
                 case 7:
                     return;
                 default:
@@ -341,8 +375,16 @@ public class AdministrationModule {
                     patientSessionBeanRemote.deletePatientEntity(patientEntity.getPatientId());
 
                     break;
-                case 5: // TODO
+                case 5: 
                     System.out.println("*** CARS :: Administraion operation :: Patient Management :: View All Patients **** \n ");
+                    
+                    List pats =  patientSessionBeanRemote.retrieveAllPatients();
+                    System.out.println("Identity Numberr | First Name | Last Name | Gender | Age | Phone | Address | Password");
+                    for (Object obj : pats) {
+                        PatientEntity my_patient = (PatientEntity) obj;
+                        System.out.println(my_patient.toString());
+                    }
+                    System.out.println("\n");
 
                     break;
                 case 6:

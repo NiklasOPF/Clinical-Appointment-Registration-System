@@ -92,11 +92,10 @@ public class PatientEntity implements Serializable {
     @Override
     public String toString() {
         if (gender.equals(Gender.F)) {
-            return " Identity number: " + identityNumber + "| First Name: " + firstName + "| Last Name: " + lastName + "| Gender: Female" + "| Age: " + age + "| Phone: " + phone + "| Address: " + address + "| Password: " + password;
+            return identityNumber + " | " + firstName + " | " + lastName + " | F" + " | " + age + " | " + phone + " | " + address + " | " + password;
 
         } else {
-            return " Identity number: " + identityNumber + "| First Name: " + firstName + "| Last Name: " + lastName + "| Gender: Male" + "| Age: " + age + "| Phone: " + phone + "| Address: " + address + "| Password: " + password;
-
+            return identityNumber + " | " + firstName + " | " + lastName + " | M" + " | " + age + " | " + phone + " | " + address + " | " + password;
         }
     }
 

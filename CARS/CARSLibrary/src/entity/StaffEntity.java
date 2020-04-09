@@ -44,8 +44,8 @@ public class StaffEntity implements Serializable {
     
     @Override
     public String toString(){
-        return " First Name: " + firstName + "| Last Name: " + lastName + "| User Name: " + userName + "| Password: " + password;
-    }
+        return firstName + " | " + lastName + " | " + userName + " | " + password;
+    } 
     
     
     

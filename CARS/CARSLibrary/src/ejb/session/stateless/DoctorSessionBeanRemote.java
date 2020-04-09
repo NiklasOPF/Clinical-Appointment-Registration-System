@@ -35,5 +35,7 @@ public interface DoctorSessionBeanRemote {
     public List getDoctorsOnLeaveBetweenDates(java.sql.Date startDate, java.sql.Date endDate);
 
     public void getAvailableDoctors(Date date);
+
+
     
 }

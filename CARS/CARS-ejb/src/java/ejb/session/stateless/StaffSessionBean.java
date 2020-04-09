@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.StaffEntity;
+import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -74,6 +75,11 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
         // We don't pass the etity itself since it would be unmanaged (pass by value in the function)
         StaffEntity staffEntity = retrieveStaffEntityByStaffId(staffId);
         em.remove(staffEntity);
+    }
+    
+    public List retrieveAllStaff(){
+        Query query = em.createQuery("SELECT p FROM StaffEntity p");
+        return query.getResultList();
     }
 
 

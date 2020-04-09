@@ -41,6 +41,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     private EntityManager em;
 
     public void requestDoctorsLeave(Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException {//TODO throws ...
+        // TODO think it inputs the date wrong. It interperets MM as MM-1 since it statrs from 0
         // Need to check for 1 week in advace, no appointments, no double leaves, only one day free per week.
         // Note that checking for one booking per week also takes care of the duplicates
         long dif1 = date.getTime() - new Date(Calendar.getInstance().getTime().getTime()).getTime();
@@ -76,25 +77,21 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         query.setParameter("date1", startDate);
         query.setParameter("date2", endDate);
         List doctorsIds = query.getResultList();
-
         return doctorsIds;
     }
 
     public List getDoctorsOnLeave(Date date) {
-        Query query2 = em.createQuery("SELECT DISTINCT p.doctorsLeaveId FROM DoctorsLeaveEntity p WHERE p.date = :date");
         Query query = em.createQuery("SELECT DISTINCT p.doctorEntity FROM DoctorsLeaveEntity p WHERE p.date = :date");
         query.setParameter("date", date);
-        List doctorsIds = query.getResultList();
-
-        return doctorsIds;
+        return query.getResultList();
     }
 
     @Override
     public List retrieveAllDoctors() {
-        Query query = em.createQuery("SELECT DISTINCT p.doctorId FROM DoctorEntity p");
-        List doctorsIds = query.getResultList();
+        Query query = em.createQuery("SELECT p FROM DoctorEntity p");
+        List doctors = query.getResultList();
 
-        return doctorsIds;
+        return doctors;
     }
 
     public void getAvailableDoctors(Date date) { // TODO. Fix the issues that we are having with java.sql.Date
@@ -153,10 +150,4 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         em.remove(doctorEntity);
     }
 
-
-//    public static void main(String[] args){
-//        DoctorSessionBean bean = new DoctorSessionBean();
-//        docs.
-//        List docs = bean.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-04-03"), java.sql.Date.valueOf("2020-04-20"));
-//    }
 }
