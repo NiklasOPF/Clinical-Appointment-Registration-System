@@ -20,7 +20,7 @@ import javax.ejb.EJB;
 public class Main {
 
     @EJB(name = "PatientSessionBeanRemote")
-    private static PatientSessionBeanRemote patientSessionBeanRemote;
+    private static PatientSessionBeanRemote patientSessionBeanRemote; //TODO theres no need to do depåendency injection here since we don't need it right now, we might not even need it in the MainApp module. Therefore it's better to wait and do a JNDI lookup when we actually need the bean. JNDI also allows the client to be in a separate JVM from the ejb
 
     @EJB(name = "StaffSessionBeanRemote")
     private static StaffSessionBeanRemote staffSessionBeanRemote;

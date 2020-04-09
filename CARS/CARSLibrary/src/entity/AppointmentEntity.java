@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package entity;
+//TODO change to work with java.util.date and simpledate package
 
 import java.io.Serializable;
 import java.sql.Date;

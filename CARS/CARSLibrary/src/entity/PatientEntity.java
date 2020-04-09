@@ -5,6 +5,7 @@
  */
 package entity;
 
+//TODO change to work with java.util.date and simpledate package
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -91,10 +92,10 @@ public class PatientEntity implements Serializable {
     @Override
     public String toString() {
         if (gender.equals(Gender.F)) {
-            return " Identity number: " + identityNumber + "First Name: " + firstName + "\n Last Name: " + lastName + "\n Gender: Female" + "\n Age: " + age + "\n Phone: " + phone + "\n Address: " + address + "\n Password: " + password;
+            return " Identity number: " + identityNumber + "| First Name: " + firstName + "| Last Name: " + lastName + "| Gender: Female" + "| Age: " + age + "| Phone: " + phone + "| Address: " + address + "| Password: " + password;
 
         } else {
-            return " Identity number: " + identityNumber + "First Name: " + firstName + "\n Last Name: " + lastName + "\n Gender: Male" + "\n Age: " + age + "\n Phone: " + phone + "\n Address: " + address + "\n Password: " + password;
+            return " Identity number: " + identityNumber + "| First Name: " + firstName + "| Last Name: " + lastName + "| Gender: Male" + "| Age: " + age + "| Phone: " + phone + "| Address: " + address + "| Password: " + password;
 
         }
     }

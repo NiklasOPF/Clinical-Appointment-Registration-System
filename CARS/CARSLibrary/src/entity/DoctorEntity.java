@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package entity;
+//TODO change to work with java.util.date and simpledate package
 
 import java.io.Serializable;
 import java.util.List;
@@ -51,7 +52,7 @@ public class DoctorEntity implements Serializable {
     
     @Override
     public String toString(){
-        return " First Name: " + firstName + "\n Last Name: " + lastName + "\n Registration: " + registration + "\n Qualifications: " + qualifications;
+        return " First Name: " + firstName + "| Last Name: " + lastName + "| Registration: " + registration + "| Qualifications: " + qualifications;
     }
 
     public Long getDoctorId() {

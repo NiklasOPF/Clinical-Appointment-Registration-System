@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package entity;
+//TODO change to work with java.util.date and simpledate package
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -43,7 +44,7 @@ public class StaffEntity implements Serializable {
     
     @Override
     public String toString(){
-        return " First Name: " + firstName + "\n Last Name: " + lastName + "\n User Name: " + userName + "\n Password: " + password;
+        return " First Name: " + firstName + "| Last Name: " + lastName + "| User Name: " + userName + "| Password: " + password;
     }
     
     
