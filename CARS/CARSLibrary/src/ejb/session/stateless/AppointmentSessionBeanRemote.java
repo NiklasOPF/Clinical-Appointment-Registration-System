@@ -20,5 +20,7 @@ public interface AppointmentSessionBeanRemote {
     public List retrieveOccupiedTimes(Date date, DoctorEntity doctorEntity);
 
     public void deleteAppointment(Long appointmentId);
+
+    public AppointmentEntity retrieveAppointmentByAppointmentId(Long appointmentId);
     
 }

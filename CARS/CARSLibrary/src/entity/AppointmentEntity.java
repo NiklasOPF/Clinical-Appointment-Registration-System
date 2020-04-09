@@ -9,6 +9,7 @@ package entity;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,9 @@ public class AppointmentEntity implements Serializable {
     // We use a DoctorEntity instead private Long patientIdentityNumber; // TODO look up special mapping
     private Date date; //TODO make sure these have the correct format
     private Time time;
+    
+    
+    
     
     @ManyToOne
     private DoctorEntity doctorEntity;
@@ -76,11 +80,11 @@ public class AppointmentEntity implements Serializable {
         return true;
     }
 
+
     @Override
     public String toString() {
-        return "entity.AppointmentEntity[ id=" + appointmentId + " ]";
+        return  appointmentId + " | " + date + " | " + new SimpleDateFormat("HH:mm").format(time) + " | " + doctorEntity.getFirstName() + " " + doctorEntity.getLastName();
     }
-
     /**
      * @return the date
      */

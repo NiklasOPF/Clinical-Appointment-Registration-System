@@ -55,12 +55,18 @@ public class AppointmentSessionBean implements AppointmentSessionBeanRemote, App
     
     public List retrieveOccupiedTimes(Date date, DoctorEntity doctorEntity){
         //Query query = em.createQuery("SELECT p FROM AppointmentEntity p WHERE p.patientEntity == :patient");
-        Query query = em.createQuery("SELECT p FROM AppointmentEntity p WHERE p.doctorEntity = :doctor AND p.date = :date");
+        Query query = em.createQuery("SELECT p.time FROM AppointmentEntity p WHERE p.doctorEntity = :doctor AND p.date = :date");
         query.setParameter("doctor", doctorEntity);
         query.setParameter("date", date, TemporalType.DATE);
         List times = query.getResultList();
         return times;
     }
+    
+    public AppointmentEntity retrieveAppointmentByAppointmentId(Long appointmentId){
+        return em.find(AppointmentEntity.class, appointmentId);
+
+    }
+
 
     
 }
