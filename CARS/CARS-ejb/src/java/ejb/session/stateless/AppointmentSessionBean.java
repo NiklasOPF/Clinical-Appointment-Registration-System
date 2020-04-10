@@ -36,6 +36,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanRemote, App
         List appointments = query.getResultList();
         return appointments;
     }
+
     
     public void deleteAppointment(Long appointmentId){
         AppointmentEntity appointmentEntity = retrieveAppointmentEntityByAppointmentId(appointmentId);

@@ -5,6 +5,7 @@
  */
 package clinicadminterminal;
 
+import ejb.session.singleton.QueueSessionBeanRemote;
 import ejb.session.stateless.AppointmentSessionBeanRemote;
 import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
@@ -26,6 +27,9 @@ import util.exception.LeaveToCloseInTimeException;
  */
 public class Main {
 
+    @EJB(name = "QueueSessionBeanRemote")
+    private static QueueSessionBeanRemote queueSessionBeanRemote;
+
     @EJB(name = "AppointmentSessionBeanRemote")
     private static AppointmentSessionBeanRemote appointmentSessionBeanRemote;
 
@@ -37,6 +41,8 @@ public class Main {
 
     @EJB(name = "DoctorSessionBeanRemote")
     private static DoctorSessionBeanRemote doctorSessionBeanRemote;
+    
+    
     
     
     
@@ -55,7 +61,7 @@ public class Main {
             
             //doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
             //doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-01-01"), java.sql.Date.valueOf("2020-05-01"));
-            new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote);
+            new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
 
     }
     

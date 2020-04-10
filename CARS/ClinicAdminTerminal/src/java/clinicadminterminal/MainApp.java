@@ -5,6 +5,7 @@
  */
 package clinicadminterminal;
 
+import ejb.session.singleton.QueueSessionBeanRemote;
 import ejb.session.stateless.AppointmentSessionBeanRemote;
 import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
@@ -24,19 +25,21 @@ public class MainApp {
     private StaffSessionBeanRemote staffSessionBeanRemote;
     private PatientSessionBeanRemote patientSessionBeanRemote;
     private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
+    private QueueSessionBeanRemote queueSessionBeanRemote;
     Scanner sc;
 
     public MainApp() {
         sc = new Scanner(System.in);
     }
 
-    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote) {
+    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
         this();
 
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
         this.staffSessionBeanRemote = staffSessionBeanRemotes;
         this.patientSessionBeanRemote = patientSessionBeanRemote;
         this.appointmentSessionBeanRemote = appointmentSessionBeanRemote;
+        this.queueSessionBeanRemote = queueSessionBeanRemote;
         while (true) {
             System.out.println("*** Welcome to Clinic Appointment Registration System (CARS) **** \n ");
             System.out.println("1: Login ");
@@ -88,7 +91,7 @@ public class MainApp {
 
             switch(response) {
                 case 1:
-                    RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote);
+                    RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
                     break;
                 case 2:
                     AppointmentModule appointmentModule = new AppointmentModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote);
