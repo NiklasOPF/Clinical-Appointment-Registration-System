@@ -25,7 +25,7 @@ public class AppointmentEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
     // We use a DoctorEntity instead private Long doctorId; //TODO look u if special mapping is needed
     // We use a DoctorEntity instead private Long patientIdentityNumber; // TODO look up special mapping

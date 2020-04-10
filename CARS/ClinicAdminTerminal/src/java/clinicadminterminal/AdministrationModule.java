@@ -205,6 +205,7 @@ public class AdministrationModule {
                     System.out.print("Enter registration> ");
                     doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
 
+                    System.out.println("First Name | Last Name | Registration | Qualifications");
                     System.out.println(doc.toString() + "\n");
 
                     System.out.println("Press enter to go back \n");
