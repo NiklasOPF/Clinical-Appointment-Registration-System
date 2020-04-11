@@ -9,6 +9,7 @@
             <included-library dirs="200">libs.javaee-api-7.0.classpath</included-library>
             <included-library dirs="200">libs.junit_4.classpath</included-library>
             <included-library dirs="200">libs.hamcrest.classpath</included-library>
+            <included-library dirs="200">reference.DemoApplicationJpaLibrary.jar</included-library>
             <source-roots>
                 <root id="src.dir" name="Source Packages"/>
             </source-roots>
@@ -19,6 +20,14 @@
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
                 <foreign-project>CARSLibrary</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>DemoApplicationJpaLibrary</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>
                 <target>jar</target>

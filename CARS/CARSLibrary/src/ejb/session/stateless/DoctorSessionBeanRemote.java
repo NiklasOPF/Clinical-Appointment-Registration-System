@@ -36,6 +36,8 @@ public interface DoctorSessionBeanRemote {
 
     public void getAvailableDoctors(Date date);
 
+    public List getDoctorsOnLeave(Date date);
+
 
     
 }

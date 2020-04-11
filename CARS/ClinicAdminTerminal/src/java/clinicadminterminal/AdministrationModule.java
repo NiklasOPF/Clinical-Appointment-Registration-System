@@ -260,6 +260,7 @@ public class AdministrationModule {
                         System.out.println("Already have a request for that week");
                         Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    List sdfsdf = doctorSessionBeanRemote.getDoctorsOnLeave(date);
                 
                     break;
 
