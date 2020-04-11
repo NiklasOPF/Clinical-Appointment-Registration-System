@@ -13,6 +13,9 @@ public class LeaveToCloseInTimeException extends Exception {
 
     public LeaveToCloseInTimeException() {
     }
-    
-    
+
+    public LeaveToCloseInTimeException(String msg) {
+        super(msg);
+    }
+
 }
