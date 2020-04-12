@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package entity;
-//TODO change to work with java.util.date and simpledate package
 
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -20,7 +19,7 @@ import javax.persistence.Id;
 @Entity
 public class StaffEntity implements Serializable {
 
-
+    // TODO make columns more specific
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +28,7 @@ public class StaffEntity implements Serializable {
     private String lastName;
     @Column(name="userName", nullable = false, unique=true)
     private String userName;
-    private String password;
+    private String password; // TODO do password encryption
 
     public StaffEntity() {
     }

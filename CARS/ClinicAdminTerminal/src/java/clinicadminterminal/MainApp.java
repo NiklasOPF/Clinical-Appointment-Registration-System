@@ -50,18 +50,17 @@ public class MainApp {
             if (response == 1) {
                 try{
                     StaffEntity staff = login(sc);
+                    System.out.println("Login successful!\n");
                     mainModule(sc, staff);
                     
-                }catch(InvalidLoginException e){ // TODO hanle this in a way that does not crash
-                    System.out.println("no such user");
-                    break;
+                }catch(InvalidLoginException e){
+                    System.out.println(e.getMsg() + "\n");
                 }
-                
             } else if (response == 2) {
                 System.out.println("Goodbye");
                 break;
             } else {
-                System.out.println("Incorrect input, try again.");
+                System.err.println("Incorrect input, try again.");
             }
         }
 
@@ -73,7 +72,11 @@ public class MainApp {
         String username = sc.nextLine();
         System.out.print("Enter password> ");
         String password = sc.nextLine();
-        return staffSessionBeanRemote.login(username, password);
+        try {
+                return staffSessionBeanRemote.login(username, password);
+        } catch (Exception e){
+            throw new InvalidLoginException("That combination of login credentials is not valid!");
+        }
 
     }
     
@@ -81,7 +84,7 @@ public class MainApp {
         while (true) {
             System.out.println("*** CARS :: Main **** \n ");
             System.out.println("You are logged in as " + staff.getFirstName() + " " + staff.getLastName());
-            System.out.println("1: Registration Operation");
+            System.out.println("\n1: Registration Operation");
             System.out.println("2: Appointment Operation");
             System.out.println("3: Administration Operation");
             System.out.println("4: Logout \n");

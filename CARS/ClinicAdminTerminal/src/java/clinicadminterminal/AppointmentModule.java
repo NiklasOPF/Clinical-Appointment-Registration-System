@@ -114,7 +114,7 @@ public class AppointmentModule {
                     System.out.print("Enter Patient Identity Number> ");
                     PatientEntity patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
                     appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, time, my_doc, patient));
-
+                    // TODO see time managin functionality from rigistrationsessionbean and add iot here
                     //TODO add the remaining functionality
                     break;
                 case 3:
