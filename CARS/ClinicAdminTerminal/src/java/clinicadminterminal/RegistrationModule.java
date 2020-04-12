@@ -133,7 +133,7 @@ public class RegistrationModule {
                 
                 // Print body of time slots
                 try{
-                    for (Calendar time : getAllTimesToday()) {
+                    for (Calendar time : TimeFiltrator.getAllTimesToday()) {
                     System.out.print("\n" + timeFormatter.format(time.getTime()) + " ");
                     for (int i = 0; i < doctors.size(); i++) {
                         doctorEntity = (DoctorEntity) doctors.get(i);
@@ -203,63 +203,6 @@ public class RegistrationModule {
         }
     }
 
-    private ArrayList<Calendar> getAllTimesToday() throws AccesSystemOnWeekendException {
-        // Idea, start with the current time and iterate every 30 mins to get the relevant times
-        ArrayList<Calendar> times = new ArrayList<>();
-        Calendar current = Calendar.getInstance();
-        Calendar lower = Calendar.getInstance();
-        lower.set(Calendar.HOUR_OF_DAY, 8);
-        lower.set(Calendar.MINUTE, 30);
-        lower.set(Calendar.SECOND, 0);
-        Calendar upper = Calendar.getInstance();
-        // Note that last consultation is 30 mins before closing
-        if (new HashSet<>(Arrays.asList(Calendar.MONDAY, Calendar.TUESDAY, Calendar.WEDNESDAY)).contains(current.get(Calendar.DAY_OF_WEEK))) {
-            upper.set(Calendar.HOUR_OF_DAY, 17);
-            upper.set(Calendar.MINUTE, 30);
-
-        } else if (current.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
-            upper.set(Calendar.HOUR_OF_DAY, 16);
-            upper.set(Calendar.MINUTE, 30);
-
-        } else if (current.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
-            upper.set(Calendar.HOUR_OF_DAY, 22); //TODO change back to 17
-            upper.set(Calendar.MINUTE, 00);
-
-        } else { //TODO handle this like an exception
-            throw new AccesSystemOnWeekendException("The system is not open during weekends. Please come back on a weekday!");
-            //System.err.println("The system is not open during weekends. Please come back on a weekday!");
-            //return new ArrayList<Calendar>();
-        }
-
-        if (current.compareTo(lower) < 1) { // If earlier then opening time
-            current.setTimeInMillis(lower.getTimeInMillis());
-        } else {
-            lower.setTimeInMillis(current.getTimeInMillis());
-            if (current.get(Calendar.SECOND) != 0) { // round to next minute
-                current.add(Calendar.MINUTE, 1);
-                current.set(Calendar.SECOND, 0);
-            }
-            // round to next half an hour
-            if (!new HashSet<>(Arrays.asList(0, 30)).contains(current.get(Calendar.MINUTE))) {
-                current.add(Calendar.MINUTE, 30 - (current.get(Calendar.MINUTE) % 30));
-            }
-        }
-        Calendar calendarCopy;
-
-        lower.add(Calendar.HOUR_OF_DAY, 3);
-        while (current.compareTo(upper) < 1 && current.compareTo(lower) < 1) {
-
-            String tmp = timeFormatter.format(current.getTime());
-            if (!"12:30".equals(tmp) && !"13:00".equals(tmp) && !"13:30".equals(tmp)) {
-                //times.add(tmp);
-                calendarCopy = Calendar.getInstance();
-                calendarCopy.setTimeInMillis(current.getTimeInMillis());
-                times.add(calendarCopy);
-            }
-            current.add(Calendar.MINUTE, 30);
-        }
-
-        return times;
-    }
+   
 
 }

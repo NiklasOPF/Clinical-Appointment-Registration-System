@@ -16,6 +16,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -70,22 +72,18 @@ public class AppointmentModule {
                         System.out.println(appointmentEntity);
                     }
                     System.out.println("\n");
-
                     break;
+                    
                 case 2:
+                    //Strategy: Maintain a list of all possible 
                     System.out.println("*** CARS :: Appointment Operation :: Add Appointment **** \n ");
 
-                    //appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(java.sql.Date.valueOf("2020-10-10"), java.sql.Time.valueOf("12:30:00"), doctorSessionBeanRemote.retrieveDoctorEntityByRegistration("reg"), patientSessionBeanRemote.retrievePatientEntityByIdentityNumber("i")));
-                    //List availableDoctors = this.doctorSessionBeanRemote.retrieveAllDoctors();
-                    // seems like i should filter times afterwards availableDoctors.removeAll(doctorSessionBeanRemote.getDoctorsOnLeave(java.sql.Date.valueOf("2020-10-10")));
-
+                    //Print all doctors
                     System.out.println("Doctor:\nId | Name");
-                    //System.out.println("Id | Name");
                     for (Object obj : this.doctorSessionBeanRemote.retrieveAllDoctors()) {
                         DoctorEntity my_doctor = (DoctorEntity) obj;
                         System.out.println(my_doctor.getDoctorId() + " | " + my_doctor.getFirstName() + " " + my_doctor.getLastName());
                     }
-                    //SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
                     System.out.print("Enter Doctor Id> ");
                     int doctorId = sc.nextInt();
@@ -95,33 +93,40 @@ public class AppointmentModule {
                     System.out.print("Enter Date> ");
                     String dateString = sc.nextLine();
                     Date date = java.sql.Date.valueOf(dateString);
-                    ArrayList<String> times = getTimeList();
-                    List occupiedTimes = appointmentSessionBeanRemote.retrieveOccupiedTimes(date, my_doc);
+                   
 
-                    for (Object obj : occupiedTimes) {
-                        Time my_time = (Time) obj;
-                        times.remove(timeFormatter.format(my_time));
+                    ArrayList<String> times = getAvailableTimes(date, my_doc);
+                    if (times.size() == 0){
+                        System.out.println("There are no available times for this doctor on the requested date \n");
+                        break;
                     }
-
+                  
+                    // Print the available times
                     System.out.println("Availability for " + my_doc.getFirstName() + " " + my_doc.getLastName() + " on " + dateString + ":");
-                    for (String time : times) {
-                        System.out.print(time + " ");
-                    }
+                    for (String time : times) {System.out.print(time + " ");}
 
-                    System.out.print("\n\n Enter Time> ");
+                    System.out.print("\n\nEnter Time> ");
                     String timeString = sc.nextLine();
-                    Time time = java.sql.Time.valueOf(timeString + ":00");
+                    if (!times.contains(timeString)){
+                        System.out.println("That time was not allowed. Try again\n");
+                        break;
+                    }
                     System.out.print("Enter Patient Identity Number> ");
                     PatientEntity patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-                    appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, time, my_doc, patient));
-                    // TODO see time managin functionality from rigistrationsessionbean and add iot here
-                    //TODO add the remaining functionality
+                    appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), my_doc, patient));
+
+                    System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_doc.getFirstName() + " " + my_doc.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
                     break;
                 case 3:
                     System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
                     System.out.print("Enter Patient Identity Number> ");
-                    patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-
+                    try{
+                        patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+                    } catch(Exception e) {
+                        System.out.println("Could not find a patient with that identity number.");
+                        break;
+                    }
+                        
                     System.out.println("Appointments:");
                     List app = appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity);
                     System.out.println("wfsdf");
@@ -163,5 +168,31 @@ public class AppointmentModule {
         times.add(timeFormatter.format(java.sql.Time.valueOf("15:30:00")));
         return times;
     }
+    
+    private ArrayList<String> getAvailableTimes(Date date, DoctorEntity my_doc){
+        // Get a list with all "allowed" consultations for the given day
+        Calendar date_cal = Calendar.getInstance();
+        date_cal.setTime(date);
+        ArrayList<Calendar> all_allowed_calendars = TimeFiltrator.getAllTimesOfDate(date_cal);
+        
+        // Keep the ones that are at least 2 days in the future
+        Calendar lower = Calendar.getInstance();
+        lower.add(Calendar.DATE, 2);
+        ArrayList<String> times = new ArrayList<>();
+        for (Calendar cal: all_allowed_calendars){
+            if (lower.compareTo(cal)<1){
+                times.add(timeFormatter.format(cal.getTime()));
+            }
+        }
+        
+        // Remove appointment times that are already occupied
+        List occupiedTimes = appointmentSessionBeanRemote.retrieveOccupiedTimes(date, my_doc);
+        for (Object obj : occupiedTimes) {
+            Time my_time = (Time) obj;
+            times.remove(timeFormatter.format(my_time));
+        }
 
+        return times;    
+    }
+    
 }
