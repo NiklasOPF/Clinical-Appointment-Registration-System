@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Scanner;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import util.Enum.Gender;
+import util.exception.AccesSystemOnWeekendException;
 
 /**
  *
@@ -63,26 +64,27 @@ public class RegistrationModule {
         DoctorEntity doctorEntity;
         switch (response) {
             case 1:
-                System.out.println("*** CARS :: Registration operation :: Register new patient**** \n ");
-                System.out.print("Enter Identity Number> ");
-                String identityNumber = sc.nextLine();
-                System.out.print("Enter Password> ");
-                String password = sc.nextLine();
-                System.out.print("Enter First Name> ");
-                String firstName = sc.nextLine();
-                System.out.print("Enter Last Name> ");
-                String lastName = sc.nextLine();
-                System.out.print("Enter Gender> ");
-                String gender = sc.nextLine();
-                System.out.print("Enter Age> ");
-                int age = sc.nextInt();
-                sc.nextLine();
-                System.out.print("Enter Phone> ");
-                String phone = sc.nextLine();
-                System.out.print("Enter Address> ");
-                String address = sc.nextLine();
+                try { // Make specific try catches for alll scenarios
+                    System.out.println("*** CARS :: Registration operation :: Register new patient**** \n ");
+                    System.out.print("Enter Identity Number> ");
+                    String identityNumber = sc.nextLine();
+                    System.out.print("Enter Password> ");
+                    String password = sc.nextLine();
+                    System.out.print("Enter First Name> ");
+                    String firstName = sc.nextLine();
+                    System.out.print("Enter Last Name> ");
+                    String lastName = sc.nextLine();
+                    System.out.print("Enter Gender> ");
+                    String gender = sc.nextLine();
+                    System.out.print("Enter Age> ");
+                    int age = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter Phone> ");
+                    String phone = sc.nextLine();
+                    System.out.print("Enter Address> ");
+                    String address = sc.nextLine();
 
-                try {
+                
                     patientEntity = new PatientEntity();
                     switch (gender) {
                         case "M":
@@ -98,7 +100,8 @@ public class RegistrationModule {
                     }
                     patientSessionBeanRemote.createPatientEntity(patientEntity);
                 } catch (Exception e) {
-                    System.err.println("wrong input"); // TODO make specific input error
+                    System.err.println("Some of the input is not valid. Please try again!");
+                    break;
                 }
                 
                 
@@ -129,7 +132,8 @@ public class RegistrationModule {
                 }
                 
                 // Print body of time slots
-                for (Calendar time : getAllTimesToday()) {
+                try{
+                    for (Calendar time : getAllTimesToday()) {
                     System.out.print("\n" + timeFormatter.format(time.getTime()) + " ");
                     for (int i = 0; i < doctors.size(); i++) {
                         doctorEntity = (DoctorEntity) doctors.get(i);
@@ -147,7 +151,13 @@ public class RegistrationModule {
                             }
                         }
                     }
+                } 
+                } catch (AccesSystemOnWeekendException e){ // Add output for how to go into test mode
+                    System.out.println("\n" + e.getMessage());
+                    break;
                 }
+                       
+
                 System.out.print("\n\n Enter Doctor Id> ");
                 doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
                 sc.nextLine();
@@ -161,10 +171,16 @@ public class RegistrationModule {
                 System.out.println("Queue number is " + queueSessionBeanRemote.getNewQueueNumber());
                 break;
 
+
             case 3:
-                System.out.println("*** CARS :: Registration operation :: Regiuster Consultaiton By Appointment**** \n ");
+                System.out.println("*** CARS :: Registration operation :: Register Consultaiton By Appointment**** \n ");
                 System.out.print("Enter Patient Identity Nuber> ");
-                patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+                try{
+                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+                } catch (Exception e) {
+                    System.out.println("Could not find a patient with this identity number.");
+                    break;
+                }
                 System.out.println("\n Appointments: \nId | Date | Time | Doctor");
 
                 for (Object obj : appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity)) {
@@ -187,7 +203,7 @@ public class RegistrationModule {
         }
     }
 
-    private ArrayList<Calendar> getAllTimesToday() {
+    private ArrayList<Calendar> getAllTimesToday() throws AccesSystemOnWeekendException {
         // Idea, start with the current time and iterate every 30 mins to get the relevant times
         ArrayList<Calendar> times = new ArrayList<>();
         Calendar current = Calendar.getInstance();
@@ -209,9 +225,10 @@ public class RegistrationModule {
             upper.set(Calendar.HOUR_OF_DAY, 22); //TODO change back to 17
             upper.set(Calendar.MINUTE, 00);
 
-        } else {
-            System.out.println("Get back on a weekday!");
-            return null;
+        } else { //TODO handle this like an exception
+            throw new AccesSystemOnWeekendException("The system is not open during weekends. Please come back on a weekday!");
+            //System.err.println("The system is not open during weekends. Please come back on a weekday!");
+            //return new ArrayList<Calendar>();
         }
 
         if (current.compareTo(lower) < 1) { // If earlier then opening time

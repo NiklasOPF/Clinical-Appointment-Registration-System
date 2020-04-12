@@ -5,21 +5,23 @@
  */
 package util.exception;
 
-
-public class InvalidLoginException extends Exception {
+/**
+ *
+ * @author Niklas
+ */
+public class AccesSystemOnWeekendException extends Exception{
     private String msg;
 
-
-    public InvalidLoginException() {
-        this.msg = null;
+    public AccesSystemOnWeekendException() {
     }
 
-    public InvalidLoginException(String msg) {
-        super();
+    public AccesSystemOnWeekendException(String msg) {
+        this();
         this.msg = msg;
     }
     
-    public String getMsg(){
-        return this.msg;
+    public String getMessage(){
+        return msg;
     }
+
 }
