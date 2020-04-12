@@ -19,6 +19,7 @@ import javax.ejb.Singleton;
 public class QueueSessionBean implements QueueSessionBeanRemote, QueueSessionBeanLocal {
 
     private int lastIssuedQueueNumber; //TODO reset every day
+    // TODO don't reset everytime you start the program
 
     public QueueSessionBean() {
         resetQueue();

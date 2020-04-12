@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package entity;
-//TODO change to work with java.util.date and simpledate package
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -27,9 +26,7 @@ public class AppointmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
-    // We use a DoctorEntity instead private Long doctorId; //TODO look u if special mapping is needed
-    // We use a DoctorEntity instead private Long patientIdentityNumber; // TODO look up special mapping
-    private Date date; //TODO make sure these have the correct format
+    private Date date;
     private Time time;
     
     

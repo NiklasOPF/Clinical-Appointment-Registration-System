@@ -48,10 +48,9 @@ public class RegistrationModule {
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
         this.appointmentSessionBeanRemote = appointmentSessionBeanRemote;
         this.queueSessionBeanRemote = queueSessionBeanRemote;
-        //TODO
+
         Scanner sc = new Scanner(System.in);
         System.out.println("*** CARS :: Registration operation **** \n ");
-        System.out.println("You are logged in as " + staff.getFirstName() + staff.getLastName());
         System.out.println("1: Register new patient");
         System.out.println("2: Register Walk-In Consultaiton");
         System.out.println("3: Register Consultation By Appointment");
@@ -101,7 +100,9 @@ public class RegistrationModule {
                 } catch (Exception e) {
                     System.err.println("wrong input"); // TODO make specific input error
                 }
-
+                
+                
+                System.out.println("Patient has been registered successfully!\n ");
                 break;
 
             case 2:

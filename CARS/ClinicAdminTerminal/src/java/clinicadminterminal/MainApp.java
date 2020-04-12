@@ -50,6 +50,7 @@ public class MainApp {
             if (response == 1) {
                 try{
                     StaffEntity staff = login(sc);
+                    System.out.println("Login successful!\n");
                     mainModule(sc, staff);
                     
                 }catch(InvalidLoginException e){ // TODO hanle this in a way that does not crash
@@ -81,7 +82,7 @@ public class MainApp {
         while (true) {
             System.out.println("*** CARS :: Main **** \n ");
             System.out.println("You are logged in as " + staff.getFirstName() + " " + staff.getLastName());
-            System.out.println("1: Registration Operation");
+            System.out.println("\n1: Registration Operation");
             System.out.println("2: Appointment Operation");
             System.out.println("3: Administration Operation");
             System.out.println("4: Logout \n");
