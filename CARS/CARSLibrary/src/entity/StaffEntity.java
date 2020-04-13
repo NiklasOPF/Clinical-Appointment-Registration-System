@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import util.Encryption;
 
 /**
  *
@@ -38,7 +39,7 @@ public class StaffEntity implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.password = password;
+        this.password = Encryption.encrypt(password);
     }
     
     @Override

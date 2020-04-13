@@ -35,11 +35,12 @@ public class DataInitializationSessionBean { //TODO fix this bean so that the pr
             //em.persist(new StaffEntity("first", "last", "admin", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
             //em.flush();
            // Can directly try to input since we don't allow duplicate usernames
-           //em.persist(new StaffEntity("first", "last", "admin", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
-           // em.flush();
+           //em.persist(new StaffEntity("Linda", "Chua", "manager", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
+           //em.flush();
+
             
         } catch (Exception e) { // TODO make exception mor especific
-            em.persist(new StaffEntity("first", "last", "admin", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
+            em.persist(new StaffEntity("Linda", "Chua", "manager", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
             em.flush();
         }
 //        try

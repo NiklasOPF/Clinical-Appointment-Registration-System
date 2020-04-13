@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -122,6 +124,14 @@ public class AppointmentEntity implements Serializable {
      */
     public PatientEntity getPatientEntity() {
         return patientEntity;
+    }
+
+    public Long getTimeToAppointmentInMills() {
+        return    time.getTime() + date.getTime() - new java.sql.Date(new java.util.Date().getTime()).getTime();
+
+        //TODO implement this method
+        
+        
     }
     
 }

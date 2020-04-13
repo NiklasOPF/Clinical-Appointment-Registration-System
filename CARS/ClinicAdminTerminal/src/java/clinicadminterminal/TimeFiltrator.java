@@ -43,7 +43,7 @@ public class TimeFiltrator {
             upper.set(Calendar.MINUTE, 30);
 
         } else if (current.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
-            upper.set(Calendar.HOUR_OF_DAY, 22); //TODO change back to 17
+            upper.set(Calendar.HOUR_OF_DAY, 17); 
             upper.set(Calendar.MINUTE, 00);
 
         } else { //TODO handle this like an exception
@@ -102,7 +102,7 @@ public class TimeFiltrator {
             upper.set(Calendar.MINUTE, 30);
 
         } else if (current.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
-            upper.set(Calendar.HOUR_OF_DAY, 22); //TODO change back to 17
+            upper.set(Calendar.HOUR_OF_DAY, 17);
             upper.set(Calendar.MINUTE, 00);
 
         } else { //TODO handle this like an exception
