@@ -34,6 +34,9 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
     @Override
     public PatientEntity login(String idenNo, String password) throws InvalidLoginException {
         PatientEntity user = retrievePatientEntityByIdentityNumber(idenNo);
+        System.out.println(idenNo);
+        System.out.println(password);
+        System.out.println(user.getPassword());
         if (user.getPassword().equals(password)) {
             return user;
         } else {

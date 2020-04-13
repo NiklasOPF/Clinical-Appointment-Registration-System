@@ -10,8 +10,6 @@ import util.exception.InvalidLoginException;
 
 public interface PatientSessionBeanLocal {
 
-    public PatientEntity login(String idenNo, String password) throws InvalidLoginException;
-
     public Long createPatientEntity(PatientEntity patientEntity);
 
     public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber);
@@ -21,5 +19,7 @@ public interface PatientSessionBeanLocal {
     public void updatePatientEntity(PatientEntity patientEntity);
 
     public void deletePatientEntity(Long patientId);
+
+    public PatientEntity login(String idenNo, String password) throws InvalidLoginException;
 
 }

@@ -55,7 +55,7 @@ public class MainApp {
                 try {
                     PatientEntity patient = login(sc);
                     System.out.println("Login successful!\n");
-                    //mainModule(sc, staff);
+                    MainModule mainModule = new MainModule(sc,patient);
 
                 } catch (InvalidLoginException e) {
                     System.out.println(e.getMsg() + "\n");

@@ -5,7 +5,7 @@
  */
 package ejb.session.stateless;
 
-import com.sun.xml.rpc.processor.schema.UnimplementedFeatureException;
+//import com.sun.xml.rpc.processor.schema.UnimplementedFeatureException;
 import entity.DoctorEntity;
 import entity.DoctorsLeaveEntity;
 import java.util.ArrayList;
