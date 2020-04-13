@@ -6,13 +6,18 @@
 package ejb.session.stateless;
 
 import entity.StaffEntity;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import util.Encryption;
 import util.exception.InvalidLoginException;
 
 /**
@@ -29,8 +34,9 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
     
     @Override
     public StaffEntity login(String username, String password) throws InvalidLoginException{
+        //String encryptedPassword = encrypt(password);
         StaffEntity user = retrieveStaffEntityByUserName(username);
-        if (user.getPassword().equals(password)){
+        if (user.getPassword().equals(Encryption.encrypt(password))){
             return user;
         }
         else {
@@ -81,6 +87,7 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
         Query query = em.createQuery("SELECT p FROM StaffEntity p");
         return query.getResultList();
     }
+
 
 
     
