@@ -84,36 +84,6 @@ public class MainApp {
 
     }
 
-    /*private void mainModule(Scanner sc, StaffEntity staff) {
-        while (true) {
-            System.out.println("*** CARS :: Main **** \n ");
-            System.out.println("You are logged in as " + staff.getFirstName() + " " + staff.getLastName());
-            System.out.println("\n1: Registration Operation");
-            System.out.println("2: Appointment Operation");
-            System.out.println("3: Administration Operation");
-            System.out.println("4: Logout \n");
-            System.out.print("> ");
-            int response = sc.nextInt();
-            sc.nextLine();
 
-            switch (response) {
-                case 1:
-                    RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
-                    break;
-                case 2:
-                    AppointmentModule appointmentModule = new AppointmentModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote);
-                    break;
-                case 3:
-                    AdministrationModule administrationModule = new AdministrationModule(staff);
-                    break;
-                case 4:
-                    System.out.println("Logging out");
-                    return;
-                default:
-                    System.out.println("Invalid input");
-            }
-        }
-
-    }*/
 }
 
