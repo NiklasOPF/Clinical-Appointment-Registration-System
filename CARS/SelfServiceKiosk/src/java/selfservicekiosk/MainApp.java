@@ -50,12 +50,47 @@ public class MainApp {
             int response = sc.nextInt();
             sc.nextLine();
             if (response == 1) {
-                System.out.println("heh");
+                String identityNumber;
+                String firstName;
+                String lastName;
+                String gender;
+                int age;
+                String phone;
+                String address;
+                String password;
+                PatientEntity patientEntity;
+                System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
+                System.out.print("Enter Identity Number> ");
+                identityNumber = sc.nextLine();
+                System.out.print("Enter First Name> ");
+                firstName = sc.nextLine();
+                System.out.print("Enter Last Name> ");
+                lastName = sc.nextLine();
+                System.out.print("Enter Gender> ");
+                gender = sc.nextLine();
+                System.out.print("Enter Age> ");
+                age = sc.nextInt();
+                sc.nextLine();
+                System.out.print("Enter Phone> ");
+                phone = sc.nextLine();
+                System.out.print("Enter Address> ");
+                address = sc.nextLine();
+                System.out.print("Enter Password> ");
+                password = sc.nextLine();
+                if (gender.equals("M") || gender.equals("m")) {
+                    patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
+                } else if (gender.equals("F") || gender.equals("f")) {
+                    patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
+                } else {
+                    System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                }
+
             } else if (response == 2) {
                 try {
                     PatientEntity patient = login(sc);
                     System.out.println("Login successful!\n");
-                    MainModule mainModule = new MainModule(sc,patient);
+                    MainModule mainModule = new MainModule(patient, doctorSessionBeanRemote, staffSessionBeanRemotes,
+                            patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
 
                 } catch (InvalidLoginException e) {
                     System.out.println(e.getMsg() + "\n");
@@ -84,6 +119,4 @@ public class MainApp {
 
     }
 
-
 }
-
