@@ -29,7 +29,7 @@ public class StaffEntity implements Serializable {
     private String lastName;
     @Column(name="userName", nullable = false, unique=true)
     private String userName;
-    private String password; // TODO do password encryption
+    private String password;
 
     public StaffEntity() {
     }
@@ -39,7 +39,7 @@ public class StaffEntity implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
-        this.password = Encryption.encrypt(password);
+        this.password = Encryption.encrypt(password + userName); // We make the encryption salted by use of the userName
     }
     
     @Override
@@ -122,7 +122,6 @@ public class StaffEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the staffId fields are not set
         if (!(object instanceof StaffEntity)) {
             return false;
         }

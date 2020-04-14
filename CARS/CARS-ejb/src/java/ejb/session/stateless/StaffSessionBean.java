@@ -36,7 +36,7 @@ public class StaffSessionBean implements StaffSessionBeanRemote, StaffSessionBea
     public StaffEntity login(String username, String password) throws InvalidLoginException{
         //String encryptedPassword = encrypt(password);
         StaffEntity user = retrieveStaffEntityByUserName(username);
-        if (user.getPassword().equals(Encryption.encrypt(password))){
+        if (user.getPassword().equals(Encryption.encrypt(password + username))){
             return user;
         }
         else {

@@ -22,7 +22,7 @@ import javax.persistence.ManyToOne;
  * @author Niklas
  */
 @Entity
-public class AppointmentEntity implements Serializable {
+public class AppointmentEntity implements Serializable { //TODO annotate all entity class attributes
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -30,8 +30,6 @@ public class AppointmentEntity implements Serializable {
     private Long appointmentId;
     private Date date;
     private Time time;
-    
-    
     
     
     @ManyToOne
@@ -68,7 +66,6 @@ public class AppointmentEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the appointmentId fields are not set
         if (!(object instanceof AppointmentEntity)) {
             return false;
         }
@@ -127,11 +124,7 @@ public class AppointmentEntity implements Serializable {
     }
 
     public Long getTimeToAppointmentInMills() {
-        return    time.getTime() + date.getTime() - new java.sql.Date(new java.util.Date().getTime()).getTime();
-
-        //TODO implement this method
-        
-        
+        return    time.getTime() + date.getTime() - new java.sql.Date(new java.util.Date().getTime()).getTime();        
     }
     
 }

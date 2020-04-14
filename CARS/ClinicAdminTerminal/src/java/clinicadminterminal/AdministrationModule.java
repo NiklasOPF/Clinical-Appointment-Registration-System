@@ -68,7 +68,7 @@ public class AdministrationModule {
 
     }
 
-    private void staffManagement() { //TODO implement logic
+    private void staffManagement() {
         StaffSessionBeanRemote staffSessionBeanRemote = lookupStaffSessionBeanRemote();
 
         System.out.println("*** CARS :: Administraion operation :: Staff Management **** \n ");
@@ -115,11 +115,14 @@ public class AdministrationModule {
                 sc.nextLine();
 
                 break;
-            case 3: // TODO Here IO am directly usign the getters and setters of the entity class. Is it better practice to use the session bean instead?
-                // TODO what to do when the user is current user
+            case 3: // TODO Here I am directly using the getters and setters of the entity class. Is it better practice to use the session bean instead?
                 System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
                 System.out.print("Enter user name> ");
                 staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+                if (staff.getUserName().equals(this.staffEntity.getUserName())){
+                    System.out.println("You can't update the staff that is currently logged in!");
+                    break;
+                }
 
                 System.out.print("Enter New First Name> ");
                 staff.setFirstName(sc.nextLine());
@@ -134,7 +137,6 @@ public class AdministrationModule {
                 break;
             case 4:
                 System.out.println("*** CARS :: Registration operation :: Delete Staff**** \n ");
-                // TODO what to do when the user is current user
                 System.out.print("Enter user name> ");
                 staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
                 if (staff.getStaffId().equals(staffEntity.getStaffId())) {
@@ -275,7 +277,7 @@ public class AdministrationModule {
 
     }
 
-    private void patientManagement() { //TODO implement logic
+    private void patientManagement() {
         while (true) {
             PatientSessionBeanRemote patientSessionBeanRemote = lookupPatientSessionBeanRemote();
             System.out.println("*** CARS :: Administraion operation :: Patient Management **** \n ");

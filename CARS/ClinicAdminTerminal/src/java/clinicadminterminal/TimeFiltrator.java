@@ -46,10 +46,8 @@ public class TimeFiltrator {
             upper.set(Calendar.HOUR_OF_DAY, 17); 
             upper.set(Calendar.MINUTE, 00);
 
-        } else { //TODO handle this like an exception
+        } else { 
             throw new AccesSystemOnWeekendException("The system is not open during weekends. Please come back on a weekday!");
-            //System.err.println("The system is not open during weekends. Please come back on a weekday!");
-            //return new ArrayList<Calendar>();
         }
 
         if (current.compareTo(lower) < 1) { // If earlier than opening time
@@ -105,10 +103,8 @@ public class TimeFiltrator {
             upper.set(Calendar.HOUR_OF_DAY, 17);
             upper.set(Calendar.MINUTE, 00);
 
-        } else { //TODO handle this like an exception
+        } else {
             throw new AccesSystemOnWeekendException("The system is not open during weekends. Please come back on a weekday!");
-            //System.err.println("The system is not open during weekends. Please come back on a weekday!");
-            //return new ArrayList<Calendar>();
         }
 
         if (current.compareTo(lower) < 1) { // If earlier than opening time

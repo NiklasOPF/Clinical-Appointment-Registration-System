@@ -34,7 +34,7 @@ public class Main { // TODO fix the problem with the menus jumping back to far
     private static AppointmentSessionBeanRemote appointmentSessionBeanRemote;
 
     @EJB(name = "PatientSessionBeanRemote")
-    private static PatientSessionBeanRemote patientSessionBeanRemote; //TODO theres no need to do depåendency injection here since we don't need it right now, we might not even need it in the MainApp module. Therefore it's better to wait and do a JNDI lookup when we actually need the bean. JNDI also allows the client to be in a separate JVM from the ejb
+    private static PatientSessionBeanRemote patientSessionBeanRemote;
 
     @EJB(name = "StaffSessionBeanRemote")
     private static StaffSessionBeanRemote staffSessionBeanRemote;
@@ -42,27 +42,12 @@ public class Main { // TODO fix the problem with the menus jumping back to far
     @EJB(name = "DoctorSessionBeanRemote")
     private static DoctorSessionBeanRemote doctorSessionBeanRemote;
     
-    
-    
-    
-    
-    
-    
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-      
-            //doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity("Niklas", "Forsstroem", "dunno", "none"));
-            //DoctorEntity doc = new DoctorEntity("Niklas", "Forsstrom", "reg", "qual");
-            //doctorSessionBeanRemote.createDoctorEntity(doc);
-            //doctorSessionBeanRemote.createDoctorsLeaveEntity(new DoctorsLeaveEntity(doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1)), java.sql.Date.valueOf("2020-04-12")));
-            
-            //doctorSessionBeanRemote.getAvailableDoctors(java.sql.Date.valueOf("2020-04-12"));
-            //doctorSessionBeanRemote.getDoctorsOnLeaveBetweenDates(java.sql.Date.valueOf("2020-01-01"), java.sql.Date.valueOf("2020-05-01"));
             new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
-
     }
     
 }
