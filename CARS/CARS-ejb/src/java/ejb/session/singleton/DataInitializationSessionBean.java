@@ -22,15 +22,15 @@ public class DataInitializationSessionBean {
 
     @PostConstruct
     public void init() {
-        System.out.println("osödnfpoasözvnkjdfzvbpközdfbvözkxcsdofnsdkfnlkfnlsdknfl");
+        //System.out.println("osödnfpoasözvnkjdfzvbpközdfbvözkxcsdofnsdkfnlkfnlsdknfl");
 
         try {
-            Query query = em.createQuery("SELECT DISTINCT p FROM StaffEntity p WHERE p.userName = :name");
-            query.setParameter("name", "bananer");
+            Query query = em.createQuery("SELECT DISTINCT p FROM StaffEntity p WHERE p.userName = 'manager'");
+            //query.setParameter("name", "lis");
             query.getResultList().get(0);
         } catch (Exception e) {
-            StaffEntity staffEntity = new StaffEntity("apan", "torsten", "bananer", "pass");
-            em.persist(staffEntity);
+            //StaffEntity staffEntity = new StaffEntity("apan", "torsten", "lisa", "pass");
+            em.persist(new StaffEntity("Linda", "Chua", "manager", "password"));
             em.flush();
         }
 
