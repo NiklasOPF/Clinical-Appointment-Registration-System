@@ -13,7 +13,6 @@
             <included-library dirs="200">libs.junit_4.classpath</included-library>
             <included-library dirs="200">libs.hamcrest.classpath</included-library>
             <included-library dirs="200">reference.DemoApplicationJpaLibrary.jar</included-library>
-            <included-library dirs="200">file.reference.jaxws-api-2.2.6.jar</included-library>
             <source-roots>
                 <root id="src.dir" name="Source Packages"/>
             </source-roots>
