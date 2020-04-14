@@ -18,18 +18,13 @@ public class DataInitializationSessionBean {
 
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
-//TODO fix this bean so that the program does not crash
 
     @PostConstruct
     public void init() {
-        //System.out.println("osödnfpoasözvnkjdfzvbpközdfbvözkxcsdofnsdkfnlkfnlsdknfl");
-
         try {
             Query query = em.createQuery("SELECT DISTINCT p FROM StaffEntity p WHERE p.userName = 'manager'");
-            //query.setParameter("name", "lis");
             query.getResultList().get(0);
         } catch (Exception e) {
-            //StaffEntity staffEntity = new StaffEntity("apan", "torsten", "lisa", "pass");
             em.persist(new StaffEntity("Linda", "Chua", "manager", "password"));
             em.flush();
         }
