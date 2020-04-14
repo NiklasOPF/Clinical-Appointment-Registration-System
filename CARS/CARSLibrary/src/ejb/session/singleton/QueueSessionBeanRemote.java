@@ -8,8 +8,6 @@ package ejb.session.singleton;
 
 public interface QueueSessionBeanRemote {
 
-    public void resetQueue();
-
     public int getNewQueueNumber();
     
 }
