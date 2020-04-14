@@ -13,8 +13,6 @@
             </test-roots>
             <included-library dirs="200">file.reference.javaee-api-7.0.jar</included-library>
             <included-library dirs="200">file.reference.javaee-endorsed-api-7.0.jar</included-library>
-            <included-library dirs="200">file.reference.javax.persistence-2.1.0.jar</included-library>
-            <included-library dirs="200">file.reference.validation-api-2.0.1.Final.jar</included-library>
             <included-library dirs="200">reference.CARSLibrary.jar</included-library>
         </data>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
