@@ -1,6 +1,8 @@
 package ejb.session.singleton;
 
+import ejb.session.stateless.PatientSessionBeanLocal;
 import ejb.session.stateless.StaffSessionBeanLocal;
+import entity.PatientEntity;
 import entity.StaffEntity;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -16,8 +18,8 @@ import javax.persistence.Query;
 @Singleton
 public class DataInitializationSessionBean { //TODO fix this bean so that the program does not crash
 
-    //@EJB(name = "StaffSessionBeanLocal")
-    //private StaffSessionBeanLocal staffSessionBeanLocal;
+    //@EJB//(name = "StaffSessionBeanLocal")
+    //private StaffSessionBeanLocal staffSessionBeanLocal; 
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
 
@@ -37,11 +39,14 @@ public class DataInitializationSessionBean { //TODO fix this bean so that the pr
            // Can directly try to input since we don't allow duplicate usernames
            //em.persist(new StaffEntity("Linda", "Chua", "manager", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
            //em.flush();
-
+           //staffSessionBeanLocal.retrieveStaffEntityByUserName("manager");
         
         } catch (Exception e) { // TODO make exception mor especific
             em.persist(new StaffEntity("Linda", "Chua", "manager", "password")); // TODO this initializes an staffentity object, which in turn increments the ID. do this in a better way
             em.flush();
+            //staffSessionBeanLocal.createStaffEntity(new StaffEntity("Linda", "Chua", "manager", "password"));
+            
+
         }
 //        try
 //        {

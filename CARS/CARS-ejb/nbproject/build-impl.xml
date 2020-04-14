@@ -16,6 +16,7 @@ is divided into following sections:
 
         -->
 <project xmlns:ejbjarproject1="http://www.netbeans.org/ns/j2ee-ejbjarproject/1" xmlns:ejbjarproject2="http://www.netbeans.org/ns/j2ee-ejbjarproject/2" xmlns:ejbjarproject3="http://www.netbeans.org/ns/j2ee-ejbjarproject/3" basedir=".." default="default" name="CARS-ejb-impl">
+    <import file="jaxws-build.xml"/>
     <import file="ant-deploy.xml"/>
     <fail message="Please build using Ant 1.7.1 or higher.">
         <condition>
@@ -797,6 +798,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.junit_4.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${libs.hamcrest.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${reference.DemoApplicationJpaLibrary.jar}" todir="${build.classes.dir}"/>
+        <copyfiles files="${file.reference.jaxws-api-2.2.6.jar}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${reference.CARSLibrary.jar}" property="manifest.reference.CARSLibrary.jar"/>
@@ -804,13 +806,15 @@ exists or setup the property manually. For example like this:
         <basename file="${libs.junit_4.classpath}" property="manifest.libs.junit_4.classpath"/>
         <basename file="${libs.hamcrest.classpath}" property="manifest.libs.hamcrest.classpath"/>
         <basename file="${reference.DemoApplicationJpaLibrary.jar}" property="manifest.reference.DemoApplicationJpaLibrary.jar"/>
+        <basename file="${file.reference.jaxws-api-2.2.6.jar}" property="manifest.file.reference.jaxws-api-2.2.6.jar"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 "/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 jar-6 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.reference.CARSLibrary.jar}"/>
             <attribute name="jar-2-Extension-Name" value="${manifest.libs.javaee-api-7.0.classpath}"/>
             <attribute name="jar-3-Extension-Name" value="${manifest.libs.junit_4.classpath}"/>
             <attribute name="jar-4-Extension-Name" value="${manifest.libs.hamcrest.classpath}"/>
             <attribute name="jar-5-Extension-Name" value="${manifest.reference.DemoApplicationJpaLibrary.jar}"/>
+            <attribute name="jar-6-Extension-Name" value="${manifest.file.reference.jaxws-api-2.2.6.jar}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
@@ -819,6 +823,7 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.junit_4.classpath}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${libs.hamcrest.classpath}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.DemoApplicationJpaLibrary.jar}" todir="${dist.ear.dir}/lib"/>
+        <copyfiles files="${file.reference.jaxws-api-2.2.6.jar}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">
