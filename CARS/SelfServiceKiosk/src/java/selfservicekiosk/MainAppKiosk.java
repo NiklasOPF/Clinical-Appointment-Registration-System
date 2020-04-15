@@ -23,7 +23,7 @@ import util.exception.InvalidLoginException;
  *
  * @author Niklas
  */
-public class MainApp {
+public class MainAppKiosk {
 
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
     private StaffSessionBeanRemote staffSessionBeanRemote;
@@ -32,11 +32,11 @@ public class MainApp {
     private QueueSessionBeanRemote queueSessionBeanRemote;
     Scanner sc;
 
-    public MainApp() {
+    public MainAppKiosk() {
         sc = new Scanner(System.in);
     }
 
-    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
+    public MainAppKiosk(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
         this();
 
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
