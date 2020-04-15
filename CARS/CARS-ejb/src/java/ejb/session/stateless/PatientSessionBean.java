@@ -32,7 +32,7 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
     }
 
     @Override
-    public PatientEntity login(String idenNo, String password) throws InvalidLoginException {
+    public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException {
         PatientEntity user = retrievePatientEntityByIdentityNumber(idenNo);
         System.out.println(idenNo);
         System.out.println(password);

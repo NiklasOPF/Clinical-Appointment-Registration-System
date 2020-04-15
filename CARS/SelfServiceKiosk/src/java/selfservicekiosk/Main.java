@@ -24,7 +24,7 @@ import util.exception.LeaveToCloseInTimeException;
  *
  * @author StudentStudent
  */
-public class MainKiosk {
+public class Main {
     @EJB(name = "QueueSessionBeanRemote")
     private static QueueSessionBeanRemote queueSessionBeanRemote;
 
@@ -32,7 +32,7 @@ public class MainKiosk {
     private static AppointmentSessionBeanRemote appointmentSessionBeanRemote;
 
     @EJB(name = "PatientSessionBeanRemote")
-    private static PatientSessionBeanRemote patientSessionBeanRemote; //TODO theres no need to do depÃ¥endency injection here since we don't need it right now, we might not even need it in the MainAppKisok module. Therefore it's better to wait and do a JNDI lookup when we actually need the bean. JNDI also allows the client to be in a separate JVM from the ejb
+    private static PatientSessionBeanRemote patientSessionBeanRemote; //TODO theres no need to do depÃ¥endency injection here since we don't need it right now, we might not even need it in the MainApp module. Therefore it's better to wait and do a JNDI lookup when we actually need the bean. JNDI also allows the client to be in a separate JVM from the ejb
 
     @EJB(name = "StaffSessionBeanRemote")
     private static StaffSessionBeanRemote staffSessionBeanRemote;
@@ -46,7 +46,7 @@ public class MainKiosk {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new MainAppKisok(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
+        new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
     }
 
 }

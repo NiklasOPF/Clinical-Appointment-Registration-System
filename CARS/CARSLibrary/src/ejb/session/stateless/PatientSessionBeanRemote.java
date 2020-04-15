@@ -11,6 +11,8 @@ import util.exception.InvalidLoginException;
 
 public interface PatientSessionBeanRemote {
 
+    public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException;
+
     public Long createPatientEntity(PatientEntity patientEntity);
 
     public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber);
@@ -23,5 +25,4 @@ public interface PatientSessionBeanRemote {
 
     public List retrieveAllPatients();
 
-    public PatientEntity login(String idenNo, String password) throws InvalidLoginException;
 }

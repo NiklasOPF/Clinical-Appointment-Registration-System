@@ -20,7 +20,7 @@ import util.exception.InvalidLoginException;
  *
  * @author Niklas
  */
-public class MainAppKisok {
+public class MainApp {
 
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
     private StaffSessionBeanRemote staffSessionBeanRemote;
@@ -29,11 +29,11 @@ public class MainAppKisok {
     private QueueSessionBeanRemote queueSessionBeanRemote;
     Scanner sc;
 
-    public MainAppKisok() {
+    public MainApp() {
         sc = new Scanner(System.in);
     }
 
-    public MainAppKisok(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
+    public MainApp(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
         this();
 
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
@@ -112,7 +112,7 @@ public class MainAppKisok {
         System.out.print("Enter password> ");
         String password = sc.nextLine();
         try {
-            return patientSessionBeanRemote.login(idenNo, password);
+            return patientSessionBeanRemote.patientLogin(idenNo, password);
         } catch (Exception e) {
             throw new InvalidLoginException("That combination of login credentials is not valid!");
         }
