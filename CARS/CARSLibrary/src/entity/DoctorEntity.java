@@ -26,10 +26,13 @@ public class DoctorEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long doctorId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
     @Column(name="registration", nullable = false, unique=true)
     private String registration;
+    @Column(nullable = false)
     private String qualifications;
     
     @OneToMany(mappedBy = "doctorEntity")

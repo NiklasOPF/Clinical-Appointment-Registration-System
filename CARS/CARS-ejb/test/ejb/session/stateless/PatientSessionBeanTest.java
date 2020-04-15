@@ -56,7 +56,12 @@ public class PatientSessionBeanTest {
     @Test()
     public void test01CreatePatientEntity() {
         System.out.println("***** PatientSesionBeanTest.test01CreatePatientEntity");
-        Long patId = patientSessionBeanRemote.createPatientEntity(new PatientEntity("identity number", "Niklas", "Forsstrom", util.Enum.Gender.M, 23, "+65 8212 8054", "vetlandavagen 23", "password"));
+        Long patId = null;
+        try{
+        patId = patientSessionBeanRemote.createPatientEntity(new PatientEntity("identity number", "Niklas", "Forsstrom", util.Enum.Gender.M, 23, "+65 8212 8054", "vetlandavagen 23", "password"));
+        } catch(Exception e){
+            
+        }
         assertNotNull(patId);
     }
     

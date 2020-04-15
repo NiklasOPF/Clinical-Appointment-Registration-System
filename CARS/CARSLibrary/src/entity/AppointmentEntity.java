@@ -28,7 +28,9 @@ public class AppointmentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
+    @Column(nullable = false)
     private Date date;
+    @Column(nullable = false)
     private Time time;
     
     

@@ -6,10 +6,13 @@
 package ejb.session.stateless;
 
 import entity.PatientEntity;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import util.exception.InvalidLoginException;
 
 public interface PatientSessionBeanRemote {
+
+    public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException;
 
     public Long createPatientEntity(PatientEntity patientEntity);
 
@@ -23,5 +26,4 @@ public interface PatientSessionBeanRemote {
 
     public List retrieveAllPatients();
 
-    public PatientEntity login(String idenNo, String password) throws InvalidLoginException;
 }

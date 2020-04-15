@@ -6,9 +6,12 @@
 package ejb.session.stateless;
 
 import entity.PatientEntity;
+import java.lang.reflect.InvocationTargetException;
 import util.exception.InvalidLoginException;
 
 public interface PatientSessionBeanLocal {
+
+    public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException;
 
     public Long createPatientEntity(PatientEntity patientEntity);
 
@@ -19,7 +22,5 @@ public interface PatientSessionBeanLocal {
     public void updatePatientEntity(PatientEntity patientEntity);
 
     public void deletePatientEntity(Long patientId);
-
-    public PatientEntity login(String idenNo, String password) throws InvalidLoginException;
 
 }
