@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import util.exception.ClashWithAppointmentException;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
@@ -262,6 +263,8 @@ public class AdministrationModule {
                     } catch (DoubleLeaveRequestException ex) {
                         System.out.println("Already have a request for that week");
                         Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClashWithAppointmentException ex) {
+                        System.out.println(ex);
                     }
                     List sdfsdf = doctorSessionBeanRemote.getDoctorsOnLeave(date);
                 
