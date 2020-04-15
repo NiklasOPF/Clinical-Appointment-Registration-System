@@ -20,7 +20,6 @@ import util.Encryption;
 @Entity
 public class StaffEntity implements Serializable {
 
-    // TODO make columns more specific
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

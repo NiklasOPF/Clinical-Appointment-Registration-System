@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import org.junit.runners.MethodSorters;
+import util.exception.ClashWithAppointmentException;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
@@ -101,6 +102,8 @@ public class DoctorSessionBeanTest {
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DoubleLeaveRequestException ex) {
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClashWithAppointmentException ex) {
+            Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         //DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1));
         //assertNotNull(doc);
@@ -120,8 +123,7 @@ public class DoctorSessionBeanTest {
     
     @Test()
     public void test99RemoveDoctorEntity() {  
-        //Note that you can't remove a doctor if he has an associated leave registered. 
-        // TODO amend this issue
+
         System.out.println("***** DoctorSesionBeanTest.test99RemoveDoctorEntity");
         DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1));
         //doctorSessionBeanRemote.deleteDoctorEntity(new Long(1));

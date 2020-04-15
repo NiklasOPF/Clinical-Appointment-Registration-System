@@ -25,7 +25,7 @@ import util.exception.LeaveToCloseInTimeException;
  *
  * @author Niklas
  */
-public class Main { // TODO fix the problem with the menus jumping back to far
+public class Main { 
 
     @EJB(name = "QueueSessionBeanRemote")
     private static QueueSessionBeanRemote queueSessionBeanRemote;

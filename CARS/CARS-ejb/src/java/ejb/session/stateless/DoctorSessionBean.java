@@ -41,7 +41,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     @PersistenceContext(unitName = "CARS-ejbPU")
     private EntityManager em;
 
-    public void requestDoctorsLeave(Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException {//TODO throws ...
+    public void requestDoctorsLeave(Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException {
         // TODO think it inputs the date wrong. It interperets MM as MM-1 since it statrs from 0
         // Need to check for 1 week in advace, no appointments, no double leaves, only one day free per week.
         // Note that checking for one booking per week also takes care of the duplicates
@@ -121,7 +121,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         return doctorEntity.getDoctorId();
     }
 
-    public Long createDoctorsLeaveEntity(DoctorsLeaveEntity doctorsLeaveEntity) { // TODO make private and remove from tests / interface in the end. 
+    public Long createDoctorsLeaveEntity(DoctorsLeaveEntity doctorsLeaveEntity) { 
         em.persist(doctorsLeaveEntity);
         em.flush();
 

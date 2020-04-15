@@ -22,7 +22,7 @@ import javax.persistence.ManyToOne;
  * @author Niklas
  */
 @Entity
-public class AppointmentEntity implements Serializable { //TODO annotate all entity class attributes
+public class AppointmentEntity implements Serializable { 
 
     private static final long serialVersionUID = 1L;
     @Id

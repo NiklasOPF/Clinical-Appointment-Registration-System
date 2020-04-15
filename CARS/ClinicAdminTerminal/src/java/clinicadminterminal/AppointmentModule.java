@@ -79,6 +79,15 @@ public class AppointmentModule {
     /** Helper method for addAppointment(). It returns the available appointment times
      for the provided doctor on the given date */
     private ArrayList<String> getAvailableTimes(Date date, DoctorEntity my_doc) {
+        // if doctor is on leave this day, there are no times
+        for (Object obj : doctorSessionBeanRemote.getDoctorsOnLeave(date)){
+            DoctorEntity doc = (DoctorEntity) obj;
+            if (doc.getDoctorId().equals(my_doc.getDoctorId())){
+                return new ArrayList<>();
+            }
+        }
+        
+        
         // Get a list with all "allowed" consultations for the given day
         Calendar date_cal = Calendar.getInstance();
         date_cal.setTime(date);
@@ -118,7 +127,6 @@ public class AppointmentModule {
     }
 
     private void addAppointment() {
-        //Strategy: Maintain a list of all possible 
         System.out.println("*** CARS :: Appointment Operation :: Add Appointment **** \n ");
 
         //Print all doctors
