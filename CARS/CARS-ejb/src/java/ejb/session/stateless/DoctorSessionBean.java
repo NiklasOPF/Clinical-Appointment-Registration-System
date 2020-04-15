@@ -80,6 +80,12 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         List doctorsIds = query.getResultList();
         return doctorsIds;
     }
+    
+    public List getLeavesForDoctor(DoctorEntity doctorEntity){
+        Query query = em.createQuery("SELECT DISTINCT p FROM DoctorsLeaveEntity p WHERE p.doctorEntity = :doc");
+        query.setParameter("doc", doctorEntity);
+        return query.getResultList();
+    }
 
     public List getDoctorsOnLeave(Date date) {
         Query query = em.createQuery("SELECT DISTINCT p.doctorEntity FROM DoctorsLeaveEntity p WHERE p.date = :date");
@@ -95,7 +101,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         return doctors;
     }
 
-    public void getAvailableDoctors(Date date) { // TODO. Fix the issues that we are having with java.sql.Date
+    public void getAvailableDoctors(Date date) { 
         Query query = em.createQuery("SELECT DISTINCT p.doctorId FROM DoctorEntity p");
         List doctorsIds = query.getResultList();
 
@@ -144,6 +150,13 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     public void updateDoctorEntity(DoctorEntity doctorEntity) {
         em.merge(doctorEntity);
     }
+    
+    
+    public void deleteDoctorsLeaveEntity(Long doctorsLeaveId) {
+        DoctorsLeaveEntity leave = retrieveDoctorsLeaveEntityById(doctorsLeaveId);
+        em.remove(leave);
+    }
+
 
     @Override
     public void deleteDoctorEntity(Long doctorId) {

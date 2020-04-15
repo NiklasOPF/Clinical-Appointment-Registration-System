@@ -39,6 +39,10 @@ public interface DoctorSessionBeanRemote {
 
     public List getDoctorsOnLeave(Date date);
 
+    public List getLeavesForDoctor(DoctorEntity doctorEntity);
+
+    public void deleteDoctorsLeaveEntity(Long doctorsLeaveId);
+
 
     
 }

@@ -30,14 +30,23 @@ public class AppointmentSessionBean implements AppointmentSessionBeanRemote, App
     }
 
 
+    @Override
     public List retrievePatientAppointments(PatientEntity patientEntity){
         Query query = em.createQuery("SELECT p FROM AppointmentEntity p WHERE p.patientEntity = :patient");
         query.setParameter("patient", patientEntity);
         List appointments = query.getResultList();
         return appointments;
     }
+    @Override
+    public List retrieveDoctorAppointments(DoctorEntity doctorEntity){
+        Query query = em.createQuery("SELECT p FROM AppointmentEntity p WHERE p.doctorEntity = :patient");
+        query.setParameter("patient", doctorEntity);
+        List appointments = query.getResultList();
+        return appointments;
+    }
 
     
+    @Override
     public void deleteAppointment(Long appointmentId){
         AppointmentEntity appointmentEntity = retrieveAppointmentEntityByAppointmentId(appointmentId);
         em.remove(appointmentEntity);
@@ -47,6 +56,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanRemote, App
         return em.find(AppointmentEntity.class, appointmentId); 
     }
            
+    @Override
     public Long createAppointmentEntity(AppointmentEntity appointmentEntity) {
         em.persist(appointmentEntity);
         em.flush();
@@ -54,8 +64,8 @@ public class AppointmentSessionBean implements AppointmentSessionBeanRemote, App
         return appointmentEntity.getAppointmentId();
     }
     
+    @Override
     public List retrieveOccupiedTimes(Date date, DoctorEntity doctorEntity){
-        //Query query = em.createQuery("SELECT p FROM AppointmentEntity p WHERE p.patientEntity == :patient");
         Query query = em.createQuery("SELECT p.time FROM AppointmentEntity p WHERE p.doctorEntity = :doctor AND p.date = :date");
         query.setParameter("doctor", doctorEntity);
         query.setParameter("date", date, TemporalType.DATE);
@@ -63,6 +73,7 @@ public class AppointmentSessionBean implements AppointmentSessionBeanRemote, App
         return times;
     }
     
+    @Override
     public AppointmentEntity retrieveAppointmentByAppointmentId(Long appointmentId){
         return em.find(AppointmentEntity.class, appointmentId);
 
