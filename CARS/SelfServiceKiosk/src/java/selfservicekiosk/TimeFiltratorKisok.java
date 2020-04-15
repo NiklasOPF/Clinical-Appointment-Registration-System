@@ -22,7 +22,7 @@ import util.exception.AccesSystemOnWeekendException;
  *
  * @author Niklas
  */
-public class TimeFiltrator {
+public class TimeFiltratorKisok {
 
     public static SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 

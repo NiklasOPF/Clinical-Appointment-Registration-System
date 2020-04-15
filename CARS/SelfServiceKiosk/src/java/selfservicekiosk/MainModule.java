@@ -137,7 +137,7 @@ public class MainModule {
         // Get a list with all "allowed" consultations for the given day
         Calendar date_cal = Calendar.getInstance();
         date_cal.setTime(date);
-        ArrayList<Calendar> all_allowed_calendars = TimeFiltrator.getAllTimesOfDate(date_cal);
+        ArrayList<Calendar> all_allowed_calendars = TimeFiltratorKisok.getAllTimesOfDate(date_cal);
 
         // Keep the ones that are at least 2 days in the future
         Calendar lower = Calendar.getInstance();
