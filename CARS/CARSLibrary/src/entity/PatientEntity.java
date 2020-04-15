@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Size;
 import util.Enum.Gender;
 
 /**
@@ -32,14 +33,21 @@ public class PatientEntity implements Serializable {
     private Long patientId;
     @Column(unique = true)
     private String identityNumber;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
     @Enumerated(EnumType.STRING)
     @Column(length = 1)
     private Gender gender;
+    @Column(nullable = false)
     private int age;
+    @Column(nullable = false)
     private String phone;
+    @Column(nullable = false)
     private String address;
+    @Column(nullable = false)
+    @Size(min = 6, max = 6)
     private String password;
 
     @OneToMany(mappedBy = "patientEntity")

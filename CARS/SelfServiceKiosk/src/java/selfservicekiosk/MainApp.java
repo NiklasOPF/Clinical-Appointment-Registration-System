@@ -13,7 +13,10 @@ import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
 import entity.PatientEntity;
 import entity.StaffEntity;
+import java.lang.reflect.InvocationTargetException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import javax.ejb.EJBException;
 import util.exception.InvalidLoginException;
 
 /**
@@ -60,31 +63,41 @@ public class MainApp {
                 String password;
                 PatientEntity patientEntity;
                 System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
-                System.out.print("Enter Identity Number> ");
-                identityNumber = sc.nextLine();
-                System.out.print("Enter First Name> ");
-                firstName = sc.nextLine();
-                System.out.print("Enter Last Name> ");
-                lastName = sc.nextLine();
-                System.out.print("Enter Gender> ");
-                gender = sc.nextLine();
-                System.out.print("Enter Age> ");
-                age = sc.nextInt();
-                sc.nextLine();
-                System.out.print("Enter Phone> ");
-                phone = sc.nextLine();
-                System.out.print("Enter Address> ");
-                address = sc.nextLine();
-                System.out.print("Enter Password> ");
-                password = sc.nextLine();
-                if (gender.equals("M") || gender.equals("m")) {
-                    patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
-                } else if (gender.equals("F") || gender.equals("f")) {
-                    patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
-                } else {
-                    System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                try {
+                    System.out.print("Enter Identity Number> ");
+                    identityNumber = sc.nextLine();
+                    System.out.print("Enter First Name> ");
+                    firstName = sc.nextLine();
+                    System.out.print("Enter Last Name> ");
+                    lastName = sc.nextLine();
+                    System.out.print("Enter Gender> ");
+                    gender = sc.nextLine();
+                    System.out.print("Enter Age> ");
+                    age = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter Phone> ");
+                    phone = sc.nextLine();
+                    System.out.print("Enter Address> ");
+                    address = sc.nextLine();
+                    while (true) {
+                        System.out.print("Enter Password> ");
+                        password = sc.nextLine();
+                        if (password.matches("[0-9]+") && password.length() != 6) {
+                            break;
+                        } else {
+                            System.out.println("wrong password input, password has to be in 6 digits");
+                        }
+                    }
+                    if (gender.equals("M") || gender.equals("m")) {
+                        patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
+                    } else if (gender.equals("F") || gender.equals("f")) {
+                        patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
+                    } else {
+                        System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                    }
+                } catch (Exception ex) {
+                    System.out.println("Please enter the particulars");
                 }
-
             } else if (response == 2) {
                 try {
                     PatientEntity patient = login(sc);

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PatientEntity;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Remote;
@@ -13,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolationException;
 import util.exception.InvalidLoginException;
 
 /**
@@ -34,9 +36,7 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
     @Override
     public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException {
         PatientEntity user = retrievePatientEntityByIdentityNumber(idenNo);
-        System.out.println(idenNo);
-        System.out.println(password);
-        System.out.println(user.getPassword());
+
         if (user.getPassword().equals(password)) {
             return user;
         } else {

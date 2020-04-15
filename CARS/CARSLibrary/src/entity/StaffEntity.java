@@ -25,10 +25,13 @@ public class StaffEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long staffId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
     @Column(name="userName", nullable = false, unique=true)
     private String userName;
+    @Column(nullable = false)
     private String password; // TODO do password encryption
 
     public StaffEntity() {

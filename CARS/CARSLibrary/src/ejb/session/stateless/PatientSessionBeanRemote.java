@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.PatientEntity;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import util.exception.InvalidLoginException;
 
