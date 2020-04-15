@@ -42,7 +42,7 @@ public class PatientEntity implements Serializable {
     private Gender gender;
     @Column(nullable = false)
     private int age;
-    @Column(nullable = false, length = 9)
+    @Column(nullable = false)
     private String phone;
     @Column(nullable = false)
     private String address;

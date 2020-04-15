@@ -58,7 +58,7 @@ public class PatientSessionBeanTest {
         System.out.println("***** PatientSesionBeanTest.test01CreatePatientEntity");
         Long patId = null;
         try{
-        patId = patientSessionBeanRemote.createPatientEntity(new PatientEntity("identity number", "Niklas", "Forsstrom", util.Enum.Gender.M, 23, "+65 8212 8054", "vetlandavagen 23", "password"));
+        patId = patientSessionBeanRemote.createPatientEntity(new PatientEntity("S1234567S", "Niklas", "Forsstrom", util.Enum.Gender.M, 23, "+65 8212 8054", "vetlandavagen 23", "123456"));
         } catch(Exception e){
             
         }
