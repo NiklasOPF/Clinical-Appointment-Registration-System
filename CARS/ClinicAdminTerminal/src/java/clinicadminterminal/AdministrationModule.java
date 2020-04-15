@@ -322,7 +322,7 @@ public class AdministrationModule {
                         while (true) {
                             System.out.print("Enter Password> ");
                             password = sc.nextLine();
-                            if (password.matches("[0-9]+") && password.length() != 6) {
+                            if (password.matches("[0-9]+") && password.length() == 6) {
                                 break;
                             } else {
                                 System.out.println("wrong password input, password has to be in 6 digits");

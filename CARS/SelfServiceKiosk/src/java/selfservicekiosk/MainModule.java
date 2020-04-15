@@ -18,8 +18,10 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import util.exception.AccesSystemOnWeekendException;
 
 /**
  *
@@ -39,7 +41,11 @@ public class MainModule {
     public MainModule() {
     }
 
-    public MainModule(PatientEntity patient, DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemote, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
+    public MainModule(PatientEntity patient, DoctorSessionBeanRemote doctorSessionBeanRemote,
+            StaffSessionBeanRemote staffSessionBeanRemote,
+            PatientSessionBeanRemote patientSessionBeanRemote,
+            AppointmentSessionBeanRemote appointmentSessionBeanRemote,
+            QueueSessionBeanRemote queueSessionBeanRemote) {
         this.patient = patient;
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
         this.staffSessionBeanRemote = staffSessionBeanRemote;
@@ -59,6 +65,12 @@ public class MainModule {
             Integer response = sc.nextInt();
             sc.nextLine();
             switch (response) {
+                case 1:
+                    registerWalkInConsultation();
+                    break;
+                case 2:
+                    registerConsultationByAppointment();
+                    break;
                 case 3:
                     viewPatientAppointments();
                     break;
@@ -189,6 +201,109 @@ public class MainModule {
         sc.nextLine();
         appointmentSessionBeanRemote.deleteAppointment(new Long(appId));
         System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with " + my_app.getDoctorEntity().getFirstName() + " " + my_app.getDoctorEntity().getLastName() + " at " + timeFormatter.format(my_app.getTime()) + " on " + my_app.getDate() + " has been canceled.");
+
+    }
+    
+    private void registerWalkInConsultation() {
+        HashMap<Long, Calendar> firstAvailableTimes = new HashMap<>(); // Keeps track of the first available time associated with each doctor
+        PatientEntity patientEntity;
+        DoctorEntity doctorEntity;
+        boolean isBooked;
+        List doctors = this.doctorSessionBeanRemote.retrieveAllDoctors();
+        List[] occupiedTimes = new List[doctors.size()]; // Arary where each element is a list, each list contains the appointments associated with a doctor
+
+        // Print the list of doctors
+        System.out.println("*** CARS :: Registration operation :: Register Walk-In Consultation **** \n ");
+        System.out.println("Doctor:\nId | Name");
+        for (Object obj : doctors) {
+            DoctorEntity my_doctor = (DoctorEntity) obj;
+            System.out.println(my_doctor.getDoctorId() + " | " + my_doctor.getFirstName() + " " + my_doctor.getLastName());
+        }
+
+        // Print header of time slots
+        System.out.print("\nAvailability:\nTime");
+        for (int i = 0; i < doctors.size(); i++) {
+            doctorEntity = ((DoctorEntity) doctors.get(i));
+            System.out.print(" | " + doctorEntity.getDoctorId());
+            occupiedTimes[i] = appointmentSessionBeanRemote.retrieveOccupiedTimes(new Date(new Long(Calendar.getInstance().getTimeInMillis())), doctorEntity);
+        }
+
+        // Print body of time slots
+        try {
+            for (Calendar time : TimeFiltratorKiosk.getAllTimesToday()) {
+                System.out.print("\n" + timeFormatter.format(time.getTime()) + " ");
+                for (int i = 0; i < doctors.size(); i++) {
+                    doctorEntity = (DoctorEntity) doctors.get(i);
+                    isBooked = false; // keeps track if the current consultation time has already been booked for the current doctor
+                    for (Object obj : occupiedTimes[i]) { //iterate over all appointments associated with that doctor
+                        if (timeFormatter.format((Time) obj).equals(timeFormatter.format(new Time(time.getTimeInMillis())))) {
+                            System.out.print("| X ");
+                            isBooked = true;
+                        }
+                    }
+                    if (!isBooked) {
+                        System.out.print("| O ");
+                        if (firstAvailableTimes.get(doctorEntity.getDoctorId()) == null) { // Check if it's the first available time for the current doctor
+                            firstAvailableTimes.put(doctorEntity.getDoctorId(), time);
+                        }
+                    }
+                }
+            }
+        } catch (AccesSystemOnWeekendException e) { // Add output for how to go into test mode
+            System.out.println("\n" + e.getMessage());
+            return;
+        }
+
+        System.out.print("\n\n Enter Doctor Id> ");
+        doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
+        sc.nextLine();
+        Time timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
+
+        System.out.print("Enter Patient Identity Nuber> ");
+        patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+        appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(new Date(new Long(Calendar.getInstance().getTimeInMillis())), timeToBook, doctorEntity, patientEntity));
+
+        System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with Dr. " + doctorEntity.getFirstName() + " " + doctorEntity.getLastName() + " has been booked at " + timeFormatter.format(timeToBook));
+        System.out.println("Queue number is " + queueSessionBeanRemote.getNewQueueNumber());
+
+    }
+    
+    private void registerConsultationByAppointment() {
+        AppointmentEntity appointmentEntity;
+        PatientEntity patientEntity;
+        System.out.println("*** CARS :: Registration operation :: Register Consultaiton By Appointment**** \n ");
+        System.out.print("Enter Patient Identity Nuber> ");
+        try {
+            patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Could not find a patient with this identity number.");
+            return;
+        }
+        
+        //Print the pre-booked appointments
+        System.out.println("\n Appointments: \nId | Date | Time | Doctor");
+        for (Object obj : appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity)) {
+            appointmentEntity = (AppointmentEntity) obj;
+            System.out.println(appointmentEntity);
+        }
+
+        System.out.print("\n\nEnter Appointment Id> ");
+        try{
+            appointmentEntity = appointmentSessionBeanRemote.retrieveAppointmentByAppointmentId(new Long(sc.nextInt()));
+            sc.nextLine();
+        }catch(Exception e){
+            System.out.println("That is not a valid appointment id. Please try again");
+            return;
+        }
+        
+        if ( appointmentEntity.getTimeToAppointmentInMills() > 3*3600000 || appointmentEntity.getTimeToAppointmentInMills()<0){
+            System.out.println("Appointment time has either passed or is in more than three hours.");
+            return;
+        } 
+        
+        System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment is confirmed with Dr. " + appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName() + " at " + timeFormatter.format(appointmentEntity.getTime()));
+        System.out.println("Queue number is " + queueSessionBeanRemote.getNewQueueNumber());
+        
 
     }
 }
