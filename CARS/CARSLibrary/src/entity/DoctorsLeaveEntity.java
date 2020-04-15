@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;  
+import javax.persistence.Column;
 
 
 /**
@@ -28,6 +29,7 @@ public class DoctorsLeaveEntity implements Serializable {
     private Long doctorsLeaveId;
     @ManyToOne
     private DoctorEntity doctorEntity;
+    @Column(nullable = false)
     private Date date;
 
     public DoctorsLeaveEntity() {

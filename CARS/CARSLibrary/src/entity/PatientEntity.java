@@ -31,14 +31,18 @@ public class PatientEntity implements Serializable {
     private Long patientId;
     @Column(unique = true)
     private String identityNumber;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
     @Enumerated(EnumType.STRING)
     @Column(length = 1)
     private Gender gender;
+    @Column(nullable = false)
     private int age;
     private String phone;
     private String address;
+    @Column(nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "patientEntity")

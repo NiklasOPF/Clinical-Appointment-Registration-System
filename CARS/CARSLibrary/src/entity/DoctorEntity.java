@@ -24,8 +24,11 @@ public class DoctorEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long doctorId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
     @Column(name="registration", nullable = false, unique=true)
     private String registration;

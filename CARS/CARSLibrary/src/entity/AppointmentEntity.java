@@ -27,8 +27,11 @@ public class AppointmentEntity implements Serializable { //TODO annotate all ent
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long appointmentId;
+    @Column(nullable = false)
     private Date date;
+    @Column(nullable = false)
     private Time time;
     
     
