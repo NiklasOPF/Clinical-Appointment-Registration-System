@@ -46,7 +46,7 @@ public class Main { // TODO fix the problem with the menus jumping back to far
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) { // TODO stop project from crashing if we cont give number inputto console
             new MainApp(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
     }
     

@@ -183,8 +183,14 @@ public class RegistrationModule {
         }
 
         System.out.print("\n\n Enter Doctor Id> ");
-        doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
-        sc.nextLine();
+        try{
+            doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
+            sc.nextLine();   
+        } catch (Exception e){
+            System.out.println("That doctor could not be found");
+            return;
+        }
+        
         try{
             timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
         }catch(NullPointerException e){
