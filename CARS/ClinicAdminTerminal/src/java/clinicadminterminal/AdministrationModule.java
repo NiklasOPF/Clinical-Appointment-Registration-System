@@ -145,15 +145,15 @@ public class AdministrationModule {
                 break;
             case 5:
                 System.out.println("*** CARS :: Registration operation :: View All Staff**** \n ");
-                
+
                 List staffList = staffSessionBeanRemote.retrieveAllStaff();
 
                 System.out.println("First Name | Last Name | Username | Password");
-                    for (Object obj : staffList) {
-                        StaffEntity my_staff = (StaffEntity) obj;
-                        System.out.println(my_staff.toString());
-                    }
-                    System.out.println("\n");
+                for (Object obj : staffList) {
+                    StaffEntity my_staff = (StaffEntity) obj;
+                    System.out.println(my_staff.toString());
+                }
+                System.out.println("\n");
                 break;
             case 6:
                 return;
@@ -236,15 +236,15 @@ public class AdministrationModule {
                     break;
                 case 5:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View All Doctors **** \n ");
-                    
-                    List docs =  doctorSessionBeanRemote.retrieveAllDoctors();
+
+                    List docs = doctorSessionBeanRemote.retrieveAllDoctors();
                     System.out.println("First Name | Last Name | Registration | Qualifications");
                     for (Object doctor : docs) {
                         DoctorEntity my_doctor = (DoctorEntity) doctor;
                         System.out.println(my_doctor.toString());
                     }
                     System.out.println("\n");
-                       
+
                     break;
                 case 6:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
@@ -262,7 +262,7 @@ public class AdministrationModule {
                         Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     List sdfsdf = doctorSessionBeanRemote.getDoctorsOnLeave(date);
-                
+
                     break;
 
                 case 7:
@@ -303,31 +303,41 @@ public class AdministrationModule {
             switch (response) {
                 case 1:
                     System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
-                    System.out.print("Enter Identity Number> ");
-                    identityNumber = sc.nextLine();
-                    System.out.print("Enter First Name> ");
-                    firstName = sc.nextLine();
-                    System.out.print("Enter Last Name> ");
-                    lastName = sc.nextLine();
-                    System.out.print("Enter Gender> ");
-                    gender = sc.nextLine();
-                    System.out.print("Enter Age> ");
-                    age = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Enter Phone> ");
-                    phone = sc.nextLine();
-                    System.out.print("Enter Address> ");
-                    address = sc.nextLine();
-                    System.out.print("Enter Password> ");
-                    password = sc.nextLine();
-                    if (gender.equals("M") || gender.equals("m")) {
-                        patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
-                    }else if (gender.equals("F") || gender.equals("f")) {
-                        patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
-                    }else{
-                        System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                    try {
+                        System.out.print("Enter Identity Number> ");
+                        identityNumber = sc.nextLine();
+                        System.out.print("Enter First Name> ");
+                        firstName = sc.nextLine();
+                        System.out.print("Enter Last Name> ");
+                        lastName = sc.nextLine();
+                        System.out.print("Enter Gender> ");
+                        gender = sc.nextLine();
+                        System.out.print("Enter Age> ");
+                        age = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("Enter Phone> ");
+                        phone = sc.nextLine();
+                        System.out.print("Enter Address> ");
+                        address = sc.nextLine();
+                        while (true) {
+                            System.out.print("Enter Password> ");
+                            password = sc.nextLine();
+                            if (password.matches("[0-9]+") && password.length() != 6) {
+                                break;
+                            } else {
+                                System.out.println("wrong password input, password has to be in 6 digits");
+                            }
+                        }
+                        if (gender.equals("M") || gender.equals("m")) {
+                            patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
+                        } else if (gender.equals("F") || gender.equals("f")) {
+                            patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
+                        } else {
+                            System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                        }
+                    } catch (Exception ex) {
+                        System.out.println("Please enter the particulars");
                     }
-
                     break;
                 case 2:
                     System.out.println("*** CARS :: Administraion operation :: Patient Management :: View Patient Details **** \n ");
@@ -340,8 +350,7 @@ public class AdministrationModule {
                     System.out.println("*** CARS :: Administraion operation :: Patient Management :: Update Patient **** \n ");
                     System.out.println("Enter Identity Number> ");
                     patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-                    
-                    
+
                     System.out.print("Enter New Identity Number> ");
                     patientEntity.setIdentityNumber(sc.nextLine());
                     System.out.print("Enter New First Name> ");
@@ -352,9 +361,9 @@ public class AdministrationModule {
                     gender = sc.nextLine();
                     if (gender.equals("M") || gender.equals("m")) {
                         patientEntity.setGender(util.Enum.Gender.M);
-                    }else if (gender.equals("F") || gender.equals("f")) {
+                    } else if (gender.equals("F") || gender.equals("f")) {
                         patientEntity.setGender(util.Enum.Gender.F);
-                    }else{
+                    } else {
                         System.out.println("wrong gender input, if should either be 'M' of 'F'!");
                         break;
                     }
@@ -367,7 +376,7 @@ public class AdministrationModule {
                     patientEntity.setAddress(sc.nextLine());
                     System.out.print("Enter Password> ");
                     patientEntity.setPassword(sc.nextLine());
-                    
+
                     patientSessionBeanRemote.updatePatientEntity(patientEntity);
                     break;
                 case 4:
@@ -377,10 +386,10 @@ public class AdministrationModule {
                     patientSessionBeanRemote.deletePatientEntity(patientEntity.getPatientId());
 
                     break;
-                case 5: 
+                case 5:
                     System.out.println("*** CARS :: Administraion operation :: Patient Management :: View All Patients **** \n ");
-                    
-                    List pats =  patientSessionBeanRemote.retrieveAllPatients();
+
+                    List pats = patientSessionBeanRemote.retrieveAllPatients();
                     System.out.println("Identity Numberr | First Name | Last Name | Gender | Age | Phone | Address | Password");
                     for (Object obj : pats) {
                         PatientEntity my_patient = (PatientEntity) obj;
