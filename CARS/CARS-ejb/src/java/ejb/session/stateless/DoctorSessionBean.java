@@ -14,7 +14,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import javax.ejb.Local;
@@ -43,21 +42,6 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     private EntityManager em;
 
     public void requestDoctorsLeave(Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException {//TODO throws ...
-        Calendar lower = Calendar.getInstance();
-        lower.add(Calendar.DAY_OF_MONTH, 3);
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        
-  
-        if (lower.after(cal)){
-            System.out.println("mitt fel ");
-            throw new LeaveToCloseInTimeException();
-        }
-        
-        //int daysDiff = (int)( (date. - now.getTime()) / (1000 * 60 * 60 * 24));
-        
-        
-        
         // TODO think it inputs the date wrong. It interperets MM as MM-1 since it statrs from 0
         // Need to check for 1 week in advace, no appointments, no double leaves, only one day free per week.
         // Note that checking for one booking per week also takes care of the duplicates
