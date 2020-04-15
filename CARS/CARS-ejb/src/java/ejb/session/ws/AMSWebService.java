@@ -18,19 +18,19 @@ import util.exception.InvalidLoginException;
  *
  * @author StudentStudent
  */
-@WebService(serviceName = "PatientSessionBeanWebService")
+@WebService(serviceName = "AMSWebService")
 @Stateless()
-public class PatientSessionBeanWebService {
+public class AMSWebService {
 
     @EJB
     private PatientSessionBeanRemote patientSessionBeanRemote;
 
-    @WebMethod(operationName = "login")
-    public PatientEntity login(@WebParam(name = "identityNumber") String identityNumber,
+    @WebMethod(operationName = "patientLogin")
+    public PatientEntity patientLogin(@WebParam(name = "identityNumber") String identityNumber,
             @WebParam(name = "password") String password)
             throws InvalidLoginException {
 
-        return patientSessionBeanRemote.login(identityNumber, password);
+        return patientSessionBeanRemote.patientLogin(identityNumber, password);
     }
 
     @WebMethod(operationName = "createPatientEntity")
@@ -50,6 +50,6 @@ public class PatientSessionBeanWebService {
         } else {
             System.out.println("wrong gender input, if should either be 'M' of 'F'!");
         }
-
     }
+
 }
