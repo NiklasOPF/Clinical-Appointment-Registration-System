@@ -5,7 +5,7 @@
  */
 package amsclient;
 
-import java.sql.Date;
+import ws.client.ams.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +14,7 @@ import java.util.Scanner;
 import ws.client.ams.AppointmentEntity;
 import ws.client.ams.DoctorEntity;
 import ws.client.ams.PatientEntity;
+
 /**
  *
  * @author StudentStudent
@@ -24,6 +25,7 @@ public class PatientMenu {
     Scanner sc = new Scanner(System.in);
     SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
     public PatientMenu() {
 
     }
@@ -46,66 +48,54 @@ public class PatientMenu {
                     viewAppointment(patient);
                     break;
                 case 2:
-                    try{
-                    //Strategy: Maintain a list of all possible 
-                    System.out.println("*** CARS :: Appointment Operation :: Add Appointment **** \n ");
+                    try {
+                        //Strategy: Maintain a list of all possible 
+                        System.out.println("*** CARS :: Appointment Operation :: Add Appointment **** \n ");
 
-                    //Print all doctors
-                    System.out.println("Doctor:\nId | Name");
-                    List doctors = retrieveAllDoctors();
-                    if(doctors.isEmpty()) {
-                        System.out.println("There is no doctors available.");
-                    }
-                    for (Object obj : doctors) {
-                        DoctorEntity my_doctor = (DoctorEntity) obj;
-                        System.out.println(my_doctor.getDoctorId() + " | " + my_doctor.getFirstName() + " " + my_doctor.getLastName());
-                    }
-                    System.out.print("Enter Doctor Id> ");
-                    Long doctorId = sc.nextLong();
-                    sc.nextLine();
-                    DoctorEntity doctor = retrieveDoctorEntityByDoctorId(doctorId);
-                    System.out.print("Enter Date> ");
-                    String dateString = sc.nextLine();
-                    
-                    //long seconds = dateCal.getTimeInMillis();
-                    System.out.println("shtap");
-                    List<String> times = getAvailableTimes(dateString, doctor);
-                    if (times.size() == 0) {
-                        System.out.println("There are no available times for this doctor on the requested date \n");
+                        //Print all doctors
+                        System.out.println("Doctor:\nId | Name");
+                        List doctors = retrieveAllDoctors();
+                        if (doctors.isEmpty()) {
+                            System.out.println("There is no doctors available.");
+                        }
+                        for (Object obj : doctors) {
+                            DoctorEntity my_doctor = (DoctorEntity) obj;
+                            System.out.println(my_doctor.getDoctorId() + " | " + my_doctor.getFirstName() + " " + my_doctor.getLastName());
+                        }
+                        System.out.print("Enter Doctor Id> ");
+                        Long doctorId = sc.nextLong();
+                        sc.nextLine();
+                        DoctorEntity doctor = retrieveDoctorEntityByDoctorId(doctorId);
+                        System.out.print("Enter Date> ");
+                        String dateString = sc.nextLine();
+                        List<String> times = getAvailableTimes(dateString, doctor);
+                        if (times.size() == 0) {
+                            System.out.println("There are no available times for this doctor on the requested date \n");
+                            break;
+                        }
+                        System.out.println("Availability for " + doctor.getFirstName() + " " + doctor.getLastName() + " on " + dateString + ":");
+                        for (Object time : times) {
+                            System.out.print(time + " ");
+                        }
+                        System.out.print("\n\nEnter Time> ");
+                        String timeString = sc.nextLine();
+                        if (!times.contains(timeString)) {
+                            System.out.println("That time was not allowed. Try again\n");
+                            break;
+                        }
+                        Date date = new Date();
+                        PatientEntity patientAppoint = makeAppointment(patient.getIdentityNumber(), date, timeString, doctor);
+                        System.out.println(patientAppoint.getFirstName() + " " + patientAppoint.getLastName() + " appointment with " + doctor.getFirstName()
+                                + " " + doctor.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
                         break;
-                    }
-                    System.out.println("Availability for " + doctor.getFirstName() + " " + doctor.getLastName() + " on " + dateString + ":");
-                    for (Object time : times) {
-                        System.out.print(time + " ");
-                    }
-                    System.out.print("\n\nEnter Time> ");
-                    String timeString = sc.nextLine();
-                    if (!times.contains(timeString)) {
-                        System.out.println("That time was not allowed. Try again\n");
-                        break;
-                    }
-                    System.out.print("Enter Patient Identity Number> ");
-                    String patientId = sc.nextLine();
-                    System.out.println("shtap");
-                    Date date;
-                    //PatientEntity patientAppoint = makeAppointment(patientId, date, timeString, doctor);
-                   // System.out.println(patientAppoint.getFirstName() + " " + patientAppoint.getLastName() + " appointment with " + doctor.getFirstName()
-                    //        + " " + doctor.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
-                    break;
-                    } catch(Exception ex){
+                    } catch (Exception ex) {
                         System.out.println("Error occured during adding appointment.");
                         return;
                     }
                 case 3:
                     System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
-                    try {
-                        patient = retrievePatientEntityByIdentityNumber(patient.getIdentityNumber());
-                    } catch (Exception e) {
-                        System.out.println("Could not find a patient with that identity number.");
-                        return; //not sure break or return
-                    }
                     List<String> appoint = viewAppointment(patient);
-                    if(appoint.isEmpty()){
+                    if (appoint.isEmpty()) {
                         System.out.println("There is no appointment available.");
                         break;
                     }
@@ -148,8 +138,6 @@ public class PatientMenu {
         ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.retrieveAllDoctors();
     }
-
-
 
     private static DoctorEntity retrieveDoctorEntityByDoctorId(java.lang.Long doctorId) {
         ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
