@@ -15,7 +15,8 @@ public class DoubleLeaveRequestException extends Exception{
     }
 
     public DoubleLeaveRequestException(String str) {
-        System.err.println("str");
+        super(str);
+        
     }
 
     

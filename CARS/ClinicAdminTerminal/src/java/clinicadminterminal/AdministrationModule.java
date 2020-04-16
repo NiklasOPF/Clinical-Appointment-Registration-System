@@ -299,14 +299,15 @@ public class AdministrationModule {
                         break;
                         //Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (DoubleLeaveRequestException ex) {
-                        System.out.println("Already have a request for that day");
+                        System.out.println(ex.getMessage());
                         //Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
                         break;
                     } catch (ClashWithAppointmentException ex) {
-                        //System.out.println(ex);
-                        System.out.println("Already have a request for that week");
+                        System.out.println(ex.getMessage());
+                        //System.out.println("Already have a request for that week");
                         break;
                     } catch(Exception e){
+                        System.out.println(e.getMessage());
                         System.out.println("Incorrectly formatted date. \n\n");
                         break;
                     }

@@ -102,7 +102,8 @@ public class DoctorSessionBeanTest {
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DoubleLeaveRequestException ex) {
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClashWithAppointmentException ex) {
+
+        } catch (ClashWithAppointmentException ex ){
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         //DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1));
