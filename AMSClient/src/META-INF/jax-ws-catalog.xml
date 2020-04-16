@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
-    <system systemId="http://desktop-c7mu34c:8080/PatientSessionBeanWebService/PatientSessionBeanWebService?wsdl" uri="xml-resources/web-service-references/PatientSessionBeanWebService/wsdl/desktop-c7mu34c_8080/PatientSessionBeanWebService/PatientSessionBeanWebService.wsdl"/>
-    <system systemId="http://desktop-c7mu34c:8080/PatientSessionBeanWebService/PatientSessionBeanWebService?xsd=1" uri="xml-resources/web-service-references/PatientSessionBeanWebService/wsdl/desktop-c7mu34c_8080/PatientSessionBeanWebService/PatientSessionBeanWebService.xsd_1.xsd"/>
-    <system systemId="http://desktop-c7mu34c:8080/AppointmentSessionBeanWebService/AppointmentSessionBeanWebService?wsdl" uri="xml-resources/web-service-references/AppointmentSessionBeanWebService/wsdl/desktop-c7mu34c_8080/AppointmentSessionBeanWebService/AppointmentSessionBeanWebService.wsdl"/>
-    <system systemId="http://desktop-c7mu34c:8080/AppointmentSessionBeanWebService/AppointmentSessionBeanWebService?xsd=1" uri="xml-resources/web-service-references/AppointmentSessionBeanWebService/wsdl/desktop-c7mu34c_8080/AppointmentSessionBeanWebService/AppointmentSessionBeanWebService.xsd_1.xsd"/>
-    <system systemId="http://desktop-c7mu34c:8080/AMSWebService/AMSWebService?wsdl" uri="wsdl/desktop-c7mu34c_8080/AMSWebService/AMSWebService.wsdl"/>
-    <system systemId="http://desktop-c7mu34c:8080/AMSWebService/AMSWebService?xsd=1" uri="wsdl/desktop-c7mu34c_8080/AMSWebService/AMSWebService.xsd_1.xsd"/>
-</catalog>

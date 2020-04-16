@@ -18,7 +18,7 @@ public class AMSClient {
      */
     public static void main(String[] args) {
 
-        MainApp mainApp = new MainApp();
+        MainAppAMS mainApp = new MainAppAMS();
     }
 
 

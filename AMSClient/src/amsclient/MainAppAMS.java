@@ -14,12 +14,12 @@ import ws.client.ams.PatientEntity;
  *
  * @author StudentStudent
  */
-public class MainApp {
+public class MainAppAMS {
     // TODO code application logic here
 
     Scanner sc = new Scanner(System.in);
 
-    public MainApp() {
+    public MainAppAMS() {
         while (true) {
             String identityNumber;
             String firstName;
