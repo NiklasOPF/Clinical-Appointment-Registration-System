@@ -74,9 +74,6 @@ public class MainApp {
         System.out.print("Enter password> ");
         String password = sc.nextLine();
         try {
-        System.out.println(Encryption.encrypt(password + username));
-        System.out.println(Encryption.encrypt(password + username));
-        System.out.println(staffSessionBeanRemote.retrieveStaffEntityByUserName(username).getPassword());
                 return staffSessionBeanRemote.login(username, password);
         } catch (Exception e){
             throw new InvalidLoginException("That combination of login credentials is not valid!");

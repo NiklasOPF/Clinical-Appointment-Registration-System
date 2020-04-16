@@ -62,8 +62,13 @@ public class AppointmentModule {
                     break;
 
                 case 2:
-                    addAppointment();
+                    try {
+                        addAppointment();
+                    } catch (Exception ex) {
+                        System.out.println("Error in time.");
+                    }
                     break;
+
                 case 3:
                     cancelAppointment();
                     break;
@@ -76,18 +81,19 @@ public class AppointmentModule {
 
     }
 
-    /** Helper method for addAppointment(). It returns the available appointment times
-     for the provided doctor on the given date */
+    /**
+     * Helper method for addAppointment(). It returns the available appointment
+     * times for the provided doctor on the given date
+     */
     private ArrayList<String> getAvailableTimes(Date date, DoctorEntity my_doc) {
         // if doctor is on leave this day, there are no times
-        for (Object obj : doctorSessionBeanRemote.getDoctorsOnLeave(date)){
+        for (Object obj : doctorSessionBeanRemote.getDoctorsOnLeave(date)) {
             DoctorEntity doc = (DoctorEntity) obj;
-            if (doc.getDoctorId().equals(my_doc.getDoctorId())){
+            if (doc.getDoctorId().equals(my_doc.getDoctorId())) {
                 return new ArrayList<>();
             }
         }
-        
-        
+
         // Get a list with all "allowed" consultations for the given day
         Calendar date_cal = Calendar.getInstance();
         date_cal.setTime(date);
@@ -144,8 +150,8 @@ public class AppointmentModule {
         System.out.print("Enter Date> ");
         String dateString = sc.nextLine();
         Date date = java.sql.Date.valueOf(dateString);
-
         ArrayList<String> times = getAvailableTimes(date, my_doc);
+
         if (times.size() == 0) {
             System.out.println("There are no available times for this doctor on the requested date \n");
             return;
@@ -153,7 +159,9 @@ public class AppointmentModule {
 
         // Print the available times
         System.out.println("Availability for " + my_doc.getFirstName() + " " + my_doc.getLastName() + " on " + dateString + ":");
-        for (String time : times) {System.out.print(time + " ");}
+        for (String time : times) {
+            System.out.print(time + " ");
+        }
 
         System.out.print("\n\nEnter Time> ");
         String timeString = sc.nextLine();

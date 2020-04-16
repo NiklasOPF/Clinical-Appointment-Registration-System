@@ -60,7 +60,7 @@ public class MainModule {
             System.out.println("3: View Patient Appointments");
             System.out.println("4: Add Appointment");
             System.out.println("5: Cancel Appointment");
-            System.out.println("6: Back \n");
+            System.out.println("6: Logout \n");
             System.out.print("> ");
             Integer response = sc.nextInt();
             sc.nextLine();

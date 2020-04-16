@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.validation.ConstraintViolationException;
+import util.Encryption;
 import util.exception.InvalidLoginException;
 
 /**
@@ -37,7 +38,7 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
     public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException {
         PatientEntity user = retrievePatientEntityByIdentityNumber(idenNo);
 
-        if (user.getPassword().equals(password)) {
+        if (user.getPassword().equals(Encryption.encrypt(password + idenNo))) {
             return user;
         } else {
             throw new InvalidLoginException();

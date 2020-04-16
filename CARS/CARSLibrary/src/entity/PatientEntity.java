@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Size;
+import util.Encryption;
 import util.Enum.Gender;
 
 /**
@@ -46,7 +47,6 @@ public class PatientEntity implements Serializable {
     @Column(nullable = false)
     private String address;
     @Column(nullable = false)
-    @Size(min = 6, max = 6)
     private String password;
 
     @OneToMany(mappedBy = "patientEntity")
@@ -64,7 +64,7 @@ public class PatientEntity implements Serializable {
         this.age = age;
         this.phone = phone;
         this.address = address;
-        this.password = password;
+        this.password = Encryption.encrypt(password + identityNumber); // We make the encryption salted by use of the userName
     }
 
     public Long getPatientId() {
@@ -93,7 +93,6 @@ public class PatientEntity implements Serializable {
         }
         return true;
     }
-
 
     @Override
     public String toString() {

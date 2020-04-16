@@ -55,8 +55,15 @@ public class MainAppAMS {
                     phone = sc.nextLine();
                     System.out.print("Enter Address> ");
                     address = sc.nextLine();
-                    System.out.print("Enter Password> ");
-                    password = sc.nextLine();
+                    while (true) {
+                        System.out.print("Enter Password> ");
+                        password = sc.nextLine();
+                        if (password.matches("[0-9]+") && password.length() == 6) {
+                            break;
+                        } else {
+                            System.out.println("wrong password input, password has to be in 6 digits");
+                        }
+                    }
                     createPatientEntity(identityNumber, firstName, lastName, gender, age, phone, address, password);
                     break;
                 case 2:
