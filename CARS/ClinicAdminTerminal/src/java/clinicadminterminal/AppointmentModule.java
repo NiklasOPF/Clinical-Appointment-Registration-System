@@ -190,7 +190,6 @@ public class AppointmentModule {
 
         System.out.println("Appointments:");
         List app = appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity);
-        System.out.println("wfsdf");
 
         System.out.println("\n Appointments:");
         System.out.println("Id | Date | Time | Doctor");

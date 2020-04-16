@@ -32,7 +32,6 @@ public class MainModuleKiosk {
     Scanner sc = new Scanner(System.in);
     PatientEntity patient;
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
-    private StaffSessionBeanRemote staffSessionBeanRemote;
     private PatientSessionBeanRemote patientSessionBeanRemote;
     private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
     private QueueSessionBeanRemote queueSessionBeanRemote;
@@ -42,13 +41,11 @@ public class MainModuleKiosk {
     }
 
     public MainModuleKiosk(PatientEntity patient, DoctorSessionBeanRemote doctorSessionBeanRemote,
-            StaffSessionBeanRemote staffSessionBeanRemote,
             PatientSessionBeanRemote patientSessionBeanRemote,
             AppointmentSessionBeanRemote appointmentSessionBeanRemote,
             QueueSessionBeanRemote queueSessionBeanRemote) {
         this.patient = patient;
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
-        this.staffSessionBeanRemote = staffSessionBeanRemote;
         this.patientSessionBeanRemote = patientSessionBeanRemote;
         this.appointmentSessionBeanRemote = appointmentSessionBeanRemote;
         this.queueSessionBeanRemote = queueSessionBeanRemote;
@@ -88,9 +85,8 @@ public class MainModuleKiosk {
 
     private void viewPatientAppointments() {
         System.out.println("*** CARS :: Appointment Operation :: View Patient Appointments **** \n ");
-        System.out.print("Enter Patient Identity Number> ");
 
-        List appointments = appointmentSessionBeanRemote.retrievePatientAppointments(this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine()));
+        List appointments = appointmentSessionBeanRemote.retrievePatientAppointments(this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(patient.getIdentityNumber()));
         System.out.println("\n Appointments: \nId | Date | Time | Doctor");
         for (Object obj : appointments) {
             AppointmentEntity appointmentEntity = (AppointmentEntity) obj;
@@ -118,8 +114,8 @@ public class MainModuleKiosk {
         System.out.print("Enter Date> ");
         String dateString = sc.nextLine();
         Date date = java.sql.Date.valueOf(dateString);
-
         ArrayList<String> times = getAvailableTimes(date, my_doc);
+
         if (times.size() == 0) {
             System.out.println("There are no available times for this doctor on the requested date \n");
             return;
@@ -137,8 +133,6 @@ public class MainModuleKiosk {
             System.out.println("That time was not allowed. Try again\n");
             return;
         }
-        System.out.print("Enter Patient Identity Number> ");
-        PatientEntity patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
         appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), my_doc, patient));
 
         System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_doc.getFirstName() + " " + my_doc.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
@@ -172,17 +166,9 @@ public class MainModuleKiosk {
     }
 
     private void cancelAppointment() {
-        PatientEntity patientEntity;
         System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
-        try {
-            patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(patient.getIdentityNumber());
-        } catch (Exception e) {
-            System.out.println("Could not find a patient with that identity number.");
-            return;
-        }
 
-        System.out.println("Appointments:");
-        List app = appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity);
+        List app = appointmentSessionBeanRemote.retrievePatientAppointments(patient);
 
         System.out.println("\n Appointments:");
         System.out.println("Id | Date | Time | Doctor");
@@ -198,13 +184,12 @@ public class MainModuleKiosk {
 
         sc.nextLine();
         appointmentSessionBeanRemote.deleteAppointment(new Long(appId));
-        System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with " + my_app.getDoctorEntity().getFirstName() + " " + my_app.getDoctorEntity().getLastName() + " at " + timeFormatter.format(my_app.getTime()) + " on " + my_app.getDate() + " has been canceled.");
+        System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_app.getDoctorEntity().getFirstName() + " " + my_app.getDoctorEntity().getLastName() + " at " + timeFormatter.format(my_app.getTime()) + " on " + my_app.getDate() + " has been canceled.");
 
     }
     
     private void registerWalkInConsultation() {
         HashMap<Long, Calendar> firstAvailableTimes = new HashMap<>(); // Keeps track of the first available time associated with each doctor
-        PatientEntity patientEntity;
         DoctorEntity doctorEntity;
         boolean isBooked;
         List doctors = this.doctorSessionBeanRemote.retrieveAllDoctors();
@@ -257,30 +242,20 @@ public class MainModuleKiosk {
         sc.nextLine();
         Time timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
 
-        System.out.print("Enter Patient Identity Nuber> ");
-        patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-        appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(new Date(new Long(Calendar.getInstance().getTimeInMillis())), timeToBook, doctorEntity, patientEntity));
+        appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(new Date(new Long(Calendar.getInstance().getTimeInMillis())), timeToBook, doctorEntity, patient));
 
-        System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with Dr. " + doctorEntity.getFirstName() + " " + doctorEntity.getLastName() + " has been booked at " + timeFormatter.format(timeToBook));
+        System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with Dr. " + doctorEntity.getFirstName() + " " + doctorEntity.getLastName() + " has been booked at " + timeFormatter.format(timeToBook));
         System.out.println("Queue number is " + queueSessionBeanRemote.getNewQueueNumber());
 
     }
     
     private void registerConsultationByAppointment() {
         AppointmentEntity appointmentEntity;
-        PatientEntity patientEntity;
         System.out.println("*** CARS :: Registration operation :: Register Consultaiton By Appointment**** \n ");
-        System.out.print("Enter Patient Identity Nuber> ");
-        try {
-            patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-        } catch (Exception e) {
-            System.out.println("Could not find a patient with this identity number.");
-            return;
-        }
         
         //Print the pre-booked appointments
         System.out.println("\n Appointments: \nId | Date | Time | Doctor");
-        for (Object obj : appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity)) {
+        for (Object obj : appointmentSessionBeanRemote.retrievePatientAppointments(patient)) {
             appointmentEntity = (AppointmentEntity) obj;
             System.out.println(appointmentEntity);
         }
@@ -299,7 +274,7 @@ public class MainModuleKiosk {
             return;
         } 
         
-        System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment is confirmed with Dr. " + appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName() + " at " + timeFormatter.format(appointmentEntity.getTime()));
+        System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment is confirmed with Dr. " + appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName() + " at " + timeFormatter.format(appointmentEntity.getTime()));
         System.out.println("Queue number is " + queueSessionBeanRemote.getNewQueueNumber());
         
 

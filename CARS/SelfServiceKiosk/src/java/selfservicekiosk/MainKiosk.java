@@ -34,9 +34,6 @@ public class MainKiosk {
     @EJB(name = "PatientSessionBeanRemote")
     private static PatientSessionBeanRemote patientSessionBeanRemote; //TODO theres no need to do depÃ¥endency injection here since we don't need it right now, we might not even need it in the MainAppKiosk module. Therefore it's better to wait and do a JNDI lookup when we actually need the bean. JNDI also allows the client to be in a separate JVM from the ejb
 
-    @EJB(name = "StaffSessionBeanRemote")
-    private static StaffSessionBeanRemote staffSessionBeanRemote;
-
     @EJB(name = "DoctorSessionBeanRemote")
     private static DoctorSessionBeanRemote doctorSessionBeanRemote;
     
@@ -46,7 +43,7 @@ public class MainKiosk {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new MainAppKiosk(doctorSessionBeanRemote, staffSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
+        new MainAppKiosk(doctorSessionBeanRemote, patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
     }
 
 }

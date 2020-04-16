@@ -26,7 +26,6 @@ import util.exception.InvalidLoginException;
 public class MainAppKiosk {
 
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
-    private StaffSessionBeanRemote staffSessionBeanRemote;
     private PatientSessionBeanRemote patientSessionBeanRemote;
     private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
     private QueueSessionBeanRemote queueSessionBeanRemote;
@@ -36,11 +35,10 @@ public class MainAppKiosk {
         sc = new Scanner(System.in);
     }
 
-    public MainAppKiosk(DoctorSessionBeanRemote doctorSessionBeanRemote, StaffSessionBeanRemote staffSessionBeanRemotes, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
+    public MainAppKiosk(DoctorSessionBeanRemote doctorSessionBeanRemote, PatientSessionBeanRemote patientSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote, QueueSessionBeanRemote queueSessionBeanRemote) {
         this();
 
         this.doctorSessionBeanRemote = doctorSessionBeanRemote;
-        this.staffSessionBeanRemote = staffSessionBeanRemotes;
         this.patientSessionBeanRemote = patientSessionBeanRemote;
         this.appointmentSessionBeanRemote = appointmentSessionBeanRemote;
         this.queueSessionBeanRemote = queueSessionBeanRemote;
@@ -61,7 +59,6 @@ public class MainAppKiosk {
                 String phone;
                 String address;
                 String password;
-                PatientEntity patientEntity;
                 System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
                 try {
                     System.out.print("Enter Identity Number> ");
@@ -102,7 +99,7 @@ public class MainAppKiosk {
                 try {
                     PatientEntity patient = login(sc);
                     System.out.println("Login successful!\n");
-                    MainModuleKiosk mainModule = new MainModuleKiosk(patient, doctorSessionBeanRemote, staffSessionBeanRemotes,
+                    MainModuleKiosk mainModule = new MainModuleKiosk(patient, doctorSessionBeanRemote,
                             patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
 
                 } catch (InvalidLoginException e) {
