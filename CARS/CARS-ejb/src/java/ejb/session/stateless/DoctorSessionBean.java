@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -36,6 +37,9 @@ import util.exception.LeaveToCloseInTimeException;
 @Local(DoctorSessionBeanLocal.class)
 @Remote(DoctorSessionBeanRemote.class)
 public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSessionBeanLocal {
+
+    @EJB(name = "AppointmentSessionBeanLocal")
+    private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
 
     private AppointmentSessionBean appointmentSessionBean;
     private final Long DAYSOF7 = new Long(7 * 24 * 60 * 60 * 1000);
@@ -62,7 +66,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
 
         //check for appointment
         try{
-            List appointments = appointmentSessionBean.retrieveOccupiedTimes(date, retrieveDoctorEntityByDoctorId(doctorId));
+            List appointments = appointmentSessionBeanLocal.retrieveOccupiedTimes(date, retrieveDoctorEntityByDoctorId(doctorId));
             if (!appointments.isEmpty()) {
                 throw new ClashWithAppointmentException("There is an appointment at that time.");
             }

@@ -5,7 +5,12 @@
  */
 package ejb.session.stateless;
 
+import entity.DoctorEntity;
+import java.sql.Date;
+import java.util.List;
+
 
 public interface AppointmentSessionBeanLocal {
-    
+        public List retrieveOccupiedTimes(Date date, DoctorEntity doctorEntity);
+
 }
