@@ -6,10 +6,10 @@
 package ejb.session.stateless;
 
 import entity.DoctorEntity;
-
+import java.util.List;
 
 public interface DoctorSessionBeanLocal {
-    
+
     public Long createDoctorEntity(DoctorEntity doctorEntity);
 
     public DoctorEntity retrieveDoctorEntityByRegistration(String registration);
@@ -19,5 +19,7 @@ public interface DoctorSessionBeanLocal {
     public void updateDoctorEntity(DoctorEntity doctorEntity);
 
     public void deleteDoctorEntity(Long doctorId);
-    
+
+    public List retrieveAllDoctors();
+
 }

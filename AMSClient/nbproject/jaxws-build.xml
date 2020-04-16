@@ -10,4 +10,28 @@
                 JAX-WS WSIMPORT SECTION
                 ===================
             -->
+    <target name="wsimport-init" depends="init">
+        <mkdir dir="${build.generated.sources.dir}/jax-ws"/>
+        <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+            <classpath path="${libs.jaxws21.classpath}"/>
+        </taskdef>
+    </target>
+    <target name="wsimport-client-AMSWebService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/AMSWebService"/>
+        <property name="wsdl-AMSWebService" location="xml-resources/web-service-references/AMSWebService/wsdl/desktop-c7mu34c_8080/AMSWebService/AMSWebService.wsdl"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AMSWebService" destdir="${build.generated.dir}/jax-wsCache/AMSWebService" wsdl="${wsdl-AMSWebService}" catalog="catalog.xml" extension="true" verbose="true" fork="false" wsdlLocation="http://desktop-c7mu34c:8080/AMSWebService/AMSWebService?wsdl" xnocompile="true" xendorsed="true" package="ws.client.ams">
+            <depends file="${wsdl-AMSWebService}"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/AMSWebService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/AMSWebService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-AMSWebService" depends="-init-project">
+        <delete dir="${build.generated.dir}/jax-wsCache/AMSWebService"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws/client/ams"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-AMSWebService"/>
 </project>

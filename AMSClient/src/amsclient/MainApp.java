@@ -6,8 +6,9 @@
 package amsclient;
 
 import java.util.Scanner;
-import ws.client.patient.InvalidLoginException_Exception;
-import ws.client.patient.PatientEntity;
+import ws.client.ams.InvalidLoginException_Exception;
+import ws.client.ams.PatientEntity;
+
 
 /**
  *
@@ -65,7 +66,7 @@ public class MainApp {
                     System.out.print("Enter password> ");
                     password = sc.nextLine();
                     try {
-                        PatientEntity patient = login(identityNumber, password);
+                        PatientEntity patient = patientLogin(identityNumber,password);
                         PatientMenu patientMenu = new PatientMenu(patient);
                     } catch (Exception e) {
                         System.out.println("Error logging in" + e);
@@ -77,16 +78,19 @@ public class MainApp {
         }
     }
 
-    private static PatientEntity login(java.lang.String identityNumber, java.lang.String password) throws InvalidLoginException_Exception {
-        ws.client.patient.PatientSessionBeanWebService_Service service = new ws.client.patient.PatientSessionBeanWebService_Service();
-        ws.client.patient.PatientSessionBeanWebService port = service.getPatientSessionBeanWebServicePort();
-        return port.login(identityNumber, password);
-    }
-
     private static void createPatientEntity(java.lang.String identityNumber, java.lang.String firstName, java.lang.String lastName, java.lang.String gender, int age, java.lang.String phone, java.lang.String address, java.lang.String password) {
-        ws.client.patient.PatientSessionBeanWebService_Service service = new ws.client.patient.PatientSessionBeanWebService_Service();
-        ws.client.patient.PatientSessionBeanWebService port = service.getPatientSessionBeanWebServicePort();
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         port.createPatientEntity(identityNumber, firstName, lastName, gender, age, phone, address, password);
     }
+
+    private static PatientEntity patientLogin(java.lang.String identityNumber, java.lang.String password) throws InvalidLoginException_Exception {
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
+        return port.patientLogin(identityNumber, password);
+    }
+
+ 
+
 
 }
