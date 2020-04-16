@@ -135,9 +135,10 @@ public class RegistrationModule {
         HashMap<Long, Calendar> firstAvailableTimes = new HashMap<>(); // Keeps track of the first available time associated with each doctor
         PatientEntity patientEntity;
         DoctorEntity doctorEntity;
+        Time timeToBook;
         boolean isBooked;
         List doctors = this.doctorSessionBeanRemote.retrieveAllDoctors();
-        List[] occupiedTimes = new List[doctors.size()]; // Arary where each element is a list, each list contains the appointments associated with a doctor
+        List[] occupiedTimes = new List[doctors.size()]; // Array where each element is a list, each list contains the appointments associated with a doctor
 
         // Print the list of doctors
         System.out.println("*** CARS :: Registration operation :: Register Walk-In Consultation **** \n ");
@@ -184,8 +185,12 @@ public class RegistrationModule {
         System.out.print("\n\n Enter Doctor Id> ");
         doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
         sc.nextLine();
-        Time timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
-
+        try{
+            timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
+        }catch(NullPointerException e){
+            System.out.println("This doctor does no thave any available slots for the upcomming 3 hours. \nPlease try another doctor. \n\n");
+            return;
+        }
         System.out.print("Enter Patient Identity Nuber> ");
         patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
         appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(new Date(new Long(Calendar.getInstance().getTimeInMillis())), timeToBook, doctorEntity, patientEntity));

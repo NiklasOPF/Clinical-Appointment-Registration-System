@@ -5,6 +5,7 @@
  */
 package ejb.session.singleton;
 
+import java.util.Calendar;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Singleton;
@@ -18,22 +19,45 @@ import javax.ejb.Singleton;
 @Singleton
 public class QueueSessionBean implements QueueSessionBeanRemote, QueueSessionBeanLocal {
 
-    private int lastIssuedQueueNumber; //TODO reset every day
-    // TODO don't reset everytime you start the program
+    private int lastIssuedQueueNumber; 
+    private Calendar today;
 
     public QueueSessionBean() {
-        resetQueue();
+        if (!areSameDate(today, Calendar.getInstance())){resetQueue();}
     }
 
+    /**
+     * 
+     * @return A new incremental queue number that resets at midnight. 
+     */
+    @Override
     public int getNewQueueNumber() {
+        if (!areSameDate(today, Calendar.getInstance())){
+            resetQueue();
+            return getNewQueueNumber();
+        }
+
         this.lastIssuedQueueNumber++;
         return this.lastIssuedQueueNumber;
     }
-    
-    public void resetQueue(){
+
+    private void resetQueue() {
         lastIssuedQueueNumber = 0;
+        today = Calendar.getInstance();
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    private boolean areSameDate(Calendar c1, Calendar c2) {
+        if (c1 == null || c2 == null){
+            return false;
+        }
+        if (c1.get(Calendar.YEAR) != c2.get(Calendar.YEAR)) {
+            return false;
+        }
+        if (c1.get(Calendar.MONTH) != c2.get(Calendar.MONTH)) {
+            return false;
+        }
+        return c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
+    }
+
+
 }

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author Niklas
  */
-public class Encryption { // TODO make encryption salted
+public class Encryption {
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
     
     private static String bytesToStringHex(byte[] bytes) {

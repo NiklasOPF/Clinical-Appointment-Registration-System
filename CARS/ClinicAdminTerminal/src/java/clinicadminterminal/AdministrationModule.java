@@ -5,10 +5,13 @@
  */
 package clinicadminterminal;
 
+import ejb.session.singleton.QueueSessionBeanRemote;
+import ejb.session.stateless.AppointmentSessionBeanRemote;
 import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanRemote;
 import ejb.session.stateless.StaffSessionBeanRemote;
 import entity.DoctorEntity;
+import entity.DoctorsLeaveEntity;
 import entity.PatientEntity;
 import entity.StaffEntity;
 import java.sql.Date;
@@ -19,6 +22,7 @@ import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import util.exception.ClashWithAppointmentException;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
@@ -27,7 +31,9 @@ import util.exception.LeaveToCloseInTimeException;
  * @author Niklas
  */
 public class AdministrationModule {
-
+    private PatientSessionBeanRemote patientSessionBeanRemote;
+    private DoctorSessionBeanRemote doctorSessionBeanRemote;
+    private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
     StaffEntity staffEntity;
     Scanner sc;
     int response;
@@ -36,7 +42,10 @@ public class AdministrationModule {
 
     }
 
-    public AdministrationModule(StaffEntity staff) {
+    public AdministrationModule(StaffEntity staff, PatientSessionBeanRemote patientSessionBeanRemote, DoctorSessionBeanRemote doctorSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote) {
+        this.patientSessionBeanRemote = patientSessionBeanRemote;
+        this.doctorSessionBeanRemote = doctorSessionBeanRemote;
+        this.appointmentSessionBeanRemote = appointmentSessionBeanRemote;
         sc = new Scanner(System.in);
         staffEntity = staff;
         while (true) {
@@ -68,7 +77,9 @@ public class AdministrationModule {
 
     }
 
-    private void staffManagement() { //TODO implement logic
+
+
+    private void staffManagement() {
         StaffSessionBeanRemote staffSessionBeanRemote = lookupStaffSessionBeanRemote();
 
         System.out.println("*** CARS :: Administraion operation :: Staff Management **** \n ");
@@ -115,11 +126,14 @@ public class AdministrationModule {
                 sc.nextLine();
 
                 break;
-            case 3: // TODO Here IO am directly usign the getters and setters of the entity class. Is it better practice to use the session bean instead?
-                // TODO what to do when the user is current user
+            case 3: 
                 System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
                 System.out.print("Enter user name> ");
                 staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+                if (staff.getUserName().equals(this.staffEntity.getUserName())){
+                    System.out.println("You can't update the staff that is currently logged in!");
+                    break;
+                }
 
                 System.out.print("Enter New First Name> ");
                 staff.setFirstName(sc.nextLine());
@@ -134,7 +148,6 @@ public class AdministrationModule {
                 break;
             case 4:
                 System.out.println("*** CARS :: Registration operation :: Delete Staff**** \n ");
-                // TODO what to do when the user is current user
                 System.out.print("Enter user name> ");
                 staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
                 if (staff.getStaffId().equals(staffEntity.getStaffId())) {
@@ -228,11 +241,29 @@ public class AdministrationModule {
                     doc.setRegistration(sc.nextLine());
                     doctorSessionBeanRemote.updateDoctorEntity(doc);
                     break;
-                case 4: //TODO what to do if a doctor has appointment??
+                case 4:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Delete Doctor **** \n ");
                     System.out.println("Enter Registration> ");
-                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-                    doctorSessionBeanRemote.deleteDoctorEntity(doc.getDoctorId());
+                    try{
+                        doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+                    }catch(Exception e){
+                        System.out.println("The registration entered was incorrect");
+                        break;
+                    }
+                    if(appointmentSessionBeanRemote.retrieveDoctorAppointments(doc).size()>0){
+                        System.out.println("This doctor has associated apppointments. Remove these before removing the doctor!");
+                        break;
+                    }
+                    try{
+                        for (Object obj : doctorSessionBeanRemote.getLeavesForDoctor(doc)){
+                            DoctorsLeaveEntity leave = (DoctorsLeaveEntity) obj;
+                            doctorSessionBeanRemote.deleteDoctorsLeaveEntity(leave.getDoctorsLeaveId());
+                        }
+                        doctorSessionBeanRemote.deleteDoctorEntity(doc.getDoctorId());
+                    } catch(Exception e){
+                        System.out.println("Could not delete doctor");
+                        break;
+                    }
                     break;
                 case 5:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View All Doctors **** \n ");
@@ -249,20 +280,41 @@ public class AdministrationModule {
                 case 6:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
                     System.out.println("Enter Registration> ");
-                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+                    try{
+                        doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+                    }catch(Exception e){
+                        System.out.println("Could not find a doctor with thet registration. \n\n");
+                        break;
+                    }
                     System.out.println("Enter Requested Leave date in the format: yyyy-MM-dd> ");
-                    Date date = java.sql.Date.valueOf(sc.nextLine());
+                    
+
+    
+                    Date date;
                     try {
+                        date = java.sql.Date.valueOf(sc.nextLine());
                         doctorSessionBeanRemote.requestDoctorsLeave(date, doc.getDoctorId());
                     } catch (LeaveToCloseInTimeException ex) {
-                        System.out.println("%To close in time");
-                        Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("To close in time");
+                        break;
+                        //Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (DoubleLeaveRequestException ex) {
-                        System.out.println("Already have a request for that week");
-                        Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println(ex.getMessage());
+                        //Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
+                        break;
+                    } catch (ClashWithAppointmentException ex) {
+                        System.out.println(ex.getMessage());
+                        //System.out.println("Already have a request for that week");
+                        break;
+                    } catch(Exception e){
+                        System.out.println(e.getMessage());
+                        System.out.println("Incorrectly formatted date. \n\n");
+                        break;
                     }
                     List sdfsdf = doctorSessionBeanRemote.getDoctorsOnLeave(date);
-
+                    
+                    
+                
                     break;
 
                 case 7:
@@ -275,7 +327,7 @@ public class AdministrationModule {
 
     }
 
-    private void patientManagement() { //TODO implement logic
+    private void patientManagement() {
         while (true) {
             PatientSessionBeanRemote patientSessionBeanRemote = lookupPatientSessionBeanRemote();
             System.out.println("*** CARS :: Administraion operation :: Patient Management **** \n ");

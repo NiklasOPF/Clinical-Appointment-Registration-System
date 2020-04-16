@@ -9,6 +9,7 @@ import entity.DoctorEntity;
 import entity.DoctorsLeaveEntity;
 import java.sql.Date;
 import java.util.List;
+import util.exception.ClashWithAppointmentException;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
@@ -26,7 +27,7 @@ public interface DoctorSessionBeanRemote {
 
     public List retrieveAllDoctors();
 
-    public void requestDoctorsLeave(java.sql.Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException;
+    public void requestDoctorsLeave(java.sql.Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException, ClashWithAppointmentException;
 
     public Long createDoctorsLeaveEntity(DoctorsLeaveEntity doctorsLeaveEntity);
 
@@ -38,4 +39,10 @@ public interface DoctorSessionBeanRemote {
 
     public List getDoctorsOnLeave(Date date);
 
+    public List getLeavesForDoctor(DoctorEntity doctorEntity);
+
+    public void deleteDoctorsLeaveEntity(Long doctorsLeaveId);
+
+
+    
 }

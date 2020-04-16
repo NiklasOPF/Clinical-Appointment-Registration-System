@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package entity;
-//TODO change to work with java.util.date and simpledate package
 
 import java.io.Serializable;
 import java.util.List;
@@ -25,6 +24,7 @@ public class DoctorEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long doctorId;
     @Column(nullable = false)
     private String firstName;
@@ -75,7 +75,6 @@ public class DoctorEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the doctorId fields are not set
         if (!(object instanceof DoctorEntity)) {
             return false;
         }

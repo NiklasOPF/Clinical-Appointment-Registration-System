@@ -100,7 +100,7 @@ public class MainApp {
                     AppointmentModule appointmentModule = new AppointmentModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote);
                     break;
                 case 3:
-                    AdministrationModule administrationModule = new AdministrationModule(staff);
+                    AdministrationModule administrationModule = new AdministrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote);
                     break;
                 case 4: 
                     System.out.println("Logging out");

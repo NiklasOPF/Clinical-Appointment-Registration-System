@@ -5,7 +5,6 @@
  */
 package entity;
 
-//TODO change to work with java.util.date and simpledate package
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
@@ -85,7 +84,6 @@ public class PatientEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the patientId fields are not set
         if (!(object instanceof PatientEntity)) {
             return false;
         }

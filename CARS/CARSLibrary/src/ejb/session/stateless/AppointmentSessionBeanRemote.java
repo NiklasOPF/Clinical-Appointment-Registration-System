@@ -22,5 +22,7 @@ public interface AppointmentSessionBeanRemote {
     public void deleteAppointment(Long appointmentId);
 
     public AppointmentEntity retrieveAppointmentByAppointmentId(Long appointmentId);
+
+    public List retrieveDoctorAppointments(DoctorEntity doctorEntity);
     
 }
