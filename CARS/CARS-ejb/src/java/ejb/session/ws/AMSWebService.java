@@ -5,9 +5,11 @@
  */
 package ejb.session.ws;
 
+import ejb.session.stateless.AppointmentSessionBeanLocal;
 import ejb.session.stateless.AppointmentSessionBeanRemote;
+import ejb.session.stateless.DoctorSessionBeanLocal;
 import ejb.session.stateless.DoctorSessionBeanRemote;
-import ejb.session.stateless.PatientSessionBeanRemote;
+import ejb.session.stateless.PatientSessionBeanLocal;
 import entity.AppointmentEntity;
 import entity.DoctorEntity;
 import entity.PatientEntity;
@@ -35,11 +37,11 @@ import util.exception.InvalidLoginException;
 public class AMSWebService {
 
     @EJB
-    private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
+    private AppointmentSessionBeanLocal appointmentSessionBeanLocal;
     @EJB
-    private PatientSessionBeanRemote patientSessionBeanRemote;
+    private PatientSessionBeanLocal patientSessionBeanLocal;
     @EJB
-    private DoctorSessionBeanRemote doctorSessionBeanRemote;
+    private DoctorSessionBeanLocal doctorSessionBeanLocal;
     SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 
     @WebMethod(operationName = "patientLogin")
@@ -47,7 +49,7 @@ public class AMSWebService {
             @WebParam(name = "password") String password)
             throws InvalidLoginException {
 
-        return patientSessionBeanRemote.patientLogin(identityNumber, password);
+         return patientSessionBeanLocal.patientLogin(identityNumber, password);
     }
 
     @WebMethod(operationName = "createPatientEntity")
@@ -61,9 +63,9 @@ public class AMSWebService {
             @WebParam(name = "password") String password) {
 
         if (gender.equals("M") || gender.equals("m")) {
-            patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
+            patientSessionBeanLocal.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
         } else if (gender.equals("F") || gender.equals("f")) {
-            patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
+            patientSessionBeanLocal.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
         } else {
             System.out.println("wrong gender input, if should either be 'M' of 'F'!");
         }
@@ -72,15 +74,15 @@ public class AMSWebService {
     //view add cancel
     @WebMethod(operationName = "viewPatientAppointments")
     public List viewPatientAppointments(@WebParam(name = "identityNumber") String identityNumber) {
-        List appointments = appointmentSessionBeanRemote.
-                retrievePatientAppointments(this.patientSessionBeanRemote
+        List appointments = appointmentSessionBeanLocal.
+                retrievePatientAppointments(this.patientSessionBeanLocal
                         .retrievePatientEntityByIdentityNumber(identityNumber));
         return appointments;
     }
 
     private void addAppointment() {
 
-        // for (Object obj : this.doctorSessionBeanRemote.retrieveAllDoctors()) {
+        // for (Object obj : this.doctorSessionBeanLocal.retrieveAllDoctors()) {
         //   DoctorEntity my_doctor = (DoctorEntity) obj;
         //  System.out.println(my_doctor.getDoctorId() + " | " + my_doctor.getFirstName() + " " + my_doctor.getLastName());
         // }
@@ -88,7 +90,7 @@ public class AMSWebService {
         //System.out.print("Enter Doctor Id> ");
         //int doctorId = sc.nextInt();
         // sc.nextLine();
-        //DoctorEntity my_doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(doctorId));
+        //DoctorEntity my_doc = doctorSessionBeanLocal.retrieveDoctorEntityByDoctorId(new Long(doctorId));
         //System.out.print("Enter Date> ");
         //String dateString = sc.nextLine();
         //Date date = java.sql.Date.valueOf(dateString);
@@ -109,7 +111,7 @@ public class AMSWebService {
         //    return;
         //}
         //System.out.print("Enter Patient Identity Number> ");
-        //PatientEntity patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+        //PatientEntity patient = this.patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(sc.nextLine());
         //appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), my_doc, patient));
         //System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_doc.getFirstName() + " " + my_doc.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
     }
@@ -119,14 +121,14 @@ public class AMSWebService {
         //System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
         //System.out.print("Enter Patient Identity Number> ");
         //try {
-        //    patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+        //    patientEntity = this.patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(sc.nextLine());
         //} catch (Exception e) {
         //    System.out.println("Could not find a patient with that identity number.");
         //    return;
         //}
 
         //System.out.println("Appointments:");
-        //List app = appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity);
+        //List app = appointmentSessionBeanLocal.retrievePatientAppointments(patientEntity);
         //System.out.println("wfsdf");
         //System.out.println("\n Appointments:");
         //System.out.println("Id | Date | Time | Doctor");
@@ -137,7 +139,7 @@ public class AMSWebService {
         //System.out.println("\n");
         //System.out.println("Enter Appointment Id> ");
         //int appId = sc.nextInt();
-        //AppointmentEntity my_app = appointmentSessionBeanRemote.retrieveAppointmentByAppointmentId(new Long(appId));
+        //AppointmentEntity my_app = appointmentSessionBeanLocal.retrieveAppointmentByAppointmentId(new Long(appId));
         //sc.nextLine();
         //appointmentSessionBeanRemote.deleteAppointment(new Long(appId));
         //System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with " + my_app.getDoctorEntity().getFirstName() + " " + my_app.getDoctorEntity().getLastName() + " at " + timeFormatter.format(my_app.getTime()) + " on " + my_app.getDate() + " has been canceled.");
@@ -145,12 +147,12 @@ public class AMSWebService {
 
     @WebMethod(operationName = "retrieveAllDoctors")
     public List retrieveAllDoctors() {
-        return doctorSessionBeanRemote.retrieveAllDoctors();
+        return doctorSessionBeanLocal.retrieveAllDoctors();
     }
 
     @WebMethod(operationName = "retrieveDoctorEntityByDoctorId")
     public DoctorEntity retrieveDoctorEntityByDoctorId(@WebParam(name = "doctorId") Long doctorId) {
-        return doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(doctorId);
+        return doctorSessionBeanLocal.retrieveDoctorEntityByDoctorId(doctorId);
     }
 
     @WebMethod(operationName = "getAvailableTimes")
@@ -172,7 +174,7 @@ public class AMSWebService {
         }
 
         // Remove appointment times that are already occupied
-        List occupiedTimes = appointmentSessionBeanRemote.retrieveOccupiedTimes(date, doctor);
+        List occupiedTimes = appointmentSessionBeanLocal.retrieveOccupiedTimes(date, doctor);
         for (Object obj : occupiedTimes) {
             Time my_time = (Time) obj;
             times.remove(timeFormatter.format(my_time));
@@ -186,28 +188,33 @@ public class AMSWebService {
             @WebParam(name = "date") Date date,
             @WebParam(name = "timeString") String timeString,
             @WebParam(name = "doctor") DoctorEntity doctor) {
-        PatientEntity patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(patientId);
-        appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), doctor, patient));
+        PatientEntity patient = this.patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(patientId);
+        appointmentSessionBeanLocal.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), doctor, patient));
         return patient;
     }
 
     @WebMethod(operationName = "retrievePatientEntityByIdentityNumber")
     public PatientEntity retrievePatientEntityByIdentityNumber(@WebParam(name = "patientId") String identityNumber) {
-        return patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(identityNumber);
+        return patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(identityNumber);
     }
 
     @WebMethod(operationName = "retrievePatientAppointments")
     public List retrievePatientAppointments(@WebParam(name = "patientToCancel") PatientEntity patientToCancel) {
-        List app = appointmentSessionBeanRemote.retrievePatientAppointments(patientToCancel);
+        List app = appointmentSessionBeanLocal.retrievePatientAppointments(patientToCancel);
         return app;
     }
 
     @WebMethod(operationName = "retrieveAndDeletePatientAppointments")
     public AppointmentEntity retrieveAndDeletePatientAppointments(
             @WebParam(name = "appId") Long appId) {
-        AppointmentEntity my_app = appointmentSessionBeanRemote.retrieveAppointmentByAppointmentId(new Long(appId));
-        appointmentSessionBeanRemote.deleteAppointment(appId);
+        AppointmentEntity my_app = appointmentSessionBeanLocal.retrieveAppointmentByAppointmentId(new Long(appId));
+        appointmentSessionBeanLocal.deleteAppointment(appId);
         return my_app;
+    }
+    @WebMethod(operationName = "valueOf")
+    public Date valueOf(@WebParam(name = "appId") String dateString){
+        
+        return Date.valueOf(dateString);
     }
 
     private ArrayList<Calendar> getAllTimesOfDate(Calendar date) {

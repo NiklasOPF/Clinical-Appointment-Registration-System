@@ -17,3 +17,7 @@
 /CARS/AMSClient/build/
 /AMSClient/build/
 /AMSClient/nbproject/private/
+/AMSClient/dist/
+/CARS/DummyClient/nbproject/private/
+/CARS/DummyClient/build/
+/CARS/DummyClient/dist/

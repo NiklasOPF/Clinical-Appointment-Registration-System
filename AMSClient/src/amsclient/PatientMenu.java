@@ -6,14 +6,13 @@
 package amsclient;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import ws.client.appoint.AppointmentEntity;
-import ws.client.appoint.DoctorEntity;
-import ws.client.patient.PatientEntity;
-import ws.client.appoint.PatientEntity;
-import ws.client.appoint.Date;
+import ws.client.ams.AppointmentEntity;
+import ws.client.ams.Date;
+import ws.client.ams.DoctorEntity;
+import ws.client.ams.PatientEntity;
+
 /**
  *
  * @author StudentStudent
@@ -68,8 +67,8 @@ public class PatientMenu {
                     DoctorEntity doctor = retrieveDoctorEntityByDoctorId(doctorId);
                     System.out.print("Enter Date> ");
                     String dateString = sc.nextLine();
-                    ws.client.appoint.Date date = java.sql.Date.valueOf(dateString);
-                    ArrayList<String> times = getAvailableTimes(date, doctor);
+                    Date date = valueOf(dateString);
+                    List<String> times = getAvailableTimes(date, doctor);
                     if (times.size() == 0) {
                         System.out.println("There are no available times for this doctor on the requested date \n");
                         break;
@@ -95,15 +94,15 @@ public class PatientMenu {
                 case 3:
                     System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
                     System.out.print("Enter Patient Identity Number> ");
-
+                    PatientEntity patientToCancel;
                     try {
-                        PatientEntity patientToCancel = retrievePatientEntityByIdentityNumber(sc.nextLine());
+                        patientToCancel = retrievePatientEntityByIdentityNumber(sc.nextLine());
                     } catch (Exception e) {
                         System.out.println("Could not find a patient with that identity number.");
                         return; //not sure break or return
 
                     }
-                    List app = retrievePatientAppointments(patientEntity);
+                    List app = retrievePatientAppointments(patientToCancel);
                     //System.out.println("Appointments:");
                     System.out.println("\n Appointments:");
                     System.out.println("Id | Date | Time | Doctor");
@@ -115,10 +114,10 @@ public class PatientMenu {
                     System.out.println("Enter Appointment Id> ");
                     Long appId = sc.nextLong();
                     AppointmentEntity my_app = retrieveAndDeletePatientAppointments(appId);
-                    System.out.println(patientAppoint.getFirstName() + " "
-                            + patientAppoint.getLastName() + " appointment with "
-                            + my_app.getDoctorEntity().getFirstName()
-                            + " " + my_app.getDoctorEntity().getLastName()
+                    System.out.println(patientToCancel.getFirstName() + " "
+                            + patientToCancel.getLastName() + " appointment with "
+                            + my_app//.getDoctorEntity().getFirstName()
+                            + " " + my_app//.getDoctorEntity().getLastName()
                             + " at " + timeFormatter.format(my_app.getTime())
                             + " on " + my_app.getDate() + " has been canceled.");
                     break;
@@ -128,52 +127,59 @@ public class PatientMenu {
         }
     }
 
-    private static java.util.List<java.lang.String> getAvailableTimes(ws.client.appoint.Date date, ws.client.appoint.DoctorEntity doctor) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+    private static java.util.List<java.lang.String> getAvailableTimes(ws.client.ams.Date date, ws.client.ams.DoctorEntity doctor) {
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.getAvailableTimes(date, doctor);
     }
 
-    private static ws.client.appoint.PatientEntity makeAppointment(java.lang.String patientId, ws.client.appoint.Date date, java.lang.String timeString, ws.client.appoint.DoctorEntity doctor) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+    private static PatientEntity makeAppointment(java.lang.String patientId, ws.client.ams.Date date, java.lang.String timeString, ws.client.ams.DoctorEntity doctor) {
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.makeAppointment(patientId, date, timeString, doctor);
     }
 
     private static java.util.List<java.lang.Object> retrieveAllDoctors() {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.retrieveAllDoctors();
     }
 
     private static AppointmentEntity retrieveAndDeletePatientAppointments(java.lang.Long appId) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.retrieveAndDeletePatientAppointments(appId);
     }
 
     private static DoctorEntity retrieveDoctorEntityByDoctorId(java.lang.Long doctorId) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.retrieveDoctorEntityByDoctorId(doctorId);
     }
 
-    private static java.util.List<java.lang.Object> retrievePatientAppointments(ws.client.appoint.PatientEntity patientToCancel) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+    private static java.util.List<java.lang.Object> retrievePatientAppointments(ws.client.ams.PatientEntity patientToCancel) {
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.retrievePatientAppointments(patientToCancel);
     }
 
-    private static ws.client.appoint.PatientEntity retrievePatientEntityByIdentityNumber(java.lang.String patientId) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+    private static PatientEntity retrievePatientEntityByIdentityNumber(java.lang.String patientId) {
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.retrievePatientEntityByIdentityNumber(patientId);
     }
 
     private static java.util.List<java.lang.Object> viewPatientAppointments(java.lang.String identityNumber) {
-        ws.client.appoint.AppointmentSessionBeanWebService_Service service = new ws.client.appoint.AppointmentSessionBeanWebService_Service();
-        ws.client.appoint.AppointmentSessionBeanWebService port = service.getAppointmentSessionBeanWebServicePort();
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
         return port.viewPatientAppointments(identityNumber);
     }
+
+    private static Date valueOf(java.lang.String appId) {
+        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
+        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
+        return port.valueOf(appId);
+    }
+
 
 }

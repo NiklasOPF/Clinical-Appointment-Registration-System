@@ -5,7 +5,22 @@
  */
 package ejb.session.stateless;
 
+import entity.AppointmentEntity;
+import entity.DoctorEntity;
+import entity.PatientEntity;
+import java.sql.Date;
+import java.util.List;
 
 public interface AppointmentSessionBeanLocal {
-    
+
+    public Long createAppointmentEntity(AppointmentEntity appointmentEntity);
+
+    public List retrievePatientAppointments(PatientEntity patientEntity);
+
+    public List retrieveOccupiedTimes(Date date, DoctorEntity doctorEntity);
+
+    public void deleteAppointment(Long appointmentId);
+
+    public AppointmentEntity retrieveAppointmentByAppointmentId(Long appointmentId);
+
 }

@@ -13,6 +13,7 @@ import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
 public interface DoctorSessionBeanRemote {
+
     public Long createDoctorEntity(DoctorEntity doctorEntity);
 
     public DoctorEntity retrieveDoctorEntityByRegistration(String registration);
@@ -22,7 +23,6 @@ public interface DoctorSessionBeanRemote {
     public void updateDoctorEntity(DoctorEntity doctorEntity);
 
     public void deleteDoctorEntity(Long doctorId);
-
 
     public List retrieveAllDoctors();
 
@@ -38,6 +38,4 @@ public interface DoctorSessionBeanRemote {
 
     public List getDoctorsOnLeave(Date date);
 
-
-    
 }
