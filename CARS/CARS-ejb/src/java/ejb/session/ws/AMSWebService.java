@@ -6,9 +6,7 @@
 package ejb.session.ws;
 
 import ejb.session.stateless.AppointmentSessionBeanLocal;
-import ejb.session.stateless.AppointmentSessionBeanRemote;
 import ejb.session.stateless.DoctorSessionBeanLocal;
-import ejb.session.stateless.DoctorSessionBeanRemote;
 import ejb.session.stateless.PatientSessionBeanLocal;
 import entity.AppointmentEntity;
 import entity.DoctorEntity;
@@ -43,13 +41,13 @@ public class AMSWebService {
     @EJB
     private DoctorSessionBeanLocal doctorSessionBeanLocal;
     SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
-
+    SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     @WebMethod(operationName = "patientLogin")
     public PatientEntity patientLogin(@WebParam(name = "identityNumber") String identityNumber,
             @WebParam(name = "password") String password)
             throws InvalidLoginException {
 
-         return patientSessionBeanLocal.patientLogin(identityNumber, password);
+        return patientSessionBeanLocal.patientLogin(identityNumber, password);
     }
 
     @WebMethod(operationName = "createPatientEntity")
@@ -71,13 +69,22 @@ public class AMSWebService {
         }
     }
 
-    //view add cancel
+    //view add cancel//id date time doctor first and last name
     @WebMethod(operationName = "viewPatientAppointments")
-    public List viewPatientAppointments(@WebParam(name = "identityNumber") String identityNumber) {
+    public ArrayList<String> viewPatientAppointments(@WebParam(name = "identityNumber") String identityNumber) {
         List appointments = appointmentSessionBeanLocal.
                 retrievePatientAppointments(this.patientSessionBeanLocal
                         .retrievePatientEntityByIdentityNumber(identityNumber));
-        return appointments;
+        ArrayList<String> appointmentString = new ArrayList<>();
+        for(Object appointment:appointments){
+            AppointmentEntity appointmentEntity = (AppointmentEntity) appointment;
+            String string = appointmentEntity.getAppointmentId().toString() + " | " +
+                    dateFormatter.format(appointmentEntity.getDate()) + " | " + 
+                    timeFormatter.format(appointmentEntity.getTime()) + " | " +
+                    appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName();
+        appointmentString.add(string);
+        }
+        return appointmentString;
     }
 
     private void addAppointment() {
@@ -116,35 +123,6 @@ public class AMSWebService {
         //System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_doc.getFirstName() + " " + my_doc.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
     }
 
-    private void cancelAppointment() {
-        //PatientEntity patientEntity;
-        //System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
-        //System.out.print("Enter Patient Identity Number> ");
-        //try {
-        //    patientEntity = this.patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(sc.nextLine());
-        //} catch (Exception e) {
-        //    System.out.println("Could not find a patient with that identity number.");
-        //    return;
-        //}
-
-        //System.out.println("Appointments:");
-        //List app = appointmentSessionBeanLocal.retrievePatientAppointments(patientEntity);
-        //System.out.println("wfsdf");
-        //System.out.println("\n Appointments:");
-        //System.out.println("Id | Date | Time | Doctor");
-        //for (Object obj : app) {
-        //    AppointmentEntity appointmentEntity = (AppointmentEntity) obj;
-        //    System.out.println(appointmentEntity);
-        //}
-        //System.out.println("\n");
-        //System.out.println("Enter Appointment Id> ");
-        //int appId = sc.nextInt();
-        //AppointmentEntity my_app = appointmentSessionBeanLocal.retrieveAppointmentByAppointmentId(new Long(appId));
-        //sc.nextLine();
-        //appointmentSessionBeanRemote.deleteAppointment(new Long(appId));
-        //System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with " + my_app.getDoctorEntity().getFirstName() + " " + my_app.getDoctorEntity().getLastName() + " at " + timeFormatter.format(my_app.getTime()) + " on " + my_app.getDate() + " has been canceled.");
-    }
-
     @WebMethod(operationName = "retrieveAllDoctors")
     public List retrieveAllDoctors() {
         return doctorSessionBeanLocal.retrieveAllDoctors();
@@ -159,6 +137,12 @@ public class AMSWebService {
     public ArrayList<String> getAvailableTimes(@WebParam(name = "date") Date date,
             @WebParam(name = "doctor") DoctorEntity doctor) {
         // Get a list with all "allowed" consultations for the given day
+        for (Object obj : doctorSessionBeanLocal.getDoctorsOnLeave(date)) {
+            DoctorEntity doc = (DoctorEntity) obj;
+            if (doc.getDoctorId().equals(doctor.getDoctorId())) {
+                return new ArrayList<>();
+            }
+        }
         Calendar date_cal = Calendar.getInstance();
         date_cal.setTime(date);
         ArrayList<Calendar> all_allowed_calendars = getAllTimesOfDate(date_cal);
@@ -205,15 +189,21 @@ public class AMSWebService {
     }
 
     @WebMethod(operationName = "retrieveAndDeletePatientAppointments")
-    public AppointmentEntity retrieveAndDeletePatientAppointments(
+    public ArrayList<String> retrieveAndDeletePatientAppointments(
             @WebParam(name = "appId") Long appId) {
         AppointmentEntity my_app = appointmentSessionBeanLocal.retrieveAppointmentByAppointmentId(new Long(appId));
         appointmentSessionBeanLocal.deleteAppointment(appId);
-        return my_app;
+        ArrayList<String> singleAppointString = new ArrayList<>();
+        singleAppointString.add(my_app.getDoctorEntity().getFirstName());
+        singleAppointString.add(my_app.getDoctorEntity().getLastName());
+        singleAppointString.add(timeFormatter.format(my_app.getTime()));
+        singleAppointString.add(dateFormatter.format(my_app.getDate()));
+        return singleAppointString;
     }
+
     @WebMethod(operationName = "valueOf")
-    public Date valueOf(@WebParam(name = "appId") String dateString){
-        
+    public Date valueOf(@WebParam(name = "appId") String dateString) {
+
         return Date.valueOf(dateString);
     }
 

@@ -6,7 +6,12 @@
 package ejb.session.stateless;
 
 import entity.DoctorEntity;
+import entity.DoctorsLeaveEntity;
+import java.sql.Date;
 import java.util.List;
+import util.exception.ClashWithAppointmentException;
+import util.exception.DoubleLeaveRequestException;
+import util.exception.LeaveToCloseInTimeException;
 
 public interface DoctorSessionBeanLocal {
 
@@ -21,5 +26,22 @@ public interface DoctorSessionBeanLocal {
     public void deleteDoctorEntity(Long doctorId);
 
     public List retrieveAllDoctors();
+
+    public void requestDoctorsLeave(java.sql.Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException, ClashWithAppointmentException;
+
+    public Long createDoctorsLeaveEntity(DoctorsLeaveEntity doctorsLeaveEntity);
+
+    public DoctorsLeaveEntity retrieveDoctorsLeaveEntityById(Long doctorsLeaveId);
+
+    public List getDoctorsOnLeaveBetweenDates(java.sql.Date startDate, java.sql.Date endDate);
+
+    public void getAvailableDoctors(Date date);
+
+    public List getDoctorsOnLeave(Date date);
+
+    public List getLeavesForDoctor(DoctorEntity doctorEntity);
+
+    public void deleteDoctorsLeaveEntity(Long doctorsLeaveId);
+
 
 }

@@ -46,18 +46,6 @@
 
 <xs:element name="viewPatientAppointmentsResponse" type="tns:viewPatientAppointmentsResponse"/>
 
-<xs:complexType name="viewPatientAppointments">
-<xs:sequence>
-<xs:element name="identityNumber" type="xs:string" minOccurs="0"/>
-</xs:sequence>
-</xs:complexType>
-
-<xs:complexType name="viewPatientAppointmentsResponse">
-<xs:sequence>
-<xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
-</xs:sequence>
-</xs:complexType>
-
 <xs:complexType name="retrievePatientAppointments">
 <xs:sequence>
 <xs:element name="patientToCancel" type="tns:patientEntity" minOccurs="0"/>
@@ -98,6 +86,18 @@
 <xs:complexType name="retrievePatientAppointmentsResponse">
 <xs:sequence>
 <xs:element name="return" type="xs:anyType" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="viewPatientAppointments">
+<xs:sequence>
+<xs:element name="identityNumber" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="viewPatientAppointmentsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -189,7 +189,7 @@
 
 <xs:complexType name="retrieveAndDeletePatientAppointmentsResponse">
 <xs:sequence>
-<xs:element name="return" type="tns:appointmentEntity" minOccurs="0"/>
+<xs:element name="return" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 
