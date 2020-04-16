@@ -27,7 +27,7 @@ import util.exception.AccesSystemOnWeekendException;
  *
  * @author StudentStudent
  */
-public class MainModule {
+public class MainModuleKiosk {
 
     Scanner sc = new Scanner(System.in);
     PatientEntity patient;
@@ -38,10 +38,10 @@ public class MainModule {
     private QueueSessionBeanRemote queueSessionBeanRemote;
     SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
 
-    public MainModule() {
+    public MainModuleKiosk() {
     }
 
-    public MainModule(PatientEntity patient, DoctorSessionBeanRemote doctorSessionBeanRemote,
+    public MainModuleKiosk(PatientEntity patient, DoctorSessionBeanRemote doctorSessionBeanRemote,
             StaffSessionBeanRemote staffSessionBeanRemote,
             PatientSessionBeanRemote patientSessionBeanRemote,
             AppointmentSessionBeanRemote appointmentSessionBeanRemote,
@@ -174,9 +174,8 @@ public class MainModule {
     private void cancelAppointment() {
         PatientEntity patientEntity;
         System.out.println("*** CARS :: Appointment Operation :: Cancel Appointment **** \n ");
-        System.out.print("Enter Patient Identity Number> ");
         try {
-            patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+            patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(patient.getIdentityNumber());
         } catch (Exception e) {
             System.out.println("Could not find a patient with that identity number.");
             return;
@@ -184,7 +183,6 @@ public class MainModule {
 
         System.out.println("Appointments:");
         List app = appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity);
-        System.out.println("wfsdf");
 
         System.out.println("\n Appointments:");
         System.out.println("Id | Date | Time | Doctor");

@@ -42,6 +42,7 @@ public class AMSWebService {
     private DoctorSessionBeanLocal doctorSessionBeanLocal;
     SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
     @WebMethod(operationName = "patientLogin")
     public PatientEntity patientLogin(@WebParam(name = "identityNumber") String identityNumber,
             @WebParam(name = "password") String password)
@@ -76,13 +77,13 @@ public class AMSWebService {
                 retrievePatientAppointments(this.patientSessionBeanLocal
                         .retrievePatientEntityByIdentityNumber(identityNumber));
         ArrayList<String> appointmentString = new ArrayList<>();
-        for(Object appointment:appointments){
+        for (Object appointment : appointments) {
             AppointmentEntity appointmentEntity = (AppointmentEntity) appointment;
-            String string = appointmentEntity.getAppointmentId().toString() + " | " +
-                    dateFormatter.format(appointmentEntity.getDate()) + " | " + 
-                    timeFormatter.format(appointmentEntity.getTime()) + " | " +
-                    appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName();
-        appointmentString.add(string);
+            String string = appointmentEntity.getAppointmentId().toString() + " | "
+                    + dateFormatter.format(appointmentEntity.getDate()) + " | "
+                    + timeFormatter.format(appointmentEntity.getTime()) + " | "
+                    + appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName();
+            appointmentString.add(string);
         }
         return appointmentString;
     }
@@ -134,13 +135,16 @@ public class AMSWebService {
     }
 
     @WebMethod(operationName = "getAvailableTimes")
-    public ArrayList<String> getAvailableTimes(@WebParam(name = "date") Date date,
+    public ArrayList<String> getAvailableTimes(@WebParam(name = "dateString") String dateString,
             @WebParam(name = "doctor") DoctorEntity doctor) {
         // Get a list with all "allowed" consultations for the given day
+        String[] dateStringSplit = dateString.split("-");
+        Date date = new Date(Integer.parseInt(dateStringSplit[0]), Integer.parseInt(dateStringSplit[1]),
+                Integer.parseInt(dateStringSplit[2]));
         for (Object obj : doctorSessionBeanLocal.getDoctorsOnLeave(date)) {
             DoctorEntity doc = (DoctorEntity) obj;
             if (doc.getDoctorId().equals(doctor.getDoctorId())) {
-                return new ArrayList<>();
+                return new ArrayList<String>();
             }
         }
         Calendar date_cal = Calendar.getInstance();
@@ -163,7 +167,9 @@ public class AMSWebService {
             Time my_time = (Time) obj;
             times.remove(timeFormatter.format(my_time));
         }
-
+        for (String time : times) {
+            System.out.println(time);
+        }
         return times;
     }
 

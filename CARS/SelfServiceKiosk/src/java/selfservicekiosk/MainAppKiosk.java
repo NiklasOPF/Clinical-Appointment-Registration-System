@@ -102,7 +102,7 @@ public class MainAppKiosk {
                 try {
                     PatientEntity patient = login(sc);
                     System.out.println("Login successful!\n");
-                    MainModule mainModule = new MainModule(patient, doctorSessionBeanRemote, staffSessionBeanRemotes,
+                    MainModuleKiosk mainModule = new MainModuleKiosk(patient, doctorSessionBeanRemote, staffSessionBeanRemotes,
                             patientSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
 
                 } catch (InvalidLoginException e) {

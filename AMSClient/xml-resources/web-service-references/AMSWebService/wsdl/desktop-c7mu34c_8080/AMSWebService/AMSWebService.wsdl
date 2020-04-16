@@ -16,35 +16,14 @@
 <message name="makeAppointmentResponse">
 <part name="parameters" element="tns:makeAppointmentResponse"/>
 </message>
-<message name="retrievePatientEntityByIdentityNumber">
-<part name="parameters" element="tns:retrievePatientEntityByIdentityNumber"/>
+<message name="patientLogin">
+<part name="parameters" element="tns:patientLogin"/>
 </message>
-<message name="retrievePatientEntityByIdentityNumberResponse">
-<part name="parameters" element="tns:retrievePatientEntityByIdentityNumberResponse"/>
+<message name="patientLoginResponse">
+<part name="parameters" element="tns:patientLoginResponse"/>
 </message>
-<message name="retrieveAllDoctors">
-<part name="parameters" element="tns:retrieveAllDoctors"/>
-</message>
-<message name="retrieveAllDoctorsResponse">
-<part name="parameters" element="tns:retrieveAllDoctorsResponse"/>
-</message>
-<message name="retrievePatientAppointments">
-<part name="parameters" element="tns:retrievePatientAppointments"/>
-</message>
-<message name="retrievePatientAppointmentsResponse">
-<part name="parameters" element="tns:retrievePatientAppointmentsResponse"/>
-</message>
-<message name="createPatientEntity">
-<part name="parameters" element="tns:createPatientEntity"/>
-</message>
-<message name="createPatientEntityResponse">
-<part name="parameters" element="tns:createPatientEntityResponse"/>
-</message>
-<message name="retrieveDoctorEntityByDoctorId">
-<part name="parameters" element="tns:retrieveDoctorEntityByDoctorId"/>
-</message>
-<message name="retrieveDoctorEntityByDoctorIdResponse">
-<part name="parameters" element="tns:retrieveDoctorEntityByDoctorIdResponse"/>
+<message name="InvalidLoginException">
+<part name="fault" element="tns:InvalidLoginException"/>
 </message>
 <message name="retrieveAndDeletePatientAppointments">
 <part name="parameters" element="tns:retrieveAndDeletePatientAppointments"/>
@@ -64,14 +43,35 @@
 <message name="viewPatientAppointmentsResponse">
 <part name="parameters" element="tns:viewPatientAppointmentsResponse"/>
 </message>
-<message name="patientLogin">
-<part name="parameters" element="tns:patientLogin"/>
+<message name="retrievePatientEntityByIdentityNumber">
+<part name="parameters" element="tns:retrievePatientEntityByIdentityNumber"/>
 </message>
-<message name="patientLoginResponse">
-<part name="parameters" element="tns:patientLoginResponse"/>
+<message name="retrievePatientEntityByIdentityNumberResponse">
+<part name="parameters" element="tns:retrievePatientEntityByIdentityNumberResponse"/>
 </message>
-<message name="InvalidLoginException">
-<part name="fault" element="tns:InvalidLoginException"/>
+<message name="retrievePatientAppointments">
+<part name="parameters" element="tns:retrievePatientAppointments"/>
+</message>
+<message name="retrievePatientAppointmentsResponse">
+<part name="parameters" element="tns:retrievePatientAppointmentsResponse"/>
+</message>
+<message name="retrieveAllDoctors">
+<part name="parameters" element="tns:retrieveAllDoctors"/>
+</message>
+<message name="retrieveAllDoctorsResponse">
+<part name="parameters" element="tns:retrieveAllDoctorsResponse"/>
+</message>
+<message name="createPatientEntity">
+<part name="parameters" element="tns:createPatientEntity"/>
+</message>
+<message name="createPatientEntityResponse">
+<part name="parameters" element="tns:createPatientEntityResponse"/>
+</message>
+<message name="retrieveDoctorEntityByDoctorId">
+<part name="parameters" element="tns:retrieveDoctorEntityByDoctorId"/>
+</message>
+<message name="retrieveDoctorEntityByDoctorIdResponse">
+<part name="parameters" element="tns:retrieveDoctorEntityByDoctorIdResponse"/>
 </message>
 <portType name="AMSWebService">
 <operation name="valueOf">
@@ -82,25 +82,10 @@
 <input wsam:Action="http://ws.session.ejb/AMSWebService/makeAppointmentRequest" message="tns:makeAppointment"/>
 <output wsam:Action="http://ws.session.ejb/AMSWebService/makeAppointmentResponse" message="tns:makeAppointmentResponse"/>
 </operation>
-<operation name="retrievePatientEntityByIdentityNumber">
-<input wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientEntityByIdentityNumberRequest" message="tns:retrievePatientEntityByIdentityNumber"/>
-<output wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientEntityByIdentityNumberResponse" message="tns:retrievePatientEntityByIdentityNumberResponse"/>
-</operation>
-<operation name="retrieveAllDoctors">
-<input wsam:Action="http://ws.session.ejb/AMSWebService/retrieveAllDoctorsRequest" message="tns:retrieveAllDoctors"/>
-<output wsam:Action="http://ws.session.ejb/AMSWebService/retrieveAllDoctorsResponse" message="tns:retrieveAllDoctorsResponse"/>
-</operation>
-<operation name="retrievePatientAppointments">
-<input wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientAppointmentsRequest" message="tns:retrievePatientAppointments"/>
-<output wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientAppointmentsResponse" message="tns:retrievePatientAppointmentsResponse"/>
-</operation>
-<operation name="createPatientEntity">
-<input wsam:Action="http://ws.session.ejb/AMSWebService/createPatientEntityRequest" message="tns:createPatientEntity"/>
-<output wsam:Action="http://ws.session.ejb/AMSWebService/createPatientEntityResponse" message="tns:createPatientEntityResponse"/>
-</operation>
-<operation name="retrieveDoctorEntityByDoctorId">
-<input wsam:Action="http://ws.session.ejb/AMSWebService/retrieveDoctorEntityByDoctorIdRequest" message="tns:retrieveDoctorEntityByDoctorId"/>
-<output wsam:Action="http://ws.session.ejb/AMSWebService/retrieveDoctorEntityByDoctorIdResponse" message="tns:retrieveDoctorEntityByDoctorIdResponse"/>
+<operation name="patientLogin">
+<input wsam:Action="http://ws.session.ejb/AMSWebService/patientLoginRequest" message="tns:patientLogin"/>
+<output wsam:Action="http://ws.session.ejb/AMSWebService/patientLoginResponse" message="tns:patientLoginResponse"/>
+<fault message="tns:InvalidLoginException" name="InvalidLoginException" wsam:Action="http://ws.session.ejb/AMSWebService/patientLogin/Fault/InvalidLoginException"/>
 </operation>
 <operation name="retrieveAndDeletePatientAppointments">
 <input wsam:Action="http://ws.session.ejb/AMSWebService/retrieveAndDeletePatientAppointmentsRequest" message="tns:retrieveAndDeletePatientAppointments"/>
@@ -114,10 +99,25 @@
 <input wsam:Action="http://ws.session.ejb/AMSWebService/viewPatientAppointmentsRequest" message="tns:viewPatientAppointments"/>
 <output wsam:Action="http://ws.session.ejb/AMSWebService/viewPatientAppointmentsResponse" message="tns:viewPatientAppointmentsResponse"/>
 </operation>
-<operation name="patientLogin">
-<input wsam:Action="http://ws.session.ejb/AMSWebService/patientLoginRequest" message="tns:patientLogin"/>
-<output wsam:Action="http://ws.session.ejb/AMSWebService/patientLoginResponse" message="tns:patientLoginResponse"/>
-<fault message="tns:InvalidLoginException" name="InvalidLoginException" wsam:Action="http://ws.session.ejb/AMSWebService/patientLogin/Fault/InvalidLoginException"/>
+<operation name="retrievePatientEntityByIdentityNumber">
+<input wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientEntityByIdentityNumberRequest" message="tns:retrievePatientEntityByIdentityNumber"/>
+<output wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientEntityByIdentityNumberResponse" message="tns:retrievePatientEntityByIdentityNumberResponse"/>
+</operation>
+<operation name="retrievePatientAppointments">
+<input wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientAppointmentsRequest" message="tns:retrievePatientAppointments"/>
+<output wsam:Action="http://ws.session.ejb/AMSWebService/retrievePatientAppointmentsResponse" message="tns:retrievePatientAppointmentsResponse"/>
+</operation>
+<operation name="retrieveAllDoctors">
+<input wsam:Action="http://ws.session.ejb/AMSWebService/retrieveAllDoctorsRequest" message="tns:retrieveAllDoctors"/>
+<output wsam:Action="http://ws.session.ejb/AMSWebService/retrieveAllDoctorsResponse" message="tns:retrieveAllDoctorsResponse"/>
+</operation>
+<operation name="createPatientEntity">
+<input wsam:Action="http://ws.session.ejb/AMSWebService/createPatientEntityRequest" message="tns:createPatientEntity"/>
+<output wsam:Action="http://ws.session.ejb/AMSWebService/createPatientEntityResponse" message="tns:createPatientEntityResponse"/>
+</operation>
+<operation name="retrieveDoctorEntityByDoctorId">
+<input wsam:Action="http://ws.session.ejb/AMSWebService/retrieveDoctorEntityByDoctorIdRequest" message="tns:retrieveDoctorEntityByDoctorId"/>
+<output wsam:Action="http://ws.session.ejb/AMSWebService/retrieveDoctorEntityByDoctorIdResponse" message="tns:retrieveDoctorEntityByDoctorIdResponse"/>
 </operation>
 </portType>
 <binding name="AMSWebServicePortBinding" type="tns:AMSWebService">
@@ -140,7 +140,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="retrievePatientEntityByIdentityNumber">
+<operation name="patientLogin">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -148,42 +148,9 @@
 <output>
 <soap:body use="literal"/>
 </output>
-</operation>
-<operation name="retrieveAllDoctors">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="retrievePatientAppointments">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="createPatientEntity">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
-</operation>
-<operation name="retrieveDoctorEntityByDoctorId">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-<output>
-<soap:body use="literal"/>
-</output>
+<fault name="InvalidLoginException">
+<soap:fault name="InvalidLoginException" use="literal"/>
+</fault>
 </operation>
 <operation name="retrieveAndDeletePatientAppointments">
 <soap:operation soapAction=""/>
@@ -212,7 +179,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="patientLogin">
+<operation name="retrievePatientEntityByIdentityNumber">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -220,9 +187,42 @@
 <output>
 <soap:body use="literal"/>
 </output>
-<fault name="InvalidLoginException">
-<soap:fault name="InvalidLoginException" use="literal"/>
-</fault>
+</operation>
+<operation name="retrievePatientAppointments">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="retrieveAllDoctors">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="createPatientEntity">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="retrieveDoctorEntityByDoctorId">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
 </operation>
 </binding>
 <service name="AMSWebService">
