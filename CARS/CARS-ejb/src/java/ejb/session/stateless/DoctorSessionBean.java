@@ -47,12 +47,7 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
     private EntityManager em;
 
     public void requestDoctorsLeave(Date date, Long doctorId) throws LeaveToCloseInTimeException, DoubleLeaveRequestException, ClashWithAppointmentException {//TODO throws ...
-        // TODO think it inputs the date wrong. It interperets MM as MM-1 since it statrs from 0
-        // Need to check for 1 week in advace, no appointments, no double leaves, only one day free per week.
-        // Note that checking for one booking per week also takes care of the duplicates
-        //Remember Sat and Sun did not open, don't give them leave for that!!!
-        //prevent Sat or Sun leave
-        //////
+
         Calendar calToday = new GregorianCalendar();
         Calendar calLeaveDay = new GregorianCalendar();
 
@@ -63,29 +58,21 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         if (calLeaveDay.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calLeaveDay.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
             throw new ClashWithAppointmentException("It's a weekend! Choose a weekday.");
         }
-        //Calendar lower = Calendar.getInstance();
-        //lower.add(Calendar.DAY_OF_MONTH, 3);
+
         //check for appointment
-        List appointments = appointmentSessionBean.retrieveOccupiedTimes(date, retrieveDoctorEntityByDoctorId(doctorId));
-        if (!appointments.isEmpty()) {
-            throw new ClashWithAppointmentException("There is an appointment at that time.");
-        }
+        try{
+            List appointments = appointmentSessionBean.retrieveOccupiedTimes(date, retrieveDoctorEntityByDoctorId(doctorId));
+            if (!appointments.isEmpty()) {
+                throw new ClashWithAppointmentException("There is an appointment at that time.");
+            }
+        }catch(NullPointerException e){}
         //check if it is 7 days apart
         //set them to 00:00:00
-        Long difference = calToday.getTimeInMillis() - calLeaveDay.getTimeInMillis();
+        Long difference =  calLeaveDay.getTimeInMillis() - calToday.getTimeInMillis();
         if (difference < DAYSOF7) {
-            throw new LeaveToCloseInTimeException();
+            throw new LeaveToCloseInTimeException("To close in time");
         }
-        /*Calendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        long dif1 = date.getTime() - new Date(Calendar.getInstance().getTime().getTime()).getTime();
-        Long dif2 = new Date(0, 0, 2).getTime() - new Date(0, 0, 0).getTime();
-        if (dif1 < dif2) { // In case the time is to close 
-            throw new LeaveToCloseInTimeException();
-        }*/
-        //assignment says on open on mon-fri, assume sat and sun no open
-        // get start and end of week
-        //monday get nearest mondayCal and fridayCal get the nearest fridayCal
+
         Calendar mondayCal = new GregorianCalendar();
         Calendar fridayCal = new GregorianCalendar();
         mondayCal.setTime(date);
@@ -98,21 +85,14 @@ public class DoctorSessionBean implements DoctorSessionBeanRemote, DoctorSession
         }
         Date monday = new Date(mondayCal.getTimeInMillis());
         Date friday = new Date(fridayCal.getTimeInMillis());
-        /*Date mondayCal = new Date(date.getTime());
-        Date sunday = new Date(date.getTime());
-        while (mondayCal.getDay() != 1) {
-            mondayCal = new Date(mondayCal.getTime() - (new Date(0, 0, 1).getTime() - new Date(0, 0, 0).getTime()));
-        }
-        while (sunday.getDay() != 0) {
-            sunday = new Date(sunday.getTime() + (new Date(0, 0, 1).getTime() - new Date(0, 0, 0).getTime()));
-        }*/
+
+
         //retrieve entries between dates
         List docs = getDoctorsOnLeaveBetweenDates(monday, friday);
-        //see if your doctor is included
-        if (docs.contains(doctorId)) {
-            throw new DoubleLeaveRequestException("There was already an leave instance associated with this doctor during the week of interest");
+        for (Object obj : docs){
+            DoctorEntity doc = (DoctorEntity) obj;
+            if (doc.getDoctorId().equals(doctorId)){throw new DoubleLeaveRequestException("There was already an leave instance associated with this doctor during the week of interest");}
         }
-        //TODO check for appointments once they are implemented
 
         // Register the leave operation
         this.createDoctorsLeaveEntity(new DoctorsLeaveEntity(retrieveDoctorEntityByDoctorId(doctorId), date));
