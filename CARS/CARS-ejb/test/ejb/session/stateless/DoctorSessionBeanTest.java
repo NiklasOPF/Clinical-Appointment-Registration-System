@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import org.junit.runners.MethodSorters;
+import util.exception.ClashWithAppointmentException;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
 
@@ -100,6 +101,8 @@ public class DoctorSessionBeanTest {
         } catch (LeaveToCloseInTimeException ex) {
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (DoubleLeaveRequestException ex) {
+            Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClashWithAppointmentException ex ){
             Logger.getLogger(DoctorSessionBeanTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         //DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(1));
