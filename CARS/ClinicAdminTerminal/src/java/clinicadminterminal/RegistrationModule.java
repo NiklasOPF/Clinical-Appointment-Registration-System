@@ -191,7 +191,7 @@ public class RegistrationModule {
             System.out.println("This doctor does no thave any available slots for the upcomming 3 hours. \nPlease try another doctor. \n\n");
             return;
         }
-        System.out.print("Enter Patient Identity Nuber> ");
+        System.out.print("Enter Patient Identity Number> ");
         patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
         appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(new Date(new Long(Calendar.getInstance().getTimeInMillis())), timeToBook, doctorEntity, patientEntity));
 

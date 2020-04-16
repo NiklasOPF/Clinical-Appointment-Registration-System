@@ -127,59 +127,6 @@ public class PatientMenu {
         }
     }
 
-    private static java.util.List<java.lang.String> getAvailableTimes(ws.client.ams.Date date, ws.client.ams.DoctorEntity doctor) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.getAvailableTimes(date, doctor);
-    }
-
-    private static PatientEntity makeAppointment(java.lang.String patientId, ws.client.ams.Date date, java.lang.String timeString, ws.client.ams.DoctorEntity doctor) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.makeAppointment(patientId, date, timeString, doctor);
-    }
-
-    private static java.util.List<java.lang.Object> retrieveAllDoctors() {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.retrieveAllDoctors();
-    }
-
-    private static AppointmentEntity retrieveAndDeletePatientAppointments(java.lang.Long appId) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.retrieveAndDeletePatientAppointments(appId);
-    }
-
-    private static DoctorEntity retrieveDoctorEntityByDoctorId(java.lang.Long doctorId) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.retrieveDoctorEntityByDoctorId(doctorId);
-    }
-
-    private static java.util.List<java.lang.Object> retrievePatientAppointments(ws.client.ams.PatientEntity patientToCancel) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.retrievePatientAppointments(patientToCancel);
-    }
-
-    private static PatientEntity retrievePatientEntityByIdentityNumber(java.lang.String patientId) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.retrievePatientEntityByIdentityNumber(patientId);
-    }
-
-    private static java.util.List<java.lang.Object> viewPatientAppointments(java.lang.String identityNumber) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.viewPatientAppointments(identityNumber);
-    }
-
-    private static Date valueOf(java.lang.String appId) {
-        ws.client.ams.AMSWebService_Service service = new ws.client.ams.AMSWebService_Service();
-        ws.client.ams.AMSWebService port = service.getAMSWebServicePort();
-        return port.valueOf(appId);
-    }
 
 
 }
