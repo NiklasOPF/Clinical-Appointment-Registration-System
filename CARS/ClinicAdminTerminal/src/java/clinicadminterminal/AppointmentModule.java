@@ -65,11 +65,7 @@ public class AppointmentModule {
                     break;
 
                 case 2:
-                    try {
-                        addAppointment();
-                    } catch (Exception ex) {
-                        System.out.println("Error in time.");
-                    }
+                    addAppointment();
                     break;
 
                 case 3:
@@ -161,7 +157,7 @@ public class AppointmentModule {
         Date date = java.sql.Date.valueOf(dateString);
         ArrayList<String> times = getAvailableTimes(date, my_doc);
 
-        if (times.size() == 0) {
+        if (times.isEmpty()) {
             System.out.println("There are no available times for this doctor on the requested date \n");
             return;
         }
@@ -198,8 +194,8 @@ public class AppointmentModule {
         System.out.print("Enter Patient Identity Number> ");
         try {
             patientEntity = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-        } catch (Exception e) {
-            System.out.println("Could not find a patient with that identity number.");
+        } catch (PatientNotFoundException e) {
+            System.out.println(e.getMessage());
             return;
         }
 

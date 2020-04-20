@@ -40,9 +40,7 @@ public class AdministrationModule {
     Scanner sc;
     int response;
 
-    public AdministrationModule() {
-
-    }
+    public AdministrationModule() {}
 
     public AdministrationModule(StaffEntity staff, PatientSessionBeanRemote patientSessionBeanRemote, DoctorSessionBeanRemote doctorSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote) {
         this.patientSessionBeanRemote = patientSessionBeanRemote;
@@ -76,7 +74,6 @@ public class AdministrationModule {
                     System.out.println("Invalid input");
             }
         }
-
     }
 
     private void staffManagement() {
@@ -120,7 +117,6 @@ public class AdministrationModule {
 
     private void doctorManagement() {
         while (true) {
-            DoctorSessionBeanRemote doctorSessionBeanRemote = lookupDoctorSessionBeanRemote();
             System.out.println("*** CARS :: Administraion operation :: Doctor Management **** \n ");
 
             System.out.println("1: Add Doctor");
@@ -159,56 +155,54 @@ public class AdministrationModule {
                 default:
                     System.out.println("Invalid input");
             }
+        }
+    }
 
+    private void registerNewStaff(StaffSessionBeanRemote staffSessionBeanRemote) {
+
+        System.out.println("*** CARS :: Registration operation :: Register new Staff**** \n ");
+        System.out.print("Enter First Name> ");
+        String firstName = sc.nextLine();
+        System.out.print("Enter Last Name> ");
+        String lastName = sc.nextLine();
+        System.out.print("Enter User Name> ");
+        String userName = sc.nextLine();
+        System.out.print("Enter Password> ");
+        staffSessionBeanRemote.createStaffEntity(new StaffEntity(firstName, lastName, userName, sc.nextLine()));
+    }
+
+    private void viewStaffDetails(StaffSessionBeanRemote staffSessionBeanRemote) {
+
+        System.out.println("*** CARS :: Registration operation :: View Staff Details**** \n ");
+        System.out.print("Enter user name> ");
+        StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+
+        System.out.println(staff.toString() + "\n");
+
+        System.out.println(" Press enter to go back \n");
+        System.out.print("> ");
+        sc.nextLine();
+    }
+
+    private void updateStaff(StaffSessionBeanRemote staffSessionBeanRemote) {
+        System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
+        System.out.print("Enter user name> ");
+        StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+        if (staff.getUserName().equals(this.staffEntity.getUserName())) {
+            System.out.println("You can't update the staff that is currently logged in!");
+            return;
         }
 
-    }
-    private void registerNewStaff(StaffSessionBeanRemote staffSessionBeanRemote){
-        
-                System.out.println("*** CARS :: Registration operation :: Register new Staff**** \n ");
-                System.out.print("Enter First Name> ");
-                String firstName = sc.nextLine();
-                System.out.print("Enter Last Name> ");
-                String lastName = sc.nextLine();
-                System.out.print("Enter User Name> ");
-                String userName = sc.nextLine();
-                System.out.print("Enter Password> ");
-                staffSessionBeanRemote.createStaffEntity(new StaffEntity(firstName, lastName, userName, sc.nextLine()));
-    }
-    
-    private void viewStaffDetails(StaffSessionBeanRemote staffSessionBeanRemote){
-        
-                System.out.println("*** CARS :: Registration operation :: View Staff Details**** \n ");
-                System.out.print("Enter user name> ");
-                StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+        System.out.print("Enter New First Name> ");
+        staff.setFirstName(sc.nextLine());
+        System.out.print("Enter New Last Name> ");
+        staff.setLastName(sc.nextLine());
+        System.out.print("Enter New User Name> ");
+        staff.setUserName(sc.nextLine());
+        System.out.print("Enter New Password> ");
+        staff.setPassword(sc.nextLine());
 
-                System.out.println(staff.toString() + "\n");
-
-                System.out.println(" Press enter to go back \n");
-                System.out.print("> ");
-                sc.nextLine();
-
-    }
-    
-    private void updateStaff(StaffSessionBeanRemote staffSessionBeanRemote){
-                      System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
-                System.out.print("Enter user name> ");
-                StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
-                if (staff.getUserName().equals(this.staffEntity.getUserName())) {
-                    System.out.println("You can't update the staff that is currently logged in!");
-                    return;
-                }
-
-                System.out.print("Enter New First Name> ");
-                staff.setFirstName(sc.nextLine());
-                System.out.print("Enter New Last Name> ");
-                staff.setLastName(sc.nextLine());
-                System.out.print("Enter New User Name> ");
-                staff.setUserName(sc.nextLine());
-                System.out.print("Enter New Password> ");
-                staff.setPassword(sc.nextLine());
-
-                staffSessionBeanRemote.updateStaffEntity(staff); 
+        staffSessionBeanRemote.updateStaffEntity(staff);
     }
 
     private void deleteStaff(StaffSessionBeanRemote staffSessionBeanRemote) {
@@ -523,7 +517,6 @@ public class AdministrationModule {
         } catch (Exception ex) {
             System.out.println("Please enter the particulars");
         }
-
     }
 
     private StaffSessionBeanRemote lookupStaffSessionBeanRemote() {
