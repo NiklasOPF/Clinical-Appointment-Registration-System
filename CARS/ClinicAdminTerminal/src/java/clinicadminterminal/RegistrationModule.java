@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -61,25 +62,28 @@ public class RegistrationModule {
         System.out.println("3: Register Consultation By Appointment");
         System.out.println("4: Back \n");
         System.out.print("> ");
-        int response = sc.nextInt();
-        sc.nextLine();
+        try {
+            int response = sc.nextInt();
+            sc.nextLine();
 
-        switch (response) {
-            case 1:
-                registerNewPatient();
-                break;
-
-            case 2:
-                registerWalkInConsultation();
-                break;
-
-            case 3:
-                registerConsultationByAppointment();
-                break;
-            case 4:
-                return;
-            default:
-                System.out.println("Invalid input");
+            switch (response) {
+                case 1:
+                    registerNewPatient();
+                    break;
+                case 2:
+                    registerWalkInConsultation();
+                    break;
+                case 3:
+                    registerConsultationByAppointment();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid input");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Incorrect input. Expected an Integer.");
+            this.sc = new Scanner(System.in);
         }
     }
 
@@ -141,7 +145,7 @@ public class RegistrationModule {
         Time timeToBook;
         boolean isBooked;
         List doctors = this.doctorSessionBeanRemote.retrieveAllDoctors();
-        if(doctors.isEmpty()){
+        if (doctors.isEmpty()) {
             System.out.println("No doctors are registered in the system. Please register doctors before you try to book appointments.");
             return;
         }
@@ -190,19 +194,19 @@ public class RegistrationModule {
         }
 
         System.out.print("\n\n Enter Doctor Id> ");
-        try{
+        try {
             doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
-        } catch(Exception e){
-            System.out.println("Input must be an integer. Please try again. \n\n");   
+        } catch (Exception e) {
+            System.out.println("Input must be an integer. Please try again. \n\n");
         }
         sc.nextLine();
-        if (doctorEntity == null){
+        if (doctorEntity == null) {
             System.out.println("There is no registered doctor with that id. \n\n");
             return;
         }
-        try{
+        try {
             timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println("This doctor does no thave any available slots for the upcomming 3 hours. \nPlease try another doctor. \n\n");
             return;
         }
@@ -230,7 +234,7 @@ public class RegistrationModule {
             System.out.println("Could not find a patient with this identity number.");
             return;
         }
-        
+
         //Print the pre-booked appointments
         System.out.println("\n Appointments: \nId | Date | Time | Doctor");
         for (Object obj : appointmentSessionBeanRemote.retrievePatientAppointments(patientEntity)) {
@@ -239,22 +243,21 @@ public class RegistrationModule {
         }
 
         System.out.print("\n\nEnter Appointment Id> ");
-        try{
+        try {
             appointmentEntity = appointmentSessionBeanRemote.retrieveAppointmentByAppointmentId(new Long(sc.nextInt()));
             sc.nextLine();
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println("That is not a valid appointment id. Please try again");
             return;
         }
-        
-        if ( appointmentEntity.getTimeToAppointmentInMills() > 3*3600000 || appointmentEntity.getTimeToAppointmentInMills()<0){
+
+        if (appointmentEntity.getTimeToAppointmentInMills() > 3 * 3600000 || appointmentEntity.getTimeToAppointmentInMills() < 0) {
             System.out.println("Appointment time has either passed or is in more than three hours.");
             return;
-        } 
-        
+        }
+
         System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment is confirmed with Dr. " + appointmentEntity.getDoctorEntity().getFirstName() + " " + appointmentEntity.getDoctorEntity().getLastName() + " at " + timeFormatter.format(appointmentEntity.getTime()));
         System.out.println("Queue number is " + queueSessionBeanRemote.getNewQueueNumber());
-        
 
     }
 }

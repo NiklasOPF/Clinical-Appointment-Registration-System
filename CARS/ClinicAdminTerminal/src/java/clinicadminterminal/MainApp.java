@@ -46,22 +46,27 @@ public class MainApp {
             System.out.println("1: Login ");
             System.out.println("2: Exit \n ");
             System.out.print("> ");
-            int response = sc.nextInt();
-            sc.nextLine();
-            if (response == 1) {
-                try{
-                    StaffEntity staff = login(sc);
-                    System.out.println("Login successful!\n");
-                    mainModule(sc, staff);
-                    
-                }catch(InvalidLoginException e){
-                    System.out.println(e.getMsg() + "\n");
+            try {
+                int response = sc.nextInt();
+                sc.nextLine();
+                if (response == 1) {
+                    try {
+                        StaffEntity staff = login(sc);
+                        System.out.println("Login successful!\n");
+                        mainModule(sc, staff);
+
+                    } catch (InvalidLoginException e) {
+                        System.out.println(e.getMsg() + "\n");
+                    }
+                } else if (response == 2) {
+                    System.out.println("Goodbye");
+                    break;
+                } else {
+                    System.err.println("Incorrect input, try again.");
                 }
-            } else if (response == 2) {
-                System.out.println("Goodbye");
-                break;
-            } else {
-                System.err.println("Incorrect input, try again.");
+            } catch (Exception e) {
+                System.out.println("Incorrect input. Expected an Integer.");
+                this.sc = new Scanner(System.in);
             }
         }
 
@@ -74,14 +79,14 @@ public class MainApp {
         System.out.print("Enter password> ");
         String password = sc.nextLine();
         try {
-                return staffSessionBeanRemote.login(username, password);
-        } catch (Exception e){
+            return staffSessionBeanRemote.login(username, password);
+        } catch (Exception e) {
             throw new InvalidLoginException("That combination of login credentials is not valid!");
         }
 
     }
-    
-    private void mainModule(Scanner sc, StaffEntity staff){
+
+    private void mainModule(Scanner sc, StaffEntity staff) {
         while (true) {
             System.out.println("*** CARS :: Main **** \n ");
             System.out.println("You are logged in as " + staff.getFirstName() + " " + staff.getLastName());
@@ -93,7 +98,7 @@ public class MainApp {
             int response = sc.nextInt();
             sc.nextLine();
 
-            switch(response) {
+            switch (response) {
                 case 1:
                     RegistrationModule registrationModule = new RegistrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote, queueSessionBeanRemote);
                     break;
@@ -103,16 +108,13 @@ public class MainApp {
                 case 3:
                     AdministrationModule administrationModule = new AdministrationModule(staff, patientSessionBeanRemote, doctorSessionBeanRemote, appointmentSessionBeanRemote);
                     break;
-                case 4: 
+                case 4:
                     System.out.println("Logging out");
                     return;
                 default:
                     System.out.println("Invalid input");
-             }
+            }
         }
- 
-
 
     }
 }
-

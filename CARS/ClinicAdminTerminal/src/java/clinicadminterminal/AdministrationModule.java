@@ -40,7 +40,8 @@ public class AdministrationModule {
     Scanner sc;
     int response;
 
-    public AdministrationModule() {}
+    public AdministrationModule() {
+    }
 
     public AdministrationModule(StaffEntity staff, PatientSessionBeanRemote patientSessionBeanRemote, DoctorSessionBeanRemote doctorSessionBeanRemote, AppointmentSessionBeanRemote appointmentSessionBeanRemote) {
         this.patientSessionBeanRemote = patientSessionBeanRemote;
@@ -55,62 +56,72 @@ public class AdministrationModule {
             System.out.println("3: Staff Management");
             System.out.println("4: Back \n");
             System.out.print("> ");
-            response = sc.nextInt();
-            sc.nextLine();
+            try {
+                response = sc.nextInt();
+                sc.nextLine();
 
-            switch (response) {
-                case 1:
-                    patientManagement();
-                    break;
-                case 2:
-                    doctorManagement();
-                    break;
-                case 3:
-                    staffManagement();
-                    break;
-                case 4:
-                    return;
-                default:
-                    System.out.println("Invalid input");
+                switch (response) {
+                    case 1:
+                        patientManagement();
+                        break;
+                    case 2:
+                        doctorManagement();
+                        break;
+                    case 3:
+                        staffManagement();
+                        break;
+                    case 4:
+                        return;
+                    default:
+                        System.out.println("Invalid input");
+                }
+            } catch (Exception e) {
+                System.out.println("Incorrect input. Expected an integer.\n\n");
+                this.sc = new Scanner(System.in);
             }
         }
     }
 
     private void staffManagement() {
-        StaffSessionBeanRemote staffSessionBeanRemote = lookupStaffSessionBeanRemote();
+        while (true) {
+            StaffSessionBeanRemote staffSessionBeanRemote = lookupStaffSessionBeanRemote();
+            System.out.println("*** CARS :: Administraion operation :: Staff Management **** \n ");
+            System.out.println("1: Add Staff");
+            System.out.println("2: View Staff Details");
+            System.out.println("3: Update Staff");
+            System.out.println("4: Delete Staff");
+            System.out.println("5: View All Staff");
+            System.out.println("6: Back \n");
+            System.out.print("> ");
+            try {
+                response = sc.nextInt();
+                sc.nextLine();
 
-        System.out.println("*** CARS :: Administraion operation :: Staff Management **** \n ");
-
-        System.out.println("1: Add Staff");
-        System.out.println("2: View Staff Details");
-        System.out.println("3: Update Staff");
-        System.out.println("4: Delete Staff");
-        System.out.println("5: View All Staff");
-        System.out.println("6: Back \n");
-        System.out.print("> ");
-        response = sc.nextInt();
-        sc.nextLine();
-
-        switch (response) {
-            case 1:
-                registerNewStaff(staffSessionBeanRemote);
-                break;
-            case 2:
-                viewStaffDetails(staffSessionBeanRemote);
-                break;
-            case 3:
-                updateStaff(staffSessionBeanRemote);
-                break;
-            case 4:
-                deleteStaff(staffSessionBeanRemote);
-                break;
-            case 5:
-                viewAllStaff(staffSessionBeanRemote);
-                break;
-            case 6:
-                return;
-            default:
-                System.out.println("Invalid input");
+                switch (response) {
+                    case 1:
+                        registerNewStaff(staffSessionBeanRemote);
+                        break;
+                    case 2:
+                        viewStaffDetails(staffSessionBeanRemote);
+                        break;
+                    case 3:
+                        updateStaff(staffSessionBeanRemote);
+                        break;
+                    case 4:
+                        deleteStaff(staffSessionBeanRemote);
+                        break;
+                    case 5:
+                        viewAllStaff(staffSessionBeanRemote);
+                        break;
+                    case 6:
+                        return;
+                    default:
+                        System.out.println("Invalid input");
+                }
+            } catch (Exception e) {
+                System.out.println("Incorrect input. Expected an integer.\n\n");
+                this.sc = new Scanner(System.in);
+            }
         }
 
     }
@@ -118,7 +129,6 @@ public class AdministrationModule {
     private void doctorManagement() {
         while (true) {
             System.out.println("*** CARS :: Administraion operation :: Doctor Management **** \n ");
-
             System.out.println("1: Add Doctor");
             System.out.println("2: View Doctor Details");
             System.out.println("3: Update Doctor");
@@ -127,33 +137,75 @@ public class AdministrationModule {
             System.out.println("6: Leave Management");
             System.out.println("7: Back \n");
             System.out.print("> ");
+            try {
+                response = sc.nextInt();
+                sc.nextLine();
+
+                switch (response) {
+                    case 1:
+                        addDoctor();
+                        break;
+                    case 2:
+                        viewDoctorDetails();
+                        break;
+                    case 3:
+                        updateDoctor();
+                        break;
+                    case 4:
+                        deleteDoctor();
+                        break;
+                    case 5:
+                        viewAllDoctors();
+                        break;
+                    case 6:
+                        leaveManagment();
+                        break;
+                    case 7:
+                        return;
+                    default:
+                        System.out.println("Invalid input");
+                }
+            } catch (Exception e) {
+                System.out.println("Incorrect input. Expected an integer. \n\n");
+                this.sc = new Scanner(System.in);
+            }
+        }
+    }
+
+    private void patientManagement() {
+        while (true) {
+            System.out.println("*** CARS :: Administraion operation :: Patient Management **** \n ");
+            System.out.println("1: Add Patient");
+            System.out.println("2: View Patient Details");
+            System.out.println("3: Update Patient");
+            System.out.println("4: Delete Patient");
+            System.out.println("5: View All Patients");
+            System.out.println("6: Back \n");
+            System.out.print("> ");
             response = sc.nextInt();
             sc.nextLine();
 
             switch (response) {
                 case 1:
-                    addDoctor();
+                    addPatient();
                     break;
                 case 2:
-                    viewDoctorDetails();
+                    viewPatientDetails();
                     break;
                 case 3:
-                    updateDoctor();
+                    updatePatient();
                     break;
                 case 4:
-                    deleteDoctor();
+                    deletePatient();
                     break;
                 case 5:
-                    viewAllDoctors();
+                    viewAllPatients();
                     break;
                 case 6:
-                    leaveManagment();
-                    break;
-
-                case 7:
                     return;
                 default:
                     System.out.println("Invalid input");
+                    this.sc = new Scanner(System.in);
             }
         }
     }
@@ -271,57 +323,6 @@ public class AdministrationModule {
         System.out.print("Enter New Registration> ");
         doc.setRegistration(sc.nextLine());
         doctorSessionBeanRemote.updateDoctorEntity(doc);
-    }
-
-    private void patientManagement() {
-        while (true) {
-            PatientSessionBeanRemote patientSessionBeanRemote = lookupPatientSessionBeanRemote();
-            System.out.println("*** CARS :: Administraion operation :: Patient Management **** \n ");
-
-            System.out.println("1: Add Patient");
-            System.out.println("2: View Patient Details");
-            System.out.println("3: Update Patient");
-            System.out.println("4: Delete Patient");
-            System.out.println("5: View All Patients");
-            System.out.println("6: Back \n");
-            System.out.print("> ");
-            response = sc.nextInt();
-            sc.nextLine();
-
-            String identityNumber;
-            String firstName;
-            String lastName;
-            String gender;
-            int age;
-            String phone;
-            String address;
-            String password;
-            PatientEntity patientEntity;
-
-            switch (response) {
-                case 1:
-                    addPatient();
-                    break;
-                case 2:
-                    viewPatientDetails();
-                    break;
-                case 3:
-                    updatePatient();
-                    break;
-                case 4:
-                    deletePatient();
-                    break;
-                case 5:
-                    viewAllPatients();
-                    break;
-                case 6:
-                    return;
-                default:
-                    System.out.println("Invalid input");
-            }
-
-        }
-
     }
 
     private void deleteDoctor() {

@@ -56,6 +56,7 @@ public class AppointmentModule {
             System.out.println("3: Cancel Appointment");
             System.out.println("4: Back \n");
             System.out.print("> ");
+            try{
             response = sc.nextInt();
             sc.nextLine();
 
@@ -63,11 +64,9 @@ public class AppointmentModule {
                 case 1:
                     viewPatientAppointments();
                     break;
-
                 case 2:
                     addAppointment();
                     break;
-
                 case 3:
                     cancelAppointment();
                     break;
@@ -75,6 +74,10 @@ public class AppointmentModule {
                     return;
                 default:
                     System.out.println("Invalid input");
+            }
+            }catch(Exception e){
+                System.out.println("Incorrect input. Expected an integer.\n\n");
+                this.sc = new Scanner(System.in);
             }
         }
 
