@@ -8,6 +8,8 @@ package ejb.session.stateless;
 import entity.PatientEntity;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -17,6 +19,7 @@ import javax.persistence.Query;
 import javax.validation.ConstraintViolationException;
 import util.Encryption;
 import util.exception.InvalidLoginException;
+import util.exception.PatientNotFoundException;
 
 /**
  *
@@ -34,14 +37,27 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
 
     }
 
+    /**
+     *
+     * @param idenNo
+     * @param password
+     * @return
+     * @throws InvalidLoginException
+     * @throws PatientNotFoundException
+     */
     @Override
     public PatientEntity patientLogin(String idenNo, String password) throws InvalidLoginException {
-        PatientEntity user = retrievePatientEntityByIdentityNumber(idenNo);
+        PatientEntity user;
+        try {
+            user = retrievePatientEntityByIdentityNumber(idenNo);
+        } catch (PatientNotFoundException ex) {
+            throw new InvalidLoginException("Could not find a patient with that identity number.");
+        }
 
         if (user.getPassword().equals(Encryption.encrypt(password + idenNo))) {
             return user;
         } else {
-            throw new InvalidLoginException();
+            throw new InvalidLoginException("The given password does not match the identity number of the patient.");
         }
 
     }
@@ -54,11 +70,21 @@ public class PatientSessionBean implements PatientSessionBeanRemote, PatientSess
         return patientEntity.getPatientId();
     }
 
+    /**
+     *
+     * 
+     * @param identityNumber: Identifier for the PatientEntity
+     * @return An instance of PatientEntity associated with the unique identityNumber
+     * @throws PatientNotFoundException
+     */
     @Override
-    public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber) {
-        Query query = em.createQuery("SELECT DISTINCT p FROM PatientEntity p WHERE p.identityNumber = :name");
+    public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber) throws PatientNotFoundException{
+        try{Query query = em.createQuery("SELECT DISTINCT p FROM PatientEntity p WHERE p.identityNumber = :name");
         query.setParameter("name", identityNumber);
         return (PatientEntity) query.getResultList().get(0);
+        }catch(java.lang.ArrayIndexOutOfBoundsException e){
+            throw new PatientNotFoundException("Could not find a patient with that ID.");
+        }
 
     }
 

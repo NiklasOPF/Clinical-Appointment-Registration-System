@@ -20,13 +20,14 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import util.exception.PatientNotFoundException;
 
 /**
  *
  * @author Niklas
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class PatientSessionBeanTest {
+public class PatientSessionBeanTest { // TODO make extensive testing for all cases
     
     private final PatientSessionBeanRemote patientSessionBeanRemote;
 
@@ -67,10 +68,13 @@ public class PatientSessionBeanTest {
     
     @Test()
     public void test02RetrievePatientEntityByPatientId() {
-        System.out.println("***** PatientSesionBeanTest.test02RetrievePatientEntity");
-        PatientEntity patient = patientSessionBeanRemote.retrievePatientEntityByPatientId(new Long(1));
-        //Long patId = patientSessionBeanRemote.createPatientEntity(new PatientEntity("identity number", "Niklas", "Forsstrom", util.Enum.Gender.M, 23, "+65 8212 8054", "vetlandavagen 23", "password"));
-        assertNotNull(patient);
+        try {
+            System.out.println("***** PatientSesionBeanTest.test02RetrievePatientEntity");
+            PatientEntity patient = patientSessionBeanRemote.retrievePatientEntityByPatientId(new Long(1));
+            assertNotNull(patient);
+        } catch (PatientNotFoundException ex) {
+            System.err.println("error");
+        }
     }
     
     
@@ -78,11 +82,14 @@ public class PatientSessionBeanTest {
     
     @Test()
     public void test99RemovePatientEntity() {
-        System.out.println("***** PatientSesionBeanTest.test99RemovePatientEntity");
-        patientSessionBeanRemote.deletePatientEntity(new Long(1));
-        PatientEntity patient = patientSessionBeanRemote.retrievePatientEntityByPatientId(new Long(1));
-        //Long patId = patientSessionBeanRemote.createPatientEntity(new PatientEntity("identity number", "Niklas", "Forsstrom", util.Enum.Gender.M, 23, "+65 8212 8054", "vetlandavagen 23", "password"));
-        assertNull(patient);
+        try {
+            System.out.println("***** PatientSesionBeanTest.test99RemovePatientEntity");
+            patientSessionBeanRemote.deletePatientEntity(new Long(1));
+            PatientEntity patient = patientSessionBeanRemote.retrievePatientEntityByPatientId(new Long(1));
+            assertNull(patient);
+        } catch (PatientNotFoundException ex) {
+            System.out.println("ejb.session.stateless.PatientSessionBeanTest.test99RemovePatientEntity()");
+        }
     }
     
 

@@ -24,9 +24,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import util.Enum.Gender;
 import util.exception.AccesSystemOnWeekendException;
+import util.exception.PatientNotFoundException;
 
 /**
  *
@@ -133,11 +136,15 @@ public class RegistrationModule {
 
     private void registerWalkInConsultation() {
         HashMap<Long, Calendar> firstAvailableTimes = new HashMap<>(); // Keeps track of the first available time associated with each doctor
-        PatientEntity patientEntity;
-        DoctorEntity doctorEntity;
+        PatientEntity patientEntity = null;
+        DoctorEntity doctorEntity = null;
         Time timeToBook;
         boolean isBooked;
         List doctors = this.doctorSessionBeanRemote.retrieveAllDoctors();
+        if(doctors.isEmpty()){
+            System.out.println("No doctors are registered in the system. Please register doctors before you try to book appointments.");
+            return;
+        }
         List[] occupiedTimes = new List[doctors.size()]; // Array where each element is a list, each list contains the appointments associated with a doctor
 
         // Print the list of doctors
@@ -183,8 +190,16 @@ public class RegistrationModule {
         }
 
         System.out.print("\n\n Enter Doctor Id> ");
-        doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
+        try{
+            doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByDoctorId(new Long(sc.nextInt()));
+        } catch(Exception e){
+            System.out.println("Input must be an integer. Please try again. \n\n");   
+        }
         sc.nextLine();
+        if (doctorEntity == null){
+            System.out.println("There is no registered doctor with that id. \n\n");
+            return;
+        }
         try{
             timeToBook = new Time(firstAvailableTimes.get(doctorEntity.getDoctorId()).getTimeInMillis());
         }catch(NullPointerException e){
@@ -192,7 +207,11 @@ public class RegistrationModule {
             return;
         }
         System.out.print("Enter Patient Identity Number> ");
-        patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+        try {
+            patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+        } catch (PatientNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
         appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(new Date(new Long(Calendar.getInstance().getTimeInMillis())), timeToBook, doctorEntity, patientEntity));
 
         System.out.println(patientEntity.getFirstName() + " " + patientEntity.getLastName() + " appointment with Dr. " + doctorEntity.getFirstName() + " " + doctorEntity.getLastName() + " has been booked at " + timeFormatter.format(timeToBook));

@@ -16,7 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Size;
+//import javax.validation.constraints.Size;
 import util.Encryption;
 import util.Enum.Gender;
 

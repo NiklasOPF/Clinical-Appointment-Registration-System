@@ -25,6 +25,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.ejb.Stateless;
 import util.exception.InvalidLoginException;
+import util.exception.PatientNotFoundException;
 
 /**
  *
@@ -72,7 +73,7 @@ public class AMSWebService {
 
     //view add cancel//id date time doctor first and last name
     @WebMethod(operationName = "viewPatientAppointments")
-    public ArrayList<String> viewPatientAppointments(@WebParam(name = "identityNumber") String identityNumber) {
+    public ArrayList<String> viewPatientAppointments(@WebParam(name = "identityNumber") String identityNumber) throws PatientNotFoundException {
         List appointments = appointmentSessionBeanLocal.
                 retrievePatientAppointments(this.patientSessionBeanLocal
                         .retrievePatientEntityByIdentityNumber(identityNumber));
@@ -177,14 +178,14 @@ public class AMSWebService {
     public PatientEntity makeAppointment(@WebParam(name = "patientId") String patientId,
             @WebParam(name = "date") Date date,
             @WebParam(name = "timeString") String timeString,
-            @WebParam(name = "doctor") DoctorEntity doctor) {
+            @WebParam(name = "doctor") DoctorEntity doctor) throws PatientNotFoundException {
         PatientEntity patient = this.patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(patientId);
         appointmentSessionBeanLocal.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), doctor, patient));
         return patient;
     }
 
     @WebMethod(operationName = "retrievePatientEntityByIdentityNumber")
-    public PatientEntity retrievePatientEntityByIdentityNumber(@WebParam(name = "patientId") String identityNumber) {
+    public PatientEntity retrievePatientEntityByIdentityNumber(@WebParam(name = "patientId") String identityNumber) throws PatientNotFoundException {
         return patientSessionBeanLocal.retrievePatientEntityByIdentityNumber(identityNumber);
     }
 

@@ -9,6 +9,7 @@ import entity.PatientEntity;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import util.exception.InvalidLoginException;
+import util.exception.PatientNotFoundException;
 
 public interface PatientSessionBeanRemote {
 
@@ -16,9 +17,9 @@ public interface PatientSessionBeanRemote {
 
     public Long createPatientEntity(PatientEntity patientEntity);
 
-    public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber);
+    public PatientEntity retrievePatientEntityByIdentityNumber(String identityNumber) throws PatientNotFoundException;
 
-    public PatientEntity retrievePatientEntityByPatientId(Long patientId);
+    public PatientEntity retrievePatientEntityByPatientId(Long patientId) throws PatientNotFoundException;
 
     public void updatePatientEntity(PatientEntity patientEntity);
 

@@ -25,12 +25,14 @@ import javax.naming.NamingException;
 import util.exception.ClashWithAppointmentException;
 import util.exception.DoubleLeaveRequestException;
 import util.exception.LeaveToCloseInTimeException;
+import util.exception.PatientNotFoundException;
 
 /**
  *
  * @author Niklas
  */
 public class AdministrationModule {
+
     private PatientSessionBeanRemote patientSessionBeanRemote;
     private DoctorSessionBeanRemote doctorSessionBeanRemote;
     private AppointmentSessionBeanRemote appointmentSessionBeanRemote;
@@ -76,8 +78,6 @@ public class AdministrationModule {
         }
 
     }
-
-
 
     private void staffManagement() {
         StaffSessionBeanRemote staffSessionBeanRemote = lookupStaffSessionBeanRemote();
@@ -126,11 +126,11 @@ public class AdministrationModule {
                 sc.nextLine();
 
                 break;
-            case 3: 
+            case 3:
                 System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
                 System.out.print("Enter user name> ");
                 staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
-                if (staff.getUserName().equals(this.staffEntity.getUserName())){
+                if (staff.getUserName().equals(this.staffEntity.getUserName())) {
                     System.out.println("You can't update the staff that is currently logged in!");
                     break;
                 }
@@ -244,23 +244,23 @@ public class AdministrationModule {
                 case 4:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Delete Doctor **** \n ");
                     System.out.println("Enter Registration> ");
-                    try{
+                    try {
                         doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("The registration entered was incorrect");
                         break;
                     }
-                    if(appointmentSessionBeanRemote.retrieveDoctorAppointments(doc).size()>0){
+                    if (appointmentSessionBeanRemote.retrieveDoctorAppointments(doc).size() > 0) {
                         System.out.println("This doctor has associated apppointments. Remove these before removing the doctor!");
                         break;
                     }
-                    try{
-                        for (Object obj : doctorSessionBeanRemote.getLeavesForDoctor(doc)){
+                    try {
+                        for (Object obj : doctorSessionBeanRemote.getLeavesForDoctor(doc)) {
                             DoctorsLeaveEntity leave = (DoctorsLeaveEntity) obj;
                             doctorSessionBeanRemote.deleteDoctorsLeaveEntity(leave.getDoctorsLeaveId());
                         }
                         doctorSessionBeanRemote.deleteDoctorEntity(doc.getDoctorId());
-                    } catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("Could not delete doctor");
                         break;
                     }
@@ -280,16 +280,14 @@ public class AdministrationModule {
                 case 6:
                     System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
                     System.out.println("Enter Registration> ");
-                    try{
+                    try {
                         doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("Could not find a doctor with thet registration. \n\n");
                         break;
                     }
                     System.out.println("Enter Requested Leave date in the format: yyyy-MM-dd> ");
-                    
 
-    
                     Date date;
                     try {
                         date = java.sql.Date.valueOf(sc.nextLine());
@@ -306,15 +304,13 @@ public class AdministrationModule {
                         System.out.println(ex.getMessage());
                         //System.out.println("Already have a request for that week");
                         break;
-                    } catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                         System.out.println("Incorrectly formatted date. \n\n");
                         break;
                     }
                     List sdfsdf = doctorSessionBeanRemote.getDoctorsOnLeave(date);
-                    
-                    
-                
+
                     break;
 
                 case 7:
@@ -354,101 +350,19 @@ public class AdministrationModule {
 
             switch (response) {
                 case 1:
-                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
-                    try {
-                        System.out.print("Enter Identity Number> ");
-                        identityNumber = sc.nextLine();
-                        System.out.print("Enter First Name> ");
-                        firstName = sc.nextLine();
-                        System.out.print("Enter Last Name> ");
-                        lastName = sc.nextLine();
-                        System.out.print("Enter Gender> ");
-                        gender = sc.nextLine();
-                        System.out.print("Enter Age> ");
-                        age = sc.nextInt();
-                        sc.nextLine();
-                        System.out.print("Enter Phone> ");
-                        phone = sc.nextLine();
-                        System.out.print("Enter Address> ");
-                        address = sc.nextLine();
-                        while (true) {
-                            System.out.print("Enter Password> ");
-                            password = sc.nextLine();
-                            if (password.matches("[0-9]+") && password.length() == 6) {
-                                break;
-                            } else {
-                                System.out.println("wrong password input, password has to be in 6 digits");
-                            }
-                        }
-                        if (gender.equals("M") || gender.equals("m")) {
-                            patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
-                        } else if (gender.equals("F") || gender.equals("f")) {
-                            patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
-                        } else {
-                            System.out.println("wrong gender input, if should either be 'M' of 'F'!");
-                        }
-                    } catch (Exception ex) {
-                        System.out.println("Please enter the particulars");
-                    }
+                    addPatient();
                     break;
                 case 2:
-                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: View Patient Details **** \n ");
-                    System.out.println("Enter Identity Number> ");
-                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-                    System.out.println(patientEntity.toString());
-
+                    viewPatientDetails();
                     break;
                 case 3:
-                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: Update Patient **** \n ");
-                    System.out.println("Enter Identity Number> ");
-                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-
-                    System.out.print("Enter New Identity Number> ");
-                    patientEntity.setIdentityNumber(sc.nextLine());
-                    System.out.print("Enter New First Name> ");
-                    patientEntity.setFirstName(sc.nextLine());
-                    System.out.print("Enter Last Name> ");
-                    patientEntity.setLastName(sc.nextLine());
-                    System.out.print("Enter Gender> ");
-                    gender = sc.nextLine();
-                    if (gender.equals("M") || gender.equals("m")) {
-                        patientEntity.setGender(util.Enum.Gender.M);
-                    } else if (gender.equals("F") || gender.equals("f")) {
-                        patientEntity.setGender(util.Enum.Gender.F);
-                    } else {
-                        System.out.println("wrong gender input, if should either be 'M' of 'F'!");
-                        break;
-                    }
-                    System.out.print("Enter New Age> ");
-                    patientEntity.setAge(sc.nextInt());
-                    sc.nextLine();
-                    System.out.print("Enter New Phone> ");
-                    patientEntity.setPhone(sc.nextLine());
-                    System.out.print("Enter Address> ");
-                    patientEntity.setAddress(sc.nextLine());
-                    System.out.print("Enter Password> ");
-                    patientEntity.setPassword(sc.nextLine());
-
-                    patientSessionBeanRemote.updatePatientEntity(patientEntity);
+                    updatePatient();
                     break;
                 case 4:
-                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: Delete Patient **** \n ");
-                    System.out.println("Enter Identity Number> ");
-                    patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-                    patientSessionBeanRemote.deletePatientEntity(patientEntity.getPatientId());
-
+                    deletePatient();
                     break;
                 case 5:
-                    System.out.println("*** CARS :: Administraion operation :: Patient Management :: View All Patients **** \n ");
-
-                    List pats = patientSessionBeanRemote.retrieveAllPatients();
-                    System.out.println("Identity Numberr | First Name | Last Name | Gender | Age | Phone | Address | Password");
-                    for (Object obj : pats) {
-                        PatientEntity my_patient = (PatientEntity) obj;
-                        System.out.println(my_patient.toString());
-                    }
-                    System.out.println("\n");
-
+                    viewAllPatients();
                     break;
                 case 6:
                     return;
@@ -456,6 +370,137 @@ public class AdministrationModule {
                     System.out.println("Invalid input");
             }
 
+        }
+
+    }
+
+    private void viewAllPatients() {
+        System.out.println("*** CARS :: Administraion operation :: Patient Management :: View All Patients **** \n ");
+
+        List pats = patientSessionBeanRemote.retrieveAllPatients();
+        System.out.println("Identity Numberr | First Name | Last Name | Gender | Age | Phone | Address | Password");
+        for (Object obj : pats) {
+            PatientEntity my_patient = (PatientEntity) obj;
+            System.out.println(my_patient.toString());
+        }
+        System.out.println("\n");
+
+    }
+
+    private void deletePatient() {
+        try {
+            System.out.println("*** CARS :: Administraion operation :: Patient Management :: Delete Patient **** \n ");
+            System.out.println("Enter Identity Number> ");
+            PatientEntity patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+            patientSessionBeanRemote.deletePatientEntity(patientEntity.getPatientId());
+        } catch (PatientNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void updatePatient() {
+        PatientEntity patientEntity = null;
+
+        System.out.println("*** CARS :: Administraion operation :: Patient Management :: Update Patient **** \n ");
+        System.out.println("Enter Identity Number> ");
+        try {
+            patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+            System.out.print("Enter New Identity Number> ");
+            patientEntity.setIdentityNumber(sc.nextLine());
+            System.out.print("Enter New First Name> ");
+            patientEntity.setFirstName(sc.nextLine());
+            System.out.print("Enter Last Name> ");
+            patientEntity.setLastName(sc.nextLine());
+            System.out.print("Enter Gender> ");
+            String gender = sc.nextLine();
+            switch (gender) {
+                case "M":
+                case "m":
+                    patientEntity.setGender(util.Enum.Gender.M);
+                    break;
+                case "F":
+                case "f":
+                    patientEntity.setGender(util.Enum.Gender.F);
+                    break;
+                default:
+                    System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+                    return;
+            }
+            System.out.print("Enter New Age> ");
+            patientEntity.setAge(sc.nextInt());
+            sc.nextLine();
+            System.out.print("Enter New Phone> ");
+            patientEntity.setPhone(sc.nextLine());
+            System.out.print("Enter Address> ");
+            patientEntity.setAddress(sc.nextLine());
+            System.out.print("Enter Password> ");
+            patientEntity.setPassword(sc.nextLine());
+
+            patientSessionBeanRemote.updatePatientEntity(patientEntity);
+        } catch (PatientNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+    }
+
+    private void viewPatientDetails() {
+        System.out.println("*** CARS :: Administraion operation :: Patient Management :: View Patient Details **** \n ");
+        System.out.println("Enter Identity Number> ");
+        PatientEntity patientEntity;
+        try {
+            patientEntity = patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+            System.out.println(patientEntity.toString());
+        } catch (PatientNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    private void addPatient() {
+
+        String identityNumber;
+        String firstName;
+        String lastName;
+        String gender;
+        int age;
+        String phone;
+        String address;
+        String password;
+
+        System.out.println("*** CARS :: Administraion operation :: Patient Management :: Add Patient **** \n ");
+        try {
+            System.out.print("Enter Identity Number> ");
+            identityNumber = sc.nextLine();
+            System.out.print("Enter First Name> ");
+            firstName = sc.nextLine();
+            System.out.print("Enter Last Name> ");
+            lastName = sc.nextLine();
+            System.out.print("Enter Gender> ");
+            gender = sc.nextLine();
+            System.out.print("Enter Age> ");
+            age = sc.nextInt();
+            sc.nextLine();
+            System.out.print("Enter Phone> ");
+            phone = sc.nextLine();
+            System.out.print("Enter Address> ");
+            address = sc.nextLine();
+            while (true) {
+                System.out.print("Enter Password> ");
+                password = sc.nextLine();
+                if (password.matches("[0-9]+") && password.length() == 6) {
+                    break;
+                } else {
+                    System.out.println("wrong password input, password has to be in 6 digits");
+                }
+            }
+            if (gender.equals("M") || gender.equals("m")) {
+                patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.M, age, phone, address, password));
+            } else if (gender.equals("F") || gender.equals("f")) {
+                patientSessionBeanRemote.createPatientEntity(new PatientEntity(identityNumber, firstName, lastName, util.Enum.Gender.F, age, phone, address, password));
+            } else {
+                System.out.println("wrong gender input, if should either be 'M' of 'F'!");
+            }
+        } catch (Exception ex) {
+            System.out.println("Please enter the particulars");
         }
 
     }
@@ -489,5 +534,4 @@ public class AdministrationModule {
             throw new RuntimeException(ne);
         }
     }
-
 }

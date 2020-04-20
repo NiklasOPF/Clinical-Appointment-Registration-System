@@ -19,7 +19,7 @@
     <target name="wsimport-client-AMSWebService" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/AMSWebService"/>
         <property name="wsdl-AMSWebService" location="xml-resources/web-service-references/AMSWebService/wsdl/localhost_8080/AMSWebService/AMSWebService.wsdl"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AMSWebService" destdir="${build.generated.dir}/jax-wsCache/AMSWebService" wsdl="${wsdl-AMSWebService}" catalog="catalog.xml" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/AMSWebService/AMSWebService?wsdl" xnocompile="true" xendorsed="true" package="ws.client.ams">
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/AMSWebService" destdir="${build.generated.dir}/jax-wsCache/AMSWebService" wsdl="${wsdl-AMSWebService}" catalog="catalog.xml" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/AMSWebService/AMSWebService?wsdl" xnocompile="true" xendorsed="true" package="ws.client">
             <depends file="${wsdl-AMSWebService}"/>
             <produces dir="${build.generated.dir}/jax-wsCache/AMSWebService"/>
         </wsimport>
@@ -31,7 +31,7 @@
     </target>
     <target name="wsimport-client-clean-AMSWebService" depends="-init-project">
         <delete dir="${build.generated.dir}/jax-wsCache/AMSWebService"/>
-        <delete dir="${build.generated.sources.dir}/jax-ws/ws/client/ams"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/ws/client"/>
     </target>
     <target name="wsimport-client-generate" depends="wsimport-client-AMSWebService"/>
 </project>

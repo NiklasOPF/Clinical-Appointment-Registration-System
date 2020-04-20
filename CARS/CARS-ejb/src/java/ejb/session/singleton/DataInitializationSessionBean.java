@@ -27,7 +27,7 @@ public class DataInitializationSessionBean {
             Query query = em.createQuery("SELECT DISTINCT p FROM StaffEntity p WHERE p.userName = 'manager'");
             query.getResultList().get(0);
         } catch (Exception e) {
-            em.persist(new StaffEntity("Linda", "Chua", "manager", "password"));
+            em.persist(new StaffEntity("Niklas", "Forsstroem", "manager", "password"));
             em.flush();
             //staffSessionBeanLocal.createStaffEntity(new StaffEntity("Linda", "Chua", "manager", "password"));
             

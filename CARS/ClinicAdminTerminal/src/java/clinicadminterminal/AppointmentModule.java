@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.exception.PatientNotFoundException;
 
 /**
  *
@@ -123,7 +126,13 @@ public class AppointmentModule {
         System.out.println("*** CARS :: Appointment Operation :: View Patient Appointments **** \n ");
         System.out.print("Enter Patient Identity Number> ");
 
-        List appointments = appointmentSessionBeanRemote.retrievePatientAppointments(this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine()));
+        List appointments;
+        try {
+            appointments = appointmentSessionBeanRemote.retrievePatientAppointments(this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine()));
+        } catch (PatientNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            return;
+        }
         System.out.println("\n Appointments: \nId | Date | Time | Doctor");
         for (Object obj : appointments) {
             AppointmentEntity appointmentEntity = (AppointmentEntity) obj;
@@ -169,11 +178,17 @@ public class AppointmentModule {
             System.out.println("That time was not allowed. Try again\n");
             return;
         }
+        
         System.out.print("Enter Patient Identity Number> ");
-        PatientEntity patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
-        appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), my_doc, patient));
+        PatientEntity patient;
+        try {
+            patient = this.patientSessionBeanRemote.retrievePatientEntityByIdentityNumber(sc.nextLine());
+            appointmentSessionBeanRemote.createAppointmentEntity(new AppointmentEntity(date, java.sql.Time.valueOf(timeString + ":00"), my_doc, patient));
+            System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_doc.getFirstName() + " " + my_doc.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
+        } catch (PatientNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
 
-        System.out.println(patient.getFirstName() + " " + patient.getLastName() + " appointment with " + my_doc.getFirstName() + " " + my_doc.getLastName() + " at " + timeString + " on " + dateString + " has been added. \n");
 
     }
 
