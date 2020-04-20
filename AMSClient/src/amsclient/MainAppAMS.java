@@ -29,7 +29,6 @@ public class MainAppAMS {
             String phone;
             String address;
             String password;
-            PatientEntity patientEntity;
             System.out.println("*** Welcome to AMS Client ***\n");
             System.out.println("1: Register");
             System.out.println("2: Login");

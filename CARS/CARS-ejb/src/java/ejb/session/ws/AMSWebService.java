@@ -134,14 +134,17 @@ public class AMSWebService {
     public DoctorEntity retrieveDoctorEntityByDoctorId(@WebParam(name = "doctorId") Long doctorId) {
         return doctorSessionBeanLocal.retrieveDoctorEntityByDoctorId(doctorId);
     }
-
+    /*@WebMethod(operationName = "getDoctorLeaves")
+    public List getDoctorLeaves(@WebParam(name = "date") Date date){
+        
+    }*/
     @WebMethod(operationName = "getAvailableTimes")
     public ArrayList<String> getAvailableTimes(@WebParam(name = "dateString") String dateString,
             @WebParam(name = "doctor") DoctorEntity doctor) {
         // Get a list with all "allowed" consultations for the given day
-        String[] dateStringSplit = dateString.split("-");
-        Date date = new Date(Integer.parseInt(dateStringSplit[0]), Integer.parseInt(dateStringSplit[1]),
-                Integer.parseInt(dateStringSplit[2]));
+        String[] dateStr = dateString.split("-");
+        Date date = new Date(Integer.parseInt(dateStr[0]),Integer.parseInt(dateStr[1]),Integer.parseInt(dateStr[2]));
+
         for (Object obj : doctorSessionBeanLocal.getDoctorsOnLeave(date)) {
             DoctorEntity doc = (DoctorEntity) obj;
             if (doc.getDoctorId().equals(doctor.getDoctorId())) {
@@ -152,7 +155,7 @@ public class AMSWebService {
         date_cal.setTime(date);
         ArrayList<Calendar> all_allowed_calendars = getAllTimesOfDate(date_cal);
 
-        // Keep the ones that are at least 2 days in the future
+       // Keep the ones that are at least 2 days in the future
         Calendar lower = Calendar.getInstance();
         lower.add(Calendar.DATE, 2);
         ArrayList<String> times = new ArrayList<>();
@@ -162,7 +165,7 @@ public class AMSWebService {
             }
         }
 
-        // Remove appointment times that are already occupied
+        //Remove appointment times that are already occupied
         List occupiedTimes = appointmentSessionBeanLocal.retrieveOccupiedTimes(date, doctor);
         for (Object obj : occupiedTimes) {
             Time my_time = (Time) obj;
