@@ -94,79 +94,21 @@ public class AdministrationModule {
         response = sc.nextInt();
         sc.nextLine();
 
-        StaffEntity staff;
-        String firstName;
-        String lastName;
-        String userName;
-        String password;
-
         switch (response) {
             case 1:
-                System.out.println("*** CARS :: Registration operation :: Register new Staff**** \n ");
-                System.out.print("Enter First Name> ");
-                firstName = sc.nextLine();
-                System.out.print("Enter Last Name> ");
-                lastName = sc.nextLine();
-                System.out.print("Enter User Name> ");
-                userName = sc.nextLine();
-                System.out.print("Enter Password> ");
-                password = sc.nextLine();
-                staffSessionBeanRemote.createStaffEntity(new StaffEntity(firstName, lastName, userName, password));
+                registerNewStaff(staffSessionBeanRemote);
                 break;
-
             case 2:
-                System.out.println("*** CARS :: Registration operation :: View Staff Details**** \n ");
-                System.out.print("Enter user name> ");
-                staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
-
-                System.out.println(staff.toString() + "\n");
-
-                System.out.println(" Press enter to go back \n");
-                System.out.print("> ");
-                sc.nextLine();
-
+                viewStaffDetails(staffSessionBeanRemote);
                 break;
             case 3:
-                System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
-                System.out.print("Enter user name> ");
-                staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
-                if (staff.getUserName().equals(this.staffEntity.getUserName())) {
-                    System.out.println("You can't update the staff that is currently logged in!");
-                    break;
-                }
-
-                System.out.print("Enter New First Name> ");
-                staff.setFirstName(sc.nextLine());
-                System.out.print("Enter New Last Name> ");
-                staff.setLastName(sc.nextLine());
-                System.out.print("Enter New User Name> ");
-                staff.setUserName(sc.nextLine());
-                System.out.print("Enter New Password> ");
-                staff.setPassword(sc.nextLine());
-
-                staffSessionBeanRemote.updateStaffEntity(staff);
+                updateStaff(staffSessionBeanRemote);
                 break;
             case 4:
-                System.out.println("*** CARS :: Registration operation :: Delete Staff**** \n ");
-                System.out.print("Enter user name> ");
-                staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
-                if (staff.getStaffId().equals(staffEntity.getStaffId())) {
-                    System.out.println("You can't remove the same profile as you are logged into!!");
-                    break;
-                }
-                staffSessionBeanRemote.deleteStaffEntity(staff.getStaffId());
+                deleteStaff(staffSessionBeanRemote);
                 break;
             case 5:
-                System.out.println("*** CARS :: Registration operation :: View All Staff**** \n ");
-
-                List staffList = staffSessionBeanRemote.retrieveAllStaff();
-
-                System.out.println("First Name | Last Name | Username | Password");
-                for (Object obj : staffList) {
-                    StaffEntity my_staff = (StaffEntity) obj;
-                    System.out.println(my_staff.toString());
-                }
-                System.out.println("\n");
+                viewAllStaff(staffSessionBeanRemote);
                 break;
             case 6:
                 return;
@@ -192,125 +134,24 @@ public class AdministrationModule {
             response = sc.nextInt();
             sc.nextLine();
 
-            String firstName;
-            String lastName;
-            String registration;
-            String qualifications;
-            DoctorEntity doc;
             switch (response) {
                 case 1:
-                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Add Doctor **** \n ");
-
-                    System.out.print("Enter First Name> ");
-                    firstName = sc.nextLine();
-                    System.out.print("Enter Last Name> ");
-                    lastName = sc.nextLine();
-                    System.out.print("Enter Registration> ");
-                    registration = sc.nextLine();
-                    System.out.print("Enter Qualifications> ");
-                    qualifications = sc.nextLine();
-                    doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity(firstName, lastName, registration, qualifications));
+                    addDoctor();
                     break;
-
                 case 2:
-                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View Doctor Details **** \n ");
-
-                    System.out.print("Enter registration> ");
-                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-
-                    System.out.println("First Name | Last Name | Registration | Qualifications");
-                    System.out.println(doc.toString() + "\n");
-
-                    System.out.println("Press enter to go back \n");
-                    System.out.print("> ");
-                    sc.nextLine();
+                    viewDoctorDetails();
                     break;
                 case 3:
-                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Update Doctor **** \n ");
-
-                    System.out.println("Enter Registration> ");
-                    doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-
-                    System.out.print("Enter New First Name> ");
-                    doc.setFirstName(sc.nextLine());
-                    System.out.print("Enter New Last Name> ");
-                    doc.setLastName(sc.nextLine());
-                    System.out.print("Enter New Qualifications> ");
-                    doc.setQualifications(sc.nextLine());
-                    System.out.print("Enter New Registration> ");
-                    doc.setRegistration(sc.nextLine());
-                    doctorSessionBeanRemote.updateDoctorEntity(doc);
+                    updateDoctor();
                     break;
                 case 4:
-                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Delete Doctor **** \n ");
-                    System.out.println("Enter Registration> ");
-                    try {
-                        doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-                    } catch (Exception e) {
-                        System.out.println("The registration entered was incorrect");
-                        break;
-                    }
-                    if (appointmentSessionBeanRemote.retrieveDoctorAppointments(doc).size() > 0) {
-                        System.out.println("This doctor has associated apppointments. Remove these before removing the doctor!");
-                        break;
-                    }
-                    try {
-                        for (Object obj : doctorSessionBeanRemote.getLeavesForDoctor(doc)) {
-                            DoctorsLeaveEntity leave = (DoctorsLeaveEntity) obj;
-                            doctorSessionBeanRemote.deleteDoctorsLeaveEntity(leave.getDoctorsLeaveId());
-                        }
-                        doctorSessionBeanRemote.deleteDoctorEntity(doc.getDoctorId());
-                    } catch (Exception e) {
-                        System.out.println("Could not delete doctor");
-                        break;
-                    }
+                    deleteDoctor();
                     break;
                 case 5:
-                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View All Doctors **** \n ");
-
-                    List docs = doctorSessionBeanRemote.retrieveAllDoctors();
-                    System.out.println("First Name | Last Name | Registration | Qualifications");
-                    for (Object doctor : docs) {
-                        DoctorEntity my_doctor = (DoctorEntity) doctor;
-                        System.out.println(my_doctor.toString());
-                    }
-                    System.out.println("\n");
-
+                    viewAllDoctors();
                     break;
                 case 6:
-                    System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
-                    System.out.println("Enter Registration> ");
-                    try {
-                        doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
-                    } catch (Exception e) {
-                        System.out.println("Could not find a doctor with thet registration. \n\n");
-                        break;
-                    }
-                    System.out.println("Enter Requested Leave date in the format: yyyy-MM-dd> ");
-
-                    Date date;
-                    try {
-                        date = java.sql.Date.valueOf(sc.nextLine());
-                        doctorSessionBeanRemote.requestDoctorsLeave(date, doc.getDoctorId());
-                    } catch (LeaveToCloseInTimeException ex) {
-                        System.out.println("To close in time");
-                        break;
-                        //Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (DoubleLeaveRequestException ex) {
-                        System.out.println(ex.getMessage());
-                        //Logger.getLogger(AdministrationModule.class.getName()).log(Level.SEVERE, null, ex);
-                        break;
-                    } catch (ClashWithAppointmentException ex) {
-                        System.out.println(ex.getMessage());
-                        //System.out.println("Already have a request for that week");
-                        break;
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.out.println("Incorrectly formatted date. \n\n");
-                        break;
-                    }
-                    List sdfsdf = doctorSessionBeanRemote.getDoctorsOnLeave(date);
-
+                    leaveManagment();
                     break;
 
                 case 7:
@@ -321,6 +162,121 @@ public class AdministrationModule {
 
         }
 
+    }
+    private void registerNewStaff(StaffSessionBeanRemote staffSessionBeanRemote){
+        
+                System.out.println("*** CARS :: Registration operation :: Register new Staff**** \n ");
+                System.out.print("Enter First Name> ");
+                String firstName = sc.nextLine();
+                System.out.print("Enter Last Name> ");
+                String lastName = sc.nextLine();
+                System.out.print("Enter User Name> ");
+                String userName = sc.nextLine();
+                System.out.print("Enter Password> ");
+                staffSessionBeanRemote.createStaffEntity(new StaffEntity(firstName, lastName, userName, sc.nextLine()));
+    }
+    
+    private void viewStaffDetails(StaffSessionBeanRemote staffSessionBeanRemote){
+        
+                System.out.println("*** CARS :: Registration operation :: View Staff Details**** \n ");
+                System.out.print("Enter user name> ");
+                StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+
+                System.out.println(staff.toString() + "\n");
+
+                System.out.println(" Press enter to go back \n");
+                System.out.print("> ");
+                sc.nextLine();
+
+    }
+    
+    private void updateStaff(StaffSessionBeanRemote staffSessionBeanRemote){
+                      System.out.println("*** CARS :: Registration operation :: Update Staff**** \n ");
+                System.out.print("Enter user name> ");
+                StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+                if (staff.getUserName().equals(this.staffEntity.getUserName())) {
+                    System.out.println("You can't update the staff that is currently logged in!");
+                    return;
+                }
+
+                System.out.print("Enter New First Name> ");
+                staff.setFirstName(sc.nextLine());
+                System.out.print("Enter New Last Name> ");
+                staff.setLastName(sc.nextLine());
+                System.out.print("Enter New User Name> ");
+                staff.setUserName(sc.nextLine());
+                System.out.print("Enter New Password> ");
+                staff.setPassword(sc.nextLine());
+
+                staffSessionBeanRemote.updateStaffEntity(staff); 
+    }
+
+    private void deleteStaff(StaffSessionBeanRemote staffSessionBeanRemote) {
+        System.out.println("*** CARS :: Registration operation :: Delete Staff**** \n ");
+        System.out.print("Enter user name> ");
+        StaffEntity staff = staffSessionBeanRemote.retrieveStaffEntityByUserName(sc.nextLine());
+        if (staff.getStaffId().equals(staffEntity.getStaffId())) {
+            System.out.println("You can't remove the same profile as you are logged into!!");
+            return;
+        }
+        staffSessionBeanRemote.deleteStaffEntity(staff.getStaffId());
+    }
+
+    private void viewAllStaff(StaffSessionBeanRemote staffSessionBeanRemote) {
+        System.out.println("*** CARS :: Registration operation :: View All Staff**** \n ");
+
+        List staffList = staffSessionBeanRemote.retrieveAllStaff();
+
+        System.out.println("First Name | Last Name | Username | Password");
+        for (Object obj : staffList) {
+            StaffEntity my_staff = (StaffEntity) obj;
+            System.out.println(my_staff.toString());
+        }
+        System.out.println("\n");
+    }
+
+    private void addDoctor() {
+        System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Add Doctor **** \n ");
+
+        System.out.print("Enter First Name> ");
+        String firstName = sc.nextLine();
+        System.out.print("Enter Last Name> ");
+        String lastName = sc.nextLine();
+        System.out.print("Enter Registration> ");
+        String registration = sc.nextLine();
+        System.out.print("Enter Qualifications> ");
+        doctorSessionBeanRemote.createDoctorEntity(new DoctorEntity(firstName, lastName, registration, sc.nextLine()));
+    }
+
+    private void viewDoctorDetails() {
+        System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View Doctor Details **** \n ");
+
+        System.out.print("Enter registration> ");
+        DoctorEntity doctorEntity = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+
+        System.out.println("First Name | Last Name | Registration | Qualifications");
+        System.out.println(doctorEntity.toString() + "\n");
+
+        System.out.println("Press enter to go back \n");
+        System.out.print("> ");
+        sc.nextLine();
+    }
+
+    private void updateDoctor() {
+        System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Update Doctor **** \n ");
+
+        System.out.println("Enter Registration> ");
+        DoctorEntity doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+
+        System.out.print("Enter New First Name> ");
+        doc.setFirstName(sc.nextLine());
+        System.out.print("Enter New Last Name> ");
+        doc.setLastName(sc.nextLine());
+        System.out.print("Enter New Qualifications> ");
+        doc.setQualifications(sc.nextLine());
+        System.out.print("Enter New Registration> ");
+        doc.setRegistration(sc.nextLine());
+        doctorSessionBeanRemote.updateDoctorEntity(doc);
     }
 
     private void patientManagement() {
@@ -372,6 +328,71 @@ public class AdministrationModule {
 
         }
 
+    }
+
+    private void deleteDoctor() {
+        System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Delete Doctor **** \n ");
+        System.out.println("Enter Registration> ");
+        DoctorEntity doc;
+        try {
+            doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("The registration entered was incorrect");
+            return;
+        }
+        if (appointmentSessionBeanRemote.retrieveDoctorAppointments(doc).size() > 0) {
+            System.out.println("This doctor has associated apppointments. Remove these before removing the doctor!");
+            return;
+        }
+        try {
+            for (Object obj : doctorSessionBeanRemote.getLeavesForDoctor(doc)) {
+                DoctorsLeaveEntity leave = (DoctorsLeaveEntity) obj;
+                doctorSessionBeanRemote.deleteDoctorsLeaveEntity(leave.getDoctorsLeaveId());
+            }
+            doctorSessionBeanRemote.deleteDoctorEntity(doc.getDoctorId());
+        } catch (Exception e) {
+            System.out.println("Could not delete doctor");
+            return;
+        }
+    }
+
+    private void viewAllDoctors() {
+        System.out.println("*** CARS :: Administraion operation :: Doctor Management :: View All Doctors **** \n ");
+
+        List docs = doctorSessionBeanRemote.retrieveAllDoctors();
+        System.out.println("First Name | Last Name | Registration | Qualifications");
+        for (Object doctor : docs) {
+            DoctorEntity my_doctor = (DoctorEntity) doctor;
+            System.out.println(my_doctor.toString());
+        }
+        System.out.println("\n");
+
+    }
+
+    private void leaveManagment() {
+        System.out.println("*** CARS :: Administraion operation :: Doctor Management :: Leave Management **** \n ");
+        System.out.println("Enter Registration> ");
+        DoctorEntity doc;
+        try {
+            doc = doctorSessionBeanRemote.retrieveDoctorEntityByRegistration(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Could not find a doctor with thet registration. \n\n");
+            return;
+        }
+        System.out.println("Enter Requested Leave date in the format: yyyy-MM-dd> ");
+
+        Date date;
+        try {
+            date = java.sql.Date.valueOf(sc.nextLine());
+            doctorSessionBeanRemote.requestDoctorsLeave(date, doc.getDoctorId());
+        } catch (LeaveToCloseInTimeException ex) {
+            System.out.println("To close in time");
+        } catch (DoubleLeaveRequestException | ClashWithAppointmentException ex) {
+            System.out.println(ex.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Incorrectly formatted date. \n\n");
+        }
     }
 
     private void viewAllPatients() {
