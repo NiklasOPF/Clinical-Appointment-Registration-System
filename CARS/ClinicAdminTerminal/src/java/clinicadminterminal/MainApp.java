@@ -29,7 +29,7 @@ public class MainApp {
     private QueueSessionBeanRemote queueSessionBeanRemote;
     Scanner sc;
 
-    public MainApp() {
+    public MainApp() { // TODO fix stepback issue when providing wrong input
         sc = new Scanner(System.in);
     }
 
